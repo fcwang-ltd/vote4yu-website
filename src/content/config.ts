@@ -11,7 +11,7 @@ const blog = defineCollection({
     description: z.string(),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
-    locale: z.enum(['en', 'zh-Hans', 'zh-Hant']),
+    locale: z.enum(['en', 'zh-CN', 'zh-HK']),
     author: z.string().default('Dave Yu'),
     tags: z.array(z.string()).default([]),
     heroImage: z
@@ -34,7 +34,7 @@ const pages = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    locale: z.enum(['en', 'zh-Hans', 'zh-Hant']),
+    locale: z.enum(['en', 'zh-CN', 'zh-HK']),
     updated: z.coerce.date().optional(),
   }),
 });

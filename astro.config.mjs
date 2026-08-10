@@ -5,7 +5,7 @@ import mdx from '@astrojs/mdx';
 import tailwindcss from '@tailwindcss/vite';
 
 // Vote4Yu campaign site.
-// Trilingual: en (default, served at root), zh-Hans (/zh-hans/), zh-Hant (/zh-hant/).
+// Trilingual: en (default, served at root), zh-CN (/zh-CN/), zh-HK (/zh-HK/).
 // Deploy target: GitHub Pages via the .github/workflows/deploy.yml Action.
 // Custom apex domain vote4yu.ca, so `base` stays "/" (no project subpath).
 export default defineConfig({
@@ -13,7 +13,7 @@ export default defineConfig({
 
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'zh-Hans', 'zh-Hant'],
+    locales: ['en', 'zh-CN', 'zh-HK'],
     routing: {
       prefixDefaultLocale: false,
     },
@@ -25,8 +25,8 @@ export default defineConfig({
         defaultLocale: 'en',
         locales: {
           en: 'en',
-          'zh-Hans': 'zh-Hans',
-          'zh-Hant': 'zh-Hant',
+          'zh-CN': 'zh-CN',
+          'zh-HK': 'zh-HK',
         },
       },
     }),

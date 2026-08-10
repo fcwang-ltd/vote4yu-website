@@ -34,7 +34,7 @@ Rules: the accent never sits on the accent; no red-on-red / white-on-white; crea
 | CJK Hans | Noto Sans SC | PingFang SC / Microsoft YaHei | Simplified Chinese |
 | CJK Hant | Noto Sans TC | PingFang TC / Microsoft JhengHei | Traditional Chinese |
 
-`html[lang="zh-Hans"]` and `html[lang="zh-Hant"]` switch the base family automatically (see `globals.css`). Chinese display headings should render ~20% heavier than the Latin display equivalent to compensate for glyph density (the Latin display face has no CJK glyphs). **Self-host the WOFF2 files** in `public/fonts/` for performance, privacy, and AEO; add `@font-face` in `globals.css`. Placeholder font-faces are not yet wired: the build currently falls back to system fonts until the WOFF2 files are dropped in.
+`html[lang="zh-CN"]` and `html[lang="zh-HK"]` switch the base family automatically (see `globals.css`). Chinese display headings should render ~20% heavier than the Latin display equivalent to compensate for glyph density (the Latin display face has no CJK glyphs). **Self-host the WOFF2 files** in `public/fonts/` for performance, privacy, and AEO; add `@font-face` in `globals.css`. Placeholder font-faces are not yet wired: the build currently falls back to system fonts until the WOFF2 files are dropped in.
 
 ## Spacing, layout, radius
 

@@ -6,8 +6,8 @@ import type { Locale } from './i18n';
 
 export const NAV: Record<Locale, { platform: string; about: string; blog: string; contact: string }> = {
   en: { platform: 'Platform', about: 'About', blog: 'Updates', contact: 'Get involved' },
-  'zh-Hans': { platform: '政纲', about: '关于', blog: '动态', contact: '参与' },
-  'zh-Hant': { platform: '政綱', about: '關於', blog: '動態', contact: '參與' },
+  'zh-CN': { platform: '政纲', about: '关于', blog: '动态', contact: '参与' },
+  'zh-HK': { platform: '政綱', about: '關於', blog: '動態', contact: '參與' },
 };
 
 export interface Pillar {
@@ -36,14 +36,14 @@ export const PAGE_TITLES: Record<Locale, { home: string; platform: string; about
     blog: 'Updates',
     contact: 'Get Involved',
   },
-  'zh-Hans': {
+  'zh-CN': {
     home: 'Vote4Yu — Dave Yu 竞选万锦市 2 区议员 [DRAFT]',
     platform: '政纲 — 创建健康万锦 [DRAFT]',
     about: '关于 Dave Yu [DRAFT]',
     blog: '动态 [DRAFT]',
     contact: '参与 [DRAFT]',
   },
-  'zh-Hant': {
+  'zh-HK': {
     home: 'Vote4Yu — Dave Yu 競選萬錦市 2 區議員 [DRAFT]',
     platform: '政綱 — 創建健康萬錦 [DRAFT]',
     about: '關於 Dave Yu [DRAFT]',

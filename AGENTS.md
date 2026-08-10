@@ -14,7 +14,7 @@ This is a **SENSITIVE live municipal campaign**. Public-facing copy becomes publ
 |---------|--------|
 | Framework | Astro 5 (static output) |
 | Styling | Tailwind CSS v4 via `@tailwindcss/vite`; tokens in `src/styles/globals.css` (`@theme`) |
-| i18n | Astro built-in i18n; `en` at root, `zh-Hans` `/zh-Hans/`, `zh-Hant` `/zh-Hant/`, `prefixDefaultLocale: false` |
+| i18n | Astro built-in i18n; `en` at root, `zh-CN` `/zh-CN/`, `zh-HK` `/zh-HK/`, `prefixDefaultLocale: false` |
 | Content | Astro content collections; blog in `src/content/blog/{locale}/` |
 | Package manager | **pnpm** (npm is broken on the authoring machine) |
 | Deploy | GitHub Pages, `.github/workflows/deploy.yml`, apex `vote4yu.ca` (no `base`) |
@@ -33,7 +33,7 @@ This is a **SENSITIVE live municipal campaign**. Public-facing copy becomes publ
 - Design tokens live in `src/styles/globals.css`; do not hard-code palette hex values in components when a token exists.
 
 ### Content rules
-- **Chinese is DRAFT.** All `zh-Hans` and `zh-Hant` copy is provisional until a native **Mandarin AND Cantonese** speaker locks it. A line that scans in Mandarin can read oddly in Cantonese. Chinese blog posts stay `draft: true` (unpublished) until lock.
+- **Chinese is DRAFT.** All `zh-CN` (Simplified) and `zh-HK` (Traditional/Cantonese) copy is provisional until a native **Mandarin AND Cantonese** speaker locks it. A line that scans in Mandarin can read oddly in Cantonese. Chinese blog posts stay `draft: true` (unpublished) until lock.
 - **Markham place name:** use the community's established Chinese name. City/council **entity** = 万锦市 / 萬錦市 (e.g. 万锦市议会 = Markham City Council). Colloquial **place** = 万锦 / 萬錦 (e.g. 健康万锦). NEVER a phonetic transliteration (not 马尔克姆 / 馬克姆).
 - **"Vote for Yu, Vote for You" pun** does not carry phonetically into Chinese. The Chinese hero tagline is a transcreation slot, not a literal translation. Leave marked until the native reviewer transcreates it.
 - **No unverified health claims.** Benefit/subsidy specifics are largely provincial/federal, not municipal. A councillor advocates, informs, and connects residents to services; the site must not imply Dave personally grants provincial/federal benefits. Respect every `NEEDS-VERIFICATION` flag from the source notes; publish no unverified program detail.

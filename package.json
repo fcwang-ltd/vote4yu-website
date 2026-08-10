@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "description": "Campaign website for Dave Yu, Markham City Council Ward 2, 2026. Trilingual (en / zh-Hans / zh-Hant) Astro static site.",
+  "description": "Campaign website for Dave Yu, Markham City Council Ward 2, 2026. Trilingual (en / zh-CN / zh-HK) Astro static site.",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",

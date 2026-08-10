@@ -1,6 +1,6 @@
 # Vote4Yu Website
 
-Campaign website for **Dave Yu**, candidate for **Markham City Council, Ward 2**, in the 2026 municipal election. Trilingual static site: Canadian English (default), Simplified Chinese (`zh-Hans`), Traditional Chinese (`zh-Hant`).
+Campaign website for **Dave Yu**, candidate for **Markham City Council, Ward 2**, in the 2026 municipal election. Trilingual static site: Canadian English (default), Simplified Chinese (`zh-CN`), Traditional Chinese for the Cantonese audience (`zh-HK`).
 
 A Horizon Studio advisory build. The campaign and its IP belong to Dave Yu.
 
@@ -9,7 +9,7 @@ A Horizon Studio advisory build. The campaign and its IP belong to Dave Yu.
 - **Astro 5** (static output)
 - **Tailwind CSS v4** (via `@tailwindcss/vite`, tokens in `src/styles/globals.css`)
 - **Astro content collections** for the Blog (`src/content/blog/{locale}/`)
-- **Astro built-in i18n**: `en` at root, `zh-Hans` at `/zh-Hans/`, `zh-Hant` at `/zh-Hant/`
+- **Astro built-in i18n**: `en` at root, `zh-CN` at `/zh-CN/`, `zh-HK` at `/zh-HK/`
 - **Deploy:** GitHub Pages via `.github/workflows/deploy.yml`, custom apex domain `vote4yu.ca`
 
 ## Develop
@@ -31,7 +31,7 @@ src/
   content/
     config.ts      blog + pages collection schemas
     blog/{locale}/ per-locale posts
-  pages/           en at root; zh-hans/ and zh-hant/ mirrors
+  pages/           en at root; zh-CN/ and zh-HK/ mirrors
   styles/          globals.css (Tailwind v4 @theme design tokens)
   utils/           i18n.ts, content.ts
 public/

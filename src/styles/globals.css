@@ -50,8 +50,8 @@ html {
   -webkit-font-smoothing: antialiased;
 }
 
-html[lang="zh-Hans"] { font-family: var(--font-cjk-hans); }
-html[lang="zh-Hant"] { font-family: var(--font-cjk-hant); }
+html[lang="zh-CN"] { font-family: var(--font-cjk-hans); }
+html[lang="zh-HK"] { font-family: var(--font-cjk-hant); }
 
 body { margin: 0; }
 
