@@ -1,0 +1,25 @@
+---
+import { LOCALES, LOCALE_LABEL, localizePath, type Locale } from '../../utils/i18n';
+interface Props {
+  current: Locale;
+  path?: string;
+}
+const { current, path = '/' } = Astro.props;
+---
+
+<nav aria-label="Language" style="font-family: var(--font-mono); font-size: 13px;">
+  {
+    LOCALES.map((l, i) => (
+      <>
+        {i > 0 && <span style="color: var(--color-muted);"> / </span>}
+        <a
+          href={localizePath(path, l)}
+          aria-current={l === current ? 'true' : undefined}
+          style={`text-decoration:none; color:${l === current ? 'var(--color-accent)' : 'var(--color-muted)'};`}
+        >
+          {LOCALE_LABEL[l]}
+        </a>
+      </>
+    ))
+  }
+</nav>

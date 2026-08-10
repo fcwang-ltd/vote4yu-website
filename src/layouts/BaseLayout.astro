@@ -1,0 +1,70 @@
+---
+import '../styles/globals.css';
+import {
+  LOCALES,
+  LOCALE_HREFLANG,
+  localizePath,
+  SITE_URL,
+  type Locale,
+} from '../utils/i18n';
+
+interface Props {
+  title: string;
+  description: string;
+  locale: Locale;
+  /** Root-relative path of this page, e.g. "/" or "/platform". Used for hreflang alternates. */
+  path?: string;
+}
+
+const { title, description, locale, path = '/' } = Astro.props;
+
+// One unambiguous factual sentence per page for AEO, injected into the description
+// meta by callers. JSON-LD Person schema for the candidate on every page.
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Dave Yu',
+  jobTitle: 'Candidate for Markham City Council, Ward 2',
+  url: SITE_URL,
+  knowsLanguage: ['en-CA', 'zh-Hans', 'zh-Hant'],
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Markham',
+    addressRegion: 'ON',
+    addressCountry: 'CA',
+  },
+};
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(localizePath(path, locale), SITE_URL).href} />
+
+    {/* hreflang alternates for every locale variant of this page */}
+    {
+      LOCALES.map((l) => (
+        <link
+          rel="alternate"
+          hreflang={LOCALE_HREFLANG[l]}
+          href={new URL(localizePath(path, l), SITE_URL).href}
+        />
+      ))
+    }
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={new URL(localizePath(path, 'en'), SITE_URL).href}
+    />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,25 @@
+---
+// One badge for each of the six HEALTH letters. Anchor pillars (A, L) carry the
+// preventive-health / eldercare spearhead and are flagged.
+interface Props {
+  letter: string;
+  pillar: string;
+  message: string;
+  anchor?: boolean;
+}
+const { letter, pillar, message, anchor = false } = Astro.props;
+---
+
+<div
+  style={`border: 1px solid var(--color-ink); border-radius: var(--radius-lg); padding: 24px; background: var(--color-paper);${anchor ? ' box-shadow: 0 0 0 2px var(--color-accent);' : ''}`}
+>
+  <div
+    style="display:inline-flex; align-items:center; justify-content:center; width:48px; height:48px; border-radius:9999px; border:2px solid var(--color-accent); color: var(--color-accent); font-family: var(--font-display); font-weight:800; font-size:24px;"
+  >
+    {letter}
+  </div>
+  <h3 style="font-family: var(--font-display); font-weight: 600; margin: 0.75rem 0 0.25rem;">
+    {pillar}{anchor ? ' \u2605' : ''}
+  </h3>
+  <p style="line-height: 1.6; margin: 0;">{message}</p>
+</div>

@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Vote4Yu design tokens (Tailwind v4 @theme)
+   Source: 04_Execute/_Studio/horizon-studio/Vote4Yu/efforts/website-build-spec.md
+   Design language reconciles the "LE CAMP" reference (near-monochrome canvas,
+   poster-scale display type, badge illustrations) with campaign credibility.
+   Accent is tokenised for one-line swap (see --color-accent).
+   ========================================================================== */
+@theme {
+  /* Surfaces */
+  --color-ink: #000000;
+  --color-paper: #ffffff;
+  --color-cream: #f5f0e8;
+  --color-lightgray: #f5f5f5;
+  --color-deephero: #0a0a0a;
+
+  /* Accent (DECISION SLOT: deep teal, recommended). Swap here to re-skin. */
+  --color-accent: #006d77;
+  --color-accent-light: #83c5be;
+  --color-accent-dark: #00424a;
+  --color-muted: #666666;
+
+  /* Type families */
+  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-cjk-hans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-cjk-hant: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --radius-lg: 20px;
+  --radius-xl: 35px;
+
+  /* Layout */
+  --spacing-section: 60px;
+  --breakpoint-content: 1200px;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  background: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+html[lang="zh-Hans"] { font-family: var(--font-cjk-hans); }
+html[lang="zh-Hant"] { font-family: var(--font-cjk-hant); }
+
+body { margin: 0; }
+
+.container-1200 {
+  max-width: var(--breakpoint-content);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}

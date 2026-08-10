@@ -1,0 +1,29 @@
+{
+  "name": "vote4yu-website",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Campaign website for Dave Yu, Markham City Council Ward 2, 2026. Trilingual (en / zh-Hans / zh-Hant) Astro static site.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.2.0",
+    "@astrojs/sitemap": "^3.4.0",
+    "astro": "^5.13.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@tailwindcss/vite": "^4.1.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

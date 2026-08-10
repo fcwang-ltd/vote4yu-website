@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/ui/Nav.astro';
+import Footer from '../components/ui/Footer.astro';
+import { NAV, PAGE_TITLES } from '../utils/content';
+const locale = 'en' as const;
+---
+
+<BaseLayout
+  title={PAGE_TITLES[locale].contact}
+  description="Get involved with the Dave Yu campaign for Markham City Council, Ward 2: volunteer, endorse, or contact the team."
+  locale={locale}
+  path="/contact"
+>
+  <Nav locale={locale} path="/contact" navLabels={NAV[locale]} />
+  <main class="container-1200" style="padding-block: 60px;">
+    <h1 style="font-family: var(--font-display); font-size: clamp(32px,6vw,56px); font-weight:800;">Get Involved</h1>
+    <p style="max-width: 60ch; line-height: 1.7; margin-top: 1rem;">
+      Volunteer, endorse, or reach the campaign team. Contact channels (email, Instagram, Xiaohongshu) go here once confirmed.
+    </p>
+    {/* PLACEHOLDER: contact form / channel links. Form backend TBD (Principal decision). */}
+  </main>
+  <Footer locale={locale} />
+</BaseLayout>

@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+.output/
+
+# Astro
+.astro/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# Local scratch
+tmp/
+*.local
+
+# ---------------------------------------------------------------------------
+# Cursor handoff plans (gitignored on purpose)
+# docs/plans/ holds the internal build handover pulled from the vault.
+# It is SENSITIVE (live municipal campaign strategy) and must NOT ship in the
+# public repo. Tracked locally for the coding agent, never committed/pushed.
+# ---------------------------------------------------------------------------
+docs/plans/

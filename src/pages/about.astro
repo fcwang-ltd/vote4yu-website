@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/ui/Nav.astro';
+import Footer from '../components/ui/Footer.astro';
+import { NAV, PAGE_TITLES } from '../utils/content';
+const locale = 'en' as const;
+---
+
+<BaseLayout
+  title={PAGE_TITLES[locale].about}
+  description="Dave Yu brings over a decade of community health and fitness practice to his candidacy for Markham City Council, Ward 2."
+  locale={locale}
+  path="/about"
+>
+  <Nav locale={locale} path="/about" navLabels={NAV[locale]} />
+  <main class="container-1200" style="padding-block: 60px;">
+    <h1 style="font-family: var(--font-display); font-size: clamp(32px,6vw,56px); font-weight:800;">About Dave Yu</h1>
+    <p style="max-width: 60ch; line-height: 1.7; margin-top: 1rem;">
+      Dave Yu is a candidate for Markham City Council, Ward 2, in the 2026 municipal election. He brings over a decade of community health and fitness practice, and he is already building and pushing change in the community.
+    </p>
+    {/* PLACEHOLDER: primary headshot slot. Use a neutral silhouette until the real
+        tailored-suit shoot. Do not use an AI-fabricated likeness of the candidate. */}
+    <div style="margin-top: 1.5rem; width: 220px; height: 280px; border: 1px dashed var(--color-muted); border-radius: var(--radius-lg); display:flex; align-items:center; justify-content:center; color: var(--color-muted); font-family: var(--font-mono); font-size: 12px; text-align:center; padding: 1rem;">
+      PLACEHOLDER<br />tailored-suit headshot<br />(swap after shoot)
+    </div>
+  </main>
+  <Footer locale={locale} />
+</BaseLayout>

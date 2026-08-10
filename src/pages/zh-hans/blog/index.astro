@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Nav from '../../../components/ui/Nav.astro';
+import Footer from '../../../components/ui/Footer.astro';
+import { getCollection } from 'astro:content';
+import { NAV, PAGE_TITLES } from '../../../utils/content';
+const locale = 'zh-Hans' as const;
+const posts = (await getCollection('blog', (e) => e.data.locale === 'zh-Hans' && !e.data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout title={PAGE_TITLES[locale].blog} description="每周动态与健康政策解读。[DRAFT]" locale={locale} path="/blog">
+  <Nav locale={locale} path="/blog" navLabels={NAV[locale]} />
+  <main class="container-1200" style="padding-block: 60px;">
+    <h1 style="font-family: var(--font-display); font-size: clamp(32px,6vw,56px); font-weight:800;">动态</h1>
+    <p style="color: var(--color-muted); margin-top: 1rem;">DRAFT — 中文博文待母语审校后发布。</p>
+  </main>
+  <Footer locale={locale} boilerplate="[DRAFT]" />
+</BaseLayout>

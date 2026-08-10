@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/ui/Nav.astro';
+import Footer from '../../components/ui/Footer.astro';
+import Hero from '../../components/ui/Hero.astro';
+import HealthPillarBadge from '../../components/ui/HealthPillarBadge.astro';
+import { NAV, HEALTH_PILLARS, PAGE_TITLES } from '../../utils/content';
+const locale = 'zh-Hans' as const;
+---
+
+<BaseLayout
+  title={PAGE_TITLES[locale].home}
+  description="Dave Yu 是 2026 万锦市选举 2 区市议员候选人，以健康为核心政纲。[DRAFT: 待母语审校]"
+  locale={locale}
+  path="/"
+>
+  <Nav locale={locale} path="/" navLabels={NAV[locale]} />
+  <Hero
+    tagline="Vote for Yu, Vote for You"
+    umbrella="创建健康万锦 [DRAFT]"
+    supporting="Dave Yu 是 2026 万锦市选举 2 区市议员候选人。[DRAFT: 待母语审校]"
+    ctaLabel="查看政纲 [DRAFT]"
+    ctaHref="/zh-Hans/platform"
+  />
+  <section class="container-1200" style="padding-block: 60px;">
+    <p style="font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--color-accent); font-size: 13px;">
+      DRAFT — pending native Mandarin + Cantonese lock
+    </p>
+    <h2 style="font-family: var(--font-display); font-size: clamp(28px,5vw,40px); font-weight:600; margin: 0.25rem 0 1.5rem;">
+      创建健康万锦
+    </h2>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem;">
+      {HEALTH_PILLARS.map((p) => <HealthPillarBadge letter={p.letter} pillar={p.pillar} message={p.message} anchor={p.anchor} />)}
+    </div>
+  </section>
+  <Footer locale={locale} boilerplate="Dave Yu 是万锦市 2 区市议员候选人，致力于创建健康万锦。[DRAFT]" />
+</BaseLayout>

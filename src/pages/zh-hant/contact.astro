@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/ui/Nav.astro';
+import Footer from '../../components/ui/Footer.astro';
+import { NAV, PAGE_TITLES } from '../../utils/content';
+const locale = 'zh-Hant' as const;
+---
+
+<BaseLayout title={PAGE_TITLES[locale].contact} description="參與 Dave Yu 競選：志願、支持、聯繫。[DRAFT]" locale={locale} path="/contact">
+  <Nav locale={locale} path="/contact" navLabels={NAV[locale]} />
+  <main class="container-1200" style="padding-block: 60px;">
+    <h1 style="font-family: var(--font-display); font-size: clamp(32px,6vw,56px); font-weight:800;">參與</h1>
+    <p style="max-width: 60ch; line-height: 1.7; margin-top: 1rem;">DRAFT — 待母語審校。</p>
+  </main>
+  <Footer locale={locale} boilerplate="[DRAFT]" />
+</BaseLayout>
