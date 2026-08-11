@@ -1,4 +1,6 @@
 ---
+import Wordmark from '../ui/Wordmark.astro';
+
 interface Props {
   onDark?: boolean;
 }
@@ -7,10 +9,7 @@ const { onDark = false } = Astro.props;
 
 <header class:list={['lc-nav', onDark && 'lc-nav--dark']}>
   <div class="container-1200 lc-nav__inner">
-    <a class="lc-nav__brand" href="/" aria-label="LE CAMP">
-      <span class="lc-nav__mark" aria-hidden="true"></span>
-      <span class="lc-nav__word">LE CAMP</span>
-    </a>
+    <Wordmark href="/" size="md" onDark={onDark} />
     <div class="lc-nav__actions">
       <a class="btn-rect btn-rect--red" href="#contact">Contactez-nous</a>
       <details class="lc-menu">
@@ -48,41 +47,6 @@ const { onDark = false } = Astro.props;
     justify-content: space-between;
     padding-block: 15px;
     gap: 1rem;
-  }
-  .lc-nav__brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.65rem;
-    text-decoration: none;
-    color: inherit;
-  }
-  .lc-nav--dark .lc-nav__brand {
-    color: var(--color-summit-white);
-  }
-  .lc-nav__mark {
-    width: 36px;
-    height: 36px;
-    border-radius: 9999px;
-    background: var(--color-signal-red);
-    position: relative;
-  }
-  .lc-nav__mark::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 54%;
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 14px solid #fff;
-    transform: translate(-50%, -50%);
-  }
-  .lc-nav__word {
-    font-family: var(--font-agrandir);
-    font-weight: 600;
-    font-size: 18px;
-    letter-spacing: 0.04em;
   }
   .lc-nav__actions {
     display: flex;

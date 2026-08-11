@@ -1,0 +1,45 @@
+---
+interface Props {
+  href?: string;
+  size?: 'sm' | 'md' | 'lg';
+  onDark?: boolean;
+}
+const { href = '/', size = 'md', onDark = false } = Astro.props;
+
+const sizes = {
+  sm: '1.05rem',
+  md: '1.35rem',
+  lg: 'clamp(1.75rem, 4vw, 2.5rem)',
+};
+const voteColor = onDark ? '#ffffff' : 'var(--color-carbon-ink)';
+---
+
+<a
+  href={href}
+  class="wordmark"
+  style={`font-size: ${sizes[size]};`}
+  aria-label="VOTE4YU"
+>
+  <span class="wordmark__vote" style={`color: ${voteColor};`}>VOTE</span>
+  <span class="wordmark__four">4</span>
+  <span class="wordmark__yu">YU</span>
+</a>
+
+<style>
+  .wordmark {
+    font-family: var(--font-agrandir);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: baseline;
+    text-decoration: none;
+  }
+  .wordmark__four {
+    color: var(--color-blue);
+  }
+  .wordmark__yu {
+    color: var(--color-signal-red);
+  }
+</style>

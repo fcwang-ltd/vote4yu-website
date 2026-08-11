@@ -31,6 +31,29 @@
   font-style: normal;
   font-display: swap;
 }
+/* CQCM Refero (12db22d6): Athletics → Archivo Black; Manrope body */
+@font-face {
+  font-family: "Archivo Black";
+  src: url("/fonts/ArchivoBlack-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Manrope";
+  src: url("/fonts/Manrope-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+/* CQCM badge/display stand-in for Athletics (Refero) */
+@font-face {
+  font-family: "Bebas Neue";
+  src: url("/fonts/BebasNeue-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 @theme {
   --color-signal-red: #fe3a3a;
@@ -43,6 +66,12 @@
   --color-burgundy: #561515;
   --color-beige: #f7f1e8;
 
+  /* CQCM chromatic accents */
+  --color-coop-green: #44d991;
+  --color-civic-blue: #4c92e9;
+  --color-sunset-coral: #ff6a51;
+  --color-mint-whisper: #eaf9f2;
+
   --surface-summit-white: #ffffff;
   --surface-glacier-mist: #f5f5f5;
   --surface-trail-cream: #f5f0e8;
@@ -51,10 +80,14 @@
   --font-agrandir: "Agrandir", "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
   --font-dm-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
   --font-dm-mono: "DM Mono", ui-monospace, monospace;
+  --font-athletics: "Archivo Black", "Anton", "Bebas Neue", ui-sans-serif, system-ui, sans-serif;
+  --font-bebas: "Bebas Neue", "Archivo Black", ui-sans-serif, system-ui, sans-serif;
+  --font-manrope: "Manrope", ui-sans-serif, system-ui, sans-serif;
 
   --font-display: var(--font-agrandir);
   --font-body: var(--font-dm-sans);
   --font-mono: var(--font-dm-mono);
+  --font-badge: var(--font-athletics);
 
   --text-caption: 10px;
   --text-body: 16px;

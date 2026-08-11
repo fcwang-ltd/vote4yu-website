@@ -1,0 +1,161 @@
+/** Shared HEALTH dimension data + sparse dot motifs. */
+
+export type HealthDot = { x: number; y: number; r: number };
+
+export type HealthDimension = {
+  letter: string;
+  label: string;
+  short: string;
+  /** Display figure top-right (scaffold metrics; not campaign claims). */
+  metric: string;
+  image: string;
+  viewBox: string;
+  dots: HealthDot[];
+  color: string;
+  dotFill: string;
+};
+
+export const HEALTH_DIMENSIONS: HealthDimension[] = [
+  {
+    letter: 'H',
+    label: 'Housing',
+    short: 'HOUSING',
+    metric: 'H',
+    image: '/images/atmosphere/PLACEHOLDER-AI-markham-atmosphere.png',
+    viewBox: '0 0 120 120',
+    color: '#44d991',
+    dotFill: '#0a1628',
+    dots: [
+      { x: 60, y: 18, r: 7 },
+      { x: 38, y: 36, r: 6.5 },
+      { x: 82, y: 36, r: 6.5 },
+      { x: 22, y: 54, r: 6 },
+      { x: 98, y: 54, r: 6 },
+      { x: 30, y: 76, r: 6.5 },
+      { x: 90, y: 76, r: 6.5 },
+      { x: 30, y: 98, r: 6.5 },
+      { x: 90, y: 98, r: 6.5 },
+      { x: 60, y: 88, r: 6 },
+      { x: 60, y: 104, r: 6 },
+    ],
+  },
+  {
+    letter: 'E',
+    label: 'Education',
+    short: 'EDUCATION',
+    metric: 'E',
+    image: '/images/candidate/pagent-coach.jpeg',
+    viewBox: '0 0 120 110',
+    color: '#eaf9f2',
+    dotFill: '#0a1628',
+    dots: [
+      { x: 60, y: 22, r: 7 },
+      { x: 36, y: 38, r: 6.5 },
+      { x: 84, y: 38, r: 6.5 },
+      { x: 60, y: 52, r: 7 },
+      { x: 18, y: 46, r: 5.5 },
+      { x: 102, y: 46, r: 5.5 },
+      { x: 108, y: 64, r: 5 },
+      { x: 100, y: 82, r: 5 },
+      { x: 42, y: 74, r: 6 },
+      { x: 78, y: 74, r: 6 },
+      { x: 60, y: 92, r: 6.5 },
+    ],
+  },
+  {
+    letter: 'A',
+    label: 'Accessibility',
+    short: 'ACCESSIBILITY',
+    metric: 'A',
+    image: '/images/atmosphere/PLACEHOLDER-AI-path-walk.png',
+    viewBox: '0 0 120 130',
+    color: '#4c92e9',
+    dotFill: '#ffffff',
+    dots: [
+      { x: 58, y: 16, r: 7 },
+      { x: 58, y: 38, r: 6.5 },
+      { x: 82, y: 38, r: 6 },
+      { x: 98, y: 38, r: 5.5 },
+      { x: 58, y: 58, r: 6.5 },
+      { x: 36, y: 70, r: 6 },
+      { x: 58, y: 78, r: 7 },
+      { x: 82, y: 70, r: 6 },
+      { x: 28, y: 94, r: 6 },
+      { x: 58, y: 102, r: 7 },
+      { x: 88, y: 94, r: 6 },
+      { x: 42, y: 118, r: 5.5 },
+      { x: 74, y: 118, r: 5.5 },
+    ],
+  },
+  {
+    letter: 'L',
+    label: 'Living Standards',
+    short: 'LIVING STANDARDS',
+    metric: 'L',
+    image: '/images/atmosphere/PLACEHOLDER-AI-canopy-light.png',
+    viewBox: '0 0 110 130',
+    color: '#d6ebff',
+    dotFill: '#0a1628',
+    dots: [
+      { x: 55, y: 14, r: 6.5 },
+      { x: 28, y: 28, r: 6 },
+      { x: 82, y: 28, r: 6 },
+      { x: 20, y: 56, r: 6 },
+      { x: 90, y: 56, r: 6 },
+      { x: 28, y: 86, r: 6 },
+      { x: 82, y: 86, r: 6 },
+      { x: 55, y: 110, r: 6.5 },
+      { x: 55, y: 48, r: 5.5 },
+      { x: 55, y: 66, r: 7 },
+      { x: 55, y: 84, r: 5.5 },
+      { x: 38, y: 66, r: 5.5 },
+      { x: 72, y: 66, r: 5.5 },
+    ],
+  },
+  {
+    letter: 'T',
+    label: 'Technology',
+    short: 'TECHNOLOGY',
+    metric: 'T',
+    image: '/images/candidate/health-interview.jpeg',
+    viewBox: '0 0 100 130',
+    color: '#ff6a51',
+    dotFill: '#0a1628',
+    dots: [
+      { x: 42, y: 14, r: 6 },
+      { x: 42, y: 34, r: 6.5 },
+      { x: 42, y: 54, r: 6.5 },
+      { x: 62, y: 48, r: 6 },
+      { x: 78, y: 58, r: 5.5 },
+      { x: 42, y: 74, r: 7 },
+      { x: 22, y: 74, r: 5.5 },
+      { x: 62, y: 74, r: 5.5 },
+      { x: 68, y: 94, r: 6 },
+      { x: 48, y: 108, r: 6.5 },
+      { x: 28, y: 118, r: 6 },
+      { x: 68, y: 118, r: 6 },
+    ],
+  },
+  {
+    letter: 'H',
+    label: 'Hospitality',
+    short: 'HOSPITALITY',
+    metric: 'H',
+    image: '/images/candidate/stage-front.jpeg',
+    viewBox: '0 0 120 110',
+    color: '#44d991',
+    dotFill: '#0a1628',
+    dots: [
+      { x: 38, y: 22, r: 7 },
+      { x: 82, y: 22, r: 7 },
+      { x: 22, y: 42, r: 6.5 },
+      { x: 60, y: 38, r: 7 },
+      { x: 98, y: 42, r: 6.5 },
+      { x: 28, y: 64, r: 6.5 },
+      { x: 92, y: 64, r: 6.5 },
+      { x: 44, y: 82, r: 6.5 },
+      { x: 76, y: 82, r: 6.5 },
+      { x: 60, y: 98, r: 7 },
+    ],
+  },
+];

@@ -2,18 +2,11 @@
 /**
  * Le Camp homepage — real HTML/CSS only.
  * Photos: clean atmosphere + candidate imagery (no screenshot composites with baked UI text).
- * Stickers: illustrated badge assets (not page crops).
+ * Stickers: CQCM-style chromatic panels + dot icons (HealthStickers).
  */
 import Nav from './Nav.astro';
-
-const stickers = [
-  { src: '/images/stickers/sticker-ceo.png', class: 's1' },
-  { src: '/images/stickers/sticker-softlanding.png', class: 's2' },
-  { src: '/images/stickers/sticker-basecamp.png', class: 's3' },
-  { src: '/images/stickers/sticker-acceleration.png', class: 's4' },
-  { src: '/images/stickers/sticker-summit.png', class: 's5' },
-  { src: '/images/stickers/sticker-exploration.png', class: 's6' },
-];
+import HealthStickers from './HealthStickers.astro';
+import HealthCascade from './HealthCascade.astro';
 
 const marks = [
   '/images/marks/mark-lila.png',
@@ -31,20 +24,22 @@ const marks = [
     <div class="hero-sticky">
       <section class="hero" data-hero>
         <Nav onDark />
-        {stickers.map((s) => <img class={`sticker ${s.class}`} src={s.src} alt="" aria-hidden="true" />)}
+        <HealthStickers />
         <div class="hero__inner">
           <h1>Un refuge pour votre croissance entrepreneuriale</h1>
         </div>
         <div class="hero__foot">
           <span>ACCÉLÉRATEUR / INCUBATEUR</span>
-          <a class="hero__scroll" href="#intro" aria-label="Défiler">↓</a>
+          <a class="hero__scroll" href="#health" aria-label="Défiler">↓</a>
           <span>DEPUIS 2015</span>
         </div>
       </section>
     </div>
   </div>
 
-  <section id="intro" class="container-1200 section">
+  <HealthCascade />
+
+  <section id="intro" class="container-1200 section section--after-health">
     <div class="intro">
       <div class="intro__copy">
         <p>
@@ -210,6 +205,7 @@ const marks = [
   }
   .section { padding-block: 60px; }
   .section--tight { padding-top: 24px; }
+  .section--after-health { padding-top: 48px; }
   .section--journal { padding-top: 24px; padding-bottom: 40px; }
 
   /* Hero pin: creates scroll room so sticky frame can inset */
@@ -259,21 +255,6 @@ const marks = [
     margin: 0 auto;
     text-shadow: none;
   }
-  .sticker {
-    position: absolute;
-    z-index: 2;
-    width: clamp(72px, 9vw, 120px);
-    height: auto;
-    filter: drop-shadow(0 4px 20px rgba(10, 22, 40, 0.45));
-    pointer-events: none;
-  }
-  .s1 { top: 16%; left: 7%; }
-  .s2 { top: 10%; left: 42%; width: clamp(70px, 8vw, 105px); }
-  .s3 { top: 15%; right: 8%; }
-  .s4 { bottom: 20%; left: 4%; width: clamp(100px, 12vw, 150px); }
-  .s5 { bottom: 12%; left: 45%; width: clamp(70px, 8vw, 100px); }
-  .s6 { bottom: 18%; right: 6%; width: clamp(100px, 12vw, 150px); }
-
   .hero__foot {
     position: absolute;
     left: 0; right: 0; bottom: 28px;
@@ -610,7 +591,6 @@ const marks = [
     .guides__media > img:first-child { min-height: 280px; }
     .event--low { margin-top: 0; }
     .photos__a, .photos__b, .photos__c { height: 220px; }
-    .s4, .s5, .s6 { display: none; }
     .hero-sticky {
       padding: calc(var(--hero-inset, 0) * 12px);
     }

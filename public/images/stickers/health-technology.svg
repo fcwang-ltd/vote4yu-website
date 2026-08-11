@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 168 178" fill="none">
+  <!-- Technology — hexagon -->
+  <path d="M84 12 L144 46 V112 L84 146 L24 112 V46 Z" stroke="#ff8a3d" stroke-width="3.2" stroke-linejoin="round"/>
+  <path d="M84 24 L132 52 V106 L84 134 L36 106 V52 Z" stroke="#ff8a3d" stroke-width="1.15" opacity="0.32"/>
+  <!-- chip body -->
+  <rect x="54" y="64" width="60" height="48" rx="6" stroke="#ff8a3d" stroke-width="2.4"/>
+  <rect x="64" y="74" width="40" height="28" rx="3" stroke="#ff8a3d" stroke-width="1.7"/>
+  <path d="M70 80 H98 M70 87 H92 M70 94 H98" stroke="#ff8a3d" stroke-width="1.35" stroke-linecap="round" opacity="0.8"/>
+  <circle cx="84" cy="88" r="2.2" fill="#ff8a3d"/>
+  <!-- pins -->
+  <path d="M64 64 V50 M84 64 V46 M104 64 V50" stroke="#ff8a3d" stroke-width="2.1" stroke-linecap="round"/>
+  <path d="M64 112 V126 M84 112 V130 M104 112 V126" stroke="#ff8a3d" stroke-width="2.1" stroke-linecap="round"/>
+  <path d="M54 74 H40 M54 88 H36 M54 102 H40" stroke="#ff8a3d" stroke-width="2.1" stroke-linecap="round"/>
+  <path d="M114 74 H128 M114 88 H132 M114 102 H128" stroke="#ff8a3d" stroke-width="2.1" stroke-linecap="round"/>
+  <!-- circuit traces -->
+  <path d="M40 50 H52 M36 88 V72 H44" stroke="#ff8a3d" stroke-width="1.2" opacity="0.4"/>
+  <path d="M128 50 H116 M132 88 V104 H120" stroke="#ff8a3d" stroke-width="1.2" opacity="0.4"/>
+  <!-- wing marks + label -->
+  <path d="M36 158 H52 M40 162 H48" stroke="#ff8a3d" stroke-width="1.25" stroke-linecap="round" opacity="0.7"/>
+  <path d="M116 158 H132 M120 162 H128" stroke="#ff8a3d" stroke-width="1.25" stroke-linecap="round" opacity="0.7"/>
+  <text x="84" y="162" text-anchor="middle" font-family="Georgia, 'Palatino Linotype', 'Times New Roman', serif" font-size="12.5" font-weight="700" letter-spacing="0.07em">
+    <tspan fill="#fe3a3a">T</tspan><tspan fill="#ff8a3d">ECHNOLOGY</tspan>
+  </text>
+</svg>

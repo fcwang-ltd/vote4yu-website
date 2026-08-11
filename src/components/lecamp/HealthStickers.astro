@@ -1,0 +1,61 @@
+---
+/**
+ * HEALTH hero motifs — no badges.
+ * Sparse signal-red (#fe3a3a / YU) dot patterns only.
+ */
+import { HEALTH_DIMENSIONS } from '../../utils/healthDots';
+
+const stickers = HEALTH_DIMENSIONS.map((dim, i) => ({
+  class: `s${i + 1}`,
+  label: dim.label,
+  viewBox: dim.viewBox,
+  dots: dim.dots,
+}));
+---
+
+{
+  stickers.map((s) => (
+    <div class={`sticker ${s.class}`} role="img" aria-label={s.label}>
+      <svg class="sticker__svg" viewBox={s.viewBox} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g fill="#fe3a3a">
+          {s.dots.map((d) => (
+            <circle cx={d.x} cy={d.y} r={d.r} />
+          ))}
+        </g>
+      </svg>
+    </div>
+  ))
+}
+
+<style>
+  .sticker {
+    position: absolute;
+    z-index: 2;
+    width: clamp(110px, 13vw, 180px);
+    height: auto;
+    max-height: 32%;
+    pointer-events: none;
+    filter:
+      drop-shadow(0 0 8px rgb(254 58 58 / 0.45))
+      drop-shadow(0 6px 16px rgb(10 22 40 / 0.35));
+  }
+  .sticker__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .s1 { top: 18%; left: 4%; width: clamp(120px, 14vw, 190px); }
+  .s2 { top: 10%; left: 42%; width: clamp(112px, 13vw, 176px); }
+  .s3 { top: 16%; right: 4%; width: clamp(116px, 13.5vw, 182px); }
+  .s4 { bottom: 14%; left: 3.5%; width: clamp(108px, 12.5vw, 168px); }
+  .s5 { bottom: 10%; left: 44%; width: clamp(96px, 11.5vw, 156px); }
+  .s6 { bottom: 13%; right: 3.5%; width: clamp(118px, 13.5vw, 186px); }
+
+  @media (max-width: 900px) {
+    .s4, .s5, .s6 { display: none; }
+    .s1 { top: 22%; left: 3%; width: clamp(88px, 24vw, 128px); }
+    .s2 { top: 12%; left: 38%; width: clamp(82px, 22vw, 118px); }
+    .s3 { top: 20%; right: 3%; width: clamp(86px, 23vw, 122px); }
+  }
+</style>

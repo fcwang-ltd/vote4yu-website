@@ -1,0 +1,230 @@
+---
+/**
+ * CQCM-style HEALTH cascade (Refero ACTIFS card chrome):
+ * four-corner square — vertical spine · large metric · photo · topic dots.
+ * Container layout (stack left, headline right). Y-only scroll → 45° stair.
+ */
+import { HEALTH_DIMENSIONS } from '../../utils/healthDots';
+---
+
+<section class="health-pin" id="health" data-health-cascade aria-label="HEALTH platform">
+  <div class="health-sticky">
+    <div class="health-frame">
+      <div class="health-stack" data-health-stack>
+        {
+          HEALTH_DIMENSIONS.map((dim, i) => (
+            <article
+              class="health-card"
+              style={`--i: ${i}; --card-bg: ${dim.color}; --dot: ${dim.dotFill};`}
+              aria-label={`${dim.label}`}
+            >
+              <span class="health-card__spine">{dim.short}</span>
+              <span class="health-card__metric">{dim.metric}</span>
+              <img class="health-card__photo" src={dim.image} alt="" />
+              <svg
+                class="health-card__dots"
+                viewBox={dim.viewBox}
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <g fill={dim.dotFill}>
+                  {dim.dots.map((d) => (
+                    <circle cx={d.x} cy={d.y} r={d.r} />
+                  ))}
+                </g>
+              </svg>
+            </article>
+          ))
+        }
+      </div>
+
+      <div class="health-copy">
+        <h2 class="health-copy__title">
+          <span>Six pillars</span>
+          <span>for a healthier</span>
+          <span>Markham</span>
+        </h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .health-pin {
+    --cascade: 0;
+    --size: clamp(260px, 28vw, 340px);
+    /* ~half+ of the top-right letter so HEALTH reads in the stair */
+    --peek: clamp(56px, calc(var(--size) * 0.17), 78px);
+    --pad: clamp(14px, 4.2%, 18px);
+    height: 145svh;
+    background: #fff;
+    overflow-x: clip;
+  }
+  .health-sticky {
+    position: sticky;
+    top: 0;
+    min-height: 0;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    box-sizing: border-box;
+  }
+  .health-frame {
+    width: min(1200px, calc(100% - 2.5rem));
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: start;
+  }
+
+  .health-stack {
+    position: relative;
+    width: 100%;
+    max-width: calc(var(--size) + 5 * var(--peek));
+    height: calc(var(--size) + 5 * var(--peek) * var(--cascade));
+  }
+
+  .health-card {
+    position: absolute;
+    left: calc(var(--i) * var(--peek));
+    top: calc(var(--i) * var(--peek) * var(--cascade));
+    width: var(--size);
+    height: var(--size);
+    z-index: calc(1 + var(--i));
+    background: var(--card-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    color: #000;
+    box-sizing: border-box;
+  }
+
+  /* Top-left: vertical label — modest size, top-aligned with metric */
+  .health-card__spine {
+    position: absolute;
+    left: var(--pad);
+    top: var(--pad);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-family: var(--font-athletics);
+    font-weight: 400;
+    font-size: clamp(13px, 1.35vw, 15px);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    /* After rotate, flex-end keeps the start of the word at the visual top */
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    height: calc(var(--size) * 0.42);
+  }
+
+  /* Top-right: dominant metric (CQCM “484G$” role) */
+  .health-card__metric {
+    position: absolute;
+    top: var(--pad);
+    right: var(--pad);
+    margin: 0;
+    font-family: var(--font-athletics);
+    font-weight: 400;
+    font-size: calc(var(--size) * 0.22);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    text-align: right;
+  }
+
+  /* Bottom-left: inset photo — 40% of card width */
+  .health-card__photo {
+    position: absolute;
+    left: var(--pad);
+    bottom: var(--pad);
+    width: calc(var(--size) * 0.4);
+    height: calc(var(--size) * 0.4);
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+  }
+
+  /* Bottom-right: same topic dot motifs as hero stickers */
+  .health-card__dots {
+    position: absolute;
+    right: var(--pad);
+    bottom: var(--pad);
+    width: calc(var(--size) * 0.32);
+    height: calc(var(--size) * 0.32);
+  }
+
+  .health-copy {
+    padding-top: 0.25rem;
+  }
+  .health-copy__title {
+    margin: 0;
+    font-family: var(--font-athletics);
+    font-weight: 400;
+    font-size: clamp(32px, 4.2vw, 48px);
+    line-height: 1.02;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    max-width: 11ch;
+  }
+  .health-copy__title span {
+    display: block;
+  }
+
+  @media (max-width: 900px) {
+    .health-pin {
+      --size: min(72vw, 280px);
+      --peek: clamp(48px, calc(var(--size) * 0.17), 64px);
+      height: auto;
+    }
+    .health-sticky {
+      position: relative;
+      min-height: 0;
+      padding-top: 60px;
+      padding-bottom: 60px;
+    }
+    .health-frame {
+      grid-template-columns: 1fr;
+    }
+    .health-stack {
+      height: calc(var(--size) + 5 * var(--peek));
+      margin-inline: auto;
+    }
+    .health-card {
+      top: calc(var(--i) * var(--peek));
+      left: calc(var(--i) * var(--peek));
+    }
+  }
+</style>
+
+<script>
+  function bindHealthCascade() {
+    const pin = document.querySelector('[data-health-cascade]');
+    if (!(pin instanceof HTMLElement)) return;
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const update = () => {
+      if (window.matchMedia('(max-width: 900px)').matches) {
+        pin.style.setProperty('--cascade', '1');
+        return;
+      }
+      const rect = pin.getBoundingClientRect();
+      const range = Math.max(1, pin.offsetHeight - window.innerHeight);
+      const scrolled = Math.min(range, Math.max(0, -rect.top));
+      const linear = reduce ? 1 : Math.min(1, scrolled / range);
+      const progress = 1 - (1 - linear) * (1 - linear);
+      pin.style.setProperty('--cascade', String(progress));
+    };
+
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+  }
+
+  bindHealthCascade();
+  document.addEventListener('astro:page-load', bindHealthCascade);
+</script>
