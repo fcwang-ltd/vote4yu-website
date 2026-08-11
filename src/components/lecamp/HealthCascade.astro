@@ -1,8 +1,8 @@
 ---
 /**
- * CQCM-style HEALTH cascade (Refero ACTIFS card chrome):
- * four-corner square — vertical spine · large metric · photo · topic dots.
- * Container layout (stack left, headline right). Y-only scroll → 45° stair.
+ * HEALTH cascade: diagonal stair of square cards.
+ * Left peek strip carries stacked HEALTH initials (big letter + rest of word).
+ * Y-only scroll → 45° stair; photo + topic dots stay in the card body.
  */
 import { HEALTH_DIMENSIONS } from '../../utils/healthDots';
 ---
@@ -18,8 +18,10 @@ import { HEALTH_DIMENSIONS } from '../../utils/healthDots';
               style={`--i: ${i}; --card-bg: ${dim.color}; --dot: ${dim.dotFill};`}
               aria-label={`${dim.label}`}
             >
-              <span class="health-card__spine">{dim.short}</span>
-              <span class="health-card__metric">{dim.metric}</span>
+              <p class="health-card__title">
+                <span class="health-card__letter">{dim.letter}</span>
+                <span class="health-card__rest">{dim.short.slice(1)}</span>
+              </p>
               <img class="health-card__photo" src={dim.image} alt="" />
               <svg
                 class="health-card__dots"
@@ -56,8 +58,8 @@ import { HEALTH_DIMENSIONS } from '../../utils/healthDots';
   .health-pin {
     --cascade: 0;
     --size: clamp(260px, 28vw, 340px);
-    /* ~half+ of the top-right letter so HEALTH reads in the stair */
-    --peek: clamp(56px, calc(var(--size) * 0.17), 78px);
+    /* Near original stair offset; just enough for a clear HEALTH initial */
+    --peek: clamp(52px, calc(var(--size) * 0.18), 68px);
     --pad: clamp(14px, 4.2%, 18px);
     height: 145svh;
     background: #fff;
@@ -98,48 +100,48 @@ import { HEALTH_DIMENSIONS } from '../../utils/healthDots';
     z-index: calc(1 + var(--i));
     background: var(--card-bg);
     border-radius: 8px;
-    overflow: hidden;
+    /* Visible so pillar remainder can extend past the right edge when the stair opens;
+       when stacked, later cards cover that overflow so only HEALTH initials read. */
+    overflow: visible;
     color: #000;
     box-sizing: border-box;
   }
 
-  /* Top-left: vertical label — modest size, top-aligned with metric */
-  .health-card__spine {
+  /* Top-left title: HEALTH initial fills the peek; remainder sits under the next card until the stair opens */
+  .health-card__title {
     position: absolute;
     left: var(--pad);
     top: var(--pad);
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.1em;
+    margin: 0;
+    max-width: calc(100% - var(--pad) * 2);
     font-family: var(--font-athletics);
     font-weight: 400;
-    font-size: clamp(13px, 1.35vw, 15px);
-    letter-spacing: 0.04em;
     text-transform: uppercase;
     line-height: 1;
-    margin: 0;
-    padding: 0;
-    /* After rotate, flex-end keeps the start of the word at the visual top */
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-start;
-    height: calc(var(--size) * 0.42);
+    pointer-events: none;
+  }
+  .health-card__letter {
+    flex: 0 0 auto;
+    /* Fill the visible peek strip so stacked cards show only H-E-A-L-T-H */
+    width: calc(var(--peek) - var(--pad));
+    font-size: calc(var(--peek) - var(--pad) * 0.35);
+    letter-spacing: -0.03em;
+    line-height: 0.88;
+  }
+  .health-card__rest {
+    margin-top: 0.12em;
+    font-size: clamp(14px, calc(var(--size) * 0.072), 22px);
+    letter-spacing: 0.03em;
+    line-height: 1;
+    white-space: nowrap;
+    opacity: 0.95;
   }
 
-  /* Top-right: dominant metric (CQCM “484G$” role) */
-  .health-card__metric {
-    position: absolute;
-    top: var(--pad);
-    right: var(--pad);
-    margin: 0;
-    font-family: var(--font-athletics);
-    font-weight: 400;
-    font-size: calc(var(--size) * 0.22);
-    line-height: 0.9;
-    letter-spacing: 0.02em;
-    text-align: right;
-  }
-
-  /* Bottom-left: inset photo — 40% of card width */
+  /* Clip media to the rounded card without clipping the title overflow */
   .health-card__photo {
     position: absolute;
     left: var(--pad);
@@ -187,7 +189,7 @@ import { HEALTH_DIMENSIONS } from '../../utils/healthDots';
   @media (max-width: 900px) {
     .health-pin {
       --size: min(72vw, 280px);
-      --peek: clamp(48px, calc(var(--size) * 0.17), 64px);
+      --peek: clamp(48px, calc(var(--size) * 0.18), 60px);
       height: auto;
     }
     .health-sticky {
