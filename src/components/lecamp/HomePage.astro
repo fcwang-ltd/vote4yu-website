@@ -4,6 +4,8 @@
  * Photos: clean atmosphere + candidate imagery (no screenshot composites with baked UI text).
  * Stickers: illustrated badge assets (not page crops).
  */
+import Nav from './Nav.astro';
+
 const stickers = [
   { src: '/images/stickers/sticker-ceo.png', class: 's1' },
   { src: '/images/stickers/sticker-softlanding.png', class: 's2' },
@@ -24,17 +26,23 @@ const marks = [
 ---
 
 <div class="home">
-  <section class="hero">
-    {stickers.map((s) => <img class={`sticker ${s.class}`} src={s.src} alt="" aria-hidden="true" />)}
-    <div class="hero__inner">
-      <h1>Un refuge pour votre croissance entrepreneuriale</h1>
+  {/* Le Camp: fullscreen at rest → inset rounded float on scroll */}
+  <div class="hero-pin" data-hero-pin>
+    <div class="hero-sticky">
+      <section class="hero" data-hero>
+        <Nav onDark />
+        {stickers.map((s) => <img class={`sticker ${s.class}`} src={s.src} alt="" aria-hidden="true" />)}
+        <div class="hero__inner">
+          <h1>Un refuge pour votre croissance entrepreneuriale</h1>
+        </div>
+        <div class="hero__foot">
+          <span>ACCÉLÉRATEUR / INCUBATEUR</span>
+          <a class="hero__scroll" href="#intro" aria-label="Défiler">↓</a>
+          <span>DEPUIS 2015</span>
+        </div>
+      </section>
     </div>
-    <div class="hero__foot">
-      <span>ACCÉLÉRATEUR / INCUBATEUR</span>
-      <a class="hero__scroll" href="#intro" aria-label="Défiler">↓</a>
-      <span>DEPUIS 2015</span>
-    </div>
-  </section>
+  </div>
 
   <section id="intro" class="container-1200 section">
     <div class="intro">
@@ -204,20 +212,35 @@ const marks = [
   .section--tight { padding-top: 24px; }
   .section--journal { padding-top: 24px; padding-bottom: 40px; }
 
-  /* Hero: clean night photo only — headline is live HTML */
+  /* Hero pin: creates scroll room so sticky frame can inset */
+  .hero-pin {
+    height: 140svh;
+    background: #fff;
+  }
+  .hero-sticky {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    z-index: 5;
+    padding: calc(var(--hero-inset, 0) * 20px);
+    box-sizing: border-box;
+    transition: padding 0.05s linear;
+  }
   .hero {
+    --hero-radius: calc(var(--hero-inset, 0) * 40px);
     position: relative;
-    min-height: 100svh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     color: #fff;
     background:
-      linear-gradient(rgb(8 12 18 / 0.35), rgb(8 12 18 / 0.5)),
-      url('/images/atmosphere/PLACEHOLDER-AI-night-summit.png') center / cover no-repeat;
+      linear-gradient(rgb(8 12 22 / 0.55), rgb(8 12 22 / 0.72)),
+      url('/images/atmosphere/PLACEHOLDER-AI-hero-interview-contour.png') center / cover no-repeat;
     overflow: hidden;
-    border-radius: 0 0 40px 40px;
+    border-radius: var(--hero-radius);
+    will-change: border-radius;
   }
   .hero__inner {
     position: relative;
@@ -588,5 +611,33 @@ const marks = [
     .event--low { margin-top: 0; }
     .photos__a, .photos__b, .photos__c { height: 220px; }
     .s4, .s5, .s6 { display: none; }
+    .hero-sticky {
+      padding: calc(var(--hero-inset, 0) * 12px);
+    }
   }
 </style>
+
+<script>
+  function bindHeroFloat() {
+    const pin = document.querySelector('[data-hero-pin]');
+    const sticky = pin?.querySelector('.hero-sticky');
+    if (!(pin instanceof HTMLElement) || !(sticky instanceof HTMLElement)) return;
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const update = () => {
+      const rect = pin.getBoundingClientRect();
+      const range = Math.max(1, pin.offsetHeight - window.innerHeight);
+      const scrolled = Math.min(range, Math.max(0, -rect.top));
+      const progress = reduce ? 0 : Math.min(1, scrolled / range);
+      sticky.style.setProperty('--hero-inset', String(progress));
+    };
+
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+  }
+
+  bindHeroFloat();
+  document.addEventListener('astro:page-load', bindHeroFloat);
+</script>
