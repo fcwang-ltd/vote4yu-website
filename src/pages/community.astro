@@ -1,0 +1,130 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/lecamp/Nav.astro';
+import Footer from '../components/lecamp/Footer.astro';
+
+const partners = [
+  {
+    name: 'Dr. Jerry Leung Medical Club',
+    href: 'https://www.drjerryleung.ca/',
+    logo: '/images/partners/dr-jerry-leung.svg',
+    blurb:
+      'A Markham private medical and wellness club focused on preventive care, physician access, and community health.',
+  },
+  {
+    name: 'Up&Fit Fitness',
+    href: 'https://www.upandfit.ca/',
+    logo: '/images/partners/up-and-fit.png',
+    blurb:
+      'A local fitness studio built around personalised training, group classes, and long-term health for Markham-area residents.',
+  },
+];
+---
+
+<BaseLayout title="Communities | VOTE4YU">
+  <Nav />
+  <main class="community">
+    <section class="container-1200 community__intro">
+      <p class="label-mono">MARKHAM HEALTH COMMUNITY</p>
+      <h1>Rooted in local partners</h1>
+      <p>
+        Dave Yu works within Markham's health community every week. These organisations are part of that network
+        context: places where residents already train, recover, and seek care.
+      </p>
+    </section>
+
+    <section class="container-1200 community__grid" aria-label="Local health-community partners">
+      {
+        partners.map((p) => (
+          <a class="partner" href={p.href} target="_blank" rel="noopener noreferrer">
+            <img class="partner__logo" src={p.logo} alt="" />
+            <h2>{p.name}</h2>
+            <p>{p.blurb}</p>
+            <span class="partner__cta">Visit site →</span>
+          </a>
+        ))
+      }
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .community {
+    background: #fff;
+    color: #000;
+    font-family: var(--font-dm-sans);
+    padding-bottom: 80px;
+  }
+  .community__intro {
+    padding-block: 96px 40px;
+    max-width: 52ch;
+  }
+  .community__intro .label-mono {
+    margin: 0 0 0.75rem;
+  }
+  .community__intro h1 {
+    font-family: var(--font-agrandir);
+    font-weight: 600;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.05;
+    margin: 0 0 1rem;
+  }
+  .community__intro p {
+    margin: 0;
+    line-height: 1.55;
+    font-size: 17px;
+  }
+  .community__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+  .partner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface-trail-cream, #f7f3ea);
+    border-radius: 28px;
+    padding: 2rem;
+    transition: transform 0.2s ease;
+  }
+  .partner:hover {
+    transform: translateY(-2px);
+  }
+  .partner__logo {
+    height: 64px;
+    width: auto;
+    max-width: 260px;
+    object-fit: contain;
+    align-self: flex-start;
+  }
+  .partner h2 {
+    font-family: var(--font-agrandir);
+    font-weight: 600;
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+    margin: 0;
+    line-height: 1.2;
+  }
+  .partner p {
+    margin: 0;
+    line-height: 1.5;
+    font-size: 15px;
+    max-width: 40ch;
+  }
+  .partner__cta {
+    margin-top: auto;
+    font-family: var(--font-dm-mono, monospace);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-signal-red);
+  }
+  @media (max-width: 720px) {
+    .community__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

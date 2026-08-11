@@ -11,8 +11,16 @@ import HealthCascade from './HealthCascade.astro';
 // Local health-community organisations Dave works within (real, linkable).
 // Framed as network context, not endorsements.
 const network = [
-  { name: 'Dr. Jerry Leung Medical Club', href: 'https://www.drjerryleung.ca/' },
-  { name: 'Up&Fit Fitness', href: 'https://www.upandfit.ca/' },
+  {
+    name: 'Dr. Jerry Leung Medical Club',
+    href: 'https://www.drjerryleung.ca/',
+    logo: '/images/partners/dr-jerry-leung.svg',
+  },
+  {
+    name: 'Up&Fit Fitness',
+    href: 'https://www.upandfit.ca/',
+    logo: '/images/partners/up-and-fit.png',
+  },
 ];
 ---
 
@@ -43,10 +51,11 @@ const network = [
         <p>
           For ten years I have helped Markham families get healthier, one person at a time. My team and I have trained
           more than 6,000 residents, and I have worked alongside local doctors, clinics, and community health providers.
-          I am running for Ward 2 council to bring that same practical, close-to-the-ground care to the decisions that
-          shape our neighbourhood.
+          Born in Guangzhou and studying health science in Canada from age 16, I bring a weekly practice of listening
+          to people where they live. I am running for Ward 2 council to bring that same practical, close-to-the-ground
+          care to the decisions that shape our neighbourhood.
         </p>
-        <a class="btn-rect btn-rect--ink" href="/about">About Dave</a>
+        <a class="btn-rect btn-rect--ink" href="/blog/about-dave">About Dave</a>
       </div>
       <h2 class="intro__display">
         <span>A decade</span>
@@ -72,20 +81,31 @@ const network = [
           Health is the through-line of local decisions: how we reach care, how safe our streets feel, and how present
           our councillor is. These are the areas I will push on first.
         </p>
-        <a class="btn-pill btn-pill--ink" href="/platform">See the full platform</a>
+        <a class="btn-pill btn-pill--ink" href="/blog/building-a-healthier-markham">See the full platform</a>
       </div>
     </div>
 
     <div class="bento">
-      <article class="card card--ink a">
-        <h3>Accessibility</h3>
-        <p>
-          Shorter waits to find a family doctor, barrier-free services, and clear help navigating the health system in
-          the language you speak at home.
+      <a class="card card--ink a" href="/blog/ward-2-residents">
+        <p class="card__eyebrow">WARD 2 BRIEF</p>
+        <h3>What Ward 2 residents face</h3>
+        <p class="card__lede">
+          Before the platform, name the problems people actually carry. Ward 2 neighbours share six pressure points:
+          preventive care that fits language and culture, long family-doctor waits, scarce culturally adapted eldercare,
+          housing and development anxiety, everyday safety fears, and a councillor who feels far from the street.
         </p>
-        <span class="arrow" aria-hidden="true">→</span>
-      </article>
-      <img class="img b" src="/images/atmosphere/PLACEHOLDER-AI-canopy-light.png" alt="" />
+        <ul class="card__preview">
+          <li>Health access that matches how families live</li>
+          <li>Eldercare that respects culture and family duty</li>
+          <li>Housing, safety, and present local representation</li>
+        </ul>
+        <span class="card__cta">Read the full Ward 2 brief →</span>
+      </a>
+      <img
+        class="img b"
+        src="/images/atmosphere/PLACEHOLDER-AI-ward2-map.png"
+        alt="Illustrated map of Markham Ward 2"
+      />
 
       <article class="card card--sky c">
         <h3>Living quality</h3>
@@ -95,9 +115,9 @@ const network = [
         </p>
         <span class="arrow" aria-hidden="true">→</span>
       </article>
-      <img class="img d" src="/images/atmosphere/PLACEHOLDER-AI-fern-light.png" alt="" />
+      <img class="img d" src="/images/atmosphere/PLACEHOLDER-AI-living-quality.png" alt="" />
 
-      <img class="img e" src="/images/atmosphere/PLACEHOLDER-AI-path-walk.png" alt="" />
+      <img class="img e" src="/images/atmosphere/PLACEHOLDER-AI-hospitality-garden.png" alt="" />
       <article class="card card--cream f">
         <h3>Hospitality</h3>
         <p>
@@ -115,12 +135,13 @@ const network = [
     <div class="proof__row proof__row--orgs" aria-label="Local health-community organisations">
       {
         network.map((org) => (
-          <a class="org" href={org.href} target="_blank" rel="noopener noreferrer">
-            {org.name}
+          <a class="org" href={org.href} target="_blank" rel="noopener noreferrer" aria-label={org.name}>
+            <img class="org__logo" src={org.logo} alt={org.name} />
           </a>
         ))
       }
     </div>
+    <a class="proof__all" href="/community">All communities →</a>
   </section>
 
   <section class="container-1200 section">
@@ -129,11 +150,12 @@ const network = [
         <p class="label-mono guides__label">HEALTH IS THE THROUGH-LINE</p>
         <h2>A decade of health, brought to the council table</h2>
         <p>
-          I hold a health-science degree and have spent my career in community and personal health, working with
-          doctors, clinics, and thousands of Markham residents. That experience is exactly what Ward 2 needs on
-          council: someone who understands how people actually reach care, and who will advocate for it.
+          I hold a health-science degree from Simon Fraser University and have spent my career in community and
+          personal health, partnering with clinics and training thousands of Markham residents. That experience is what
+          Ward 2 needs on council: someone who understands how people actually reach care, and who will advocate for
+          it.
         </p>
-        <a class="btn-rect btn-rect--red" href="/about">Read Dave's story</a>
+        <a class="btn-rect btn-rect--red" href="/blog/about-dave">Read Dave's story</a>
       </div>
       <div class="guides__media">
         <img src="/images/candidate/stage-front.jpeg" alt="" />
@@ -190,16 +212,22 @@ const network = [
     <div class="journal">
       <p class="label-mono">UPDATES</p>
       <h2>From the campaign</h2>
-      <a class="journal__row" href="/blog/building-a-healthier-markham">
-        <span class="journal__title">Building a HEALTHier Markham: the six-pillar platform</span>
+      <a class="journal__row" href="/blog/ward-2-residents">
+        <span class="journal__title">What Ward 2 residents face</span>
+        <span class="journal__badge">ARTICLE</span>
+        <span class="journal__date">12 AUG 2026</span>
+        <span aria-hidden="true">→</span>
+      </a>
+      <a class="journal__row" href="/blog/about-dave">
+        <span class="journal__title">About Dave Yu</span>
         <span class="journal__badge">ARTICLE</span>
         <span class="journal__date">11 AUG 2026</span>
         <span aria-hidden="true">→</span>
       </a>
-      <a class="journal__row" href="/blog/family-doctor-wait">
-        <span class="journal__title">The family-doctor wait is a Ward 2 problem</span>
+      <a class="journal__row" href="/blog/building-a-healthier-markham">
+        <span class="journal__title">Building a HEALTHier Markham: the six-pillar platform</span>
         <span class="journal__badge">ARTICLE</span>
-        <span class="journal__date">12 AUG 2026</span>
+        <span class="journal__date">11 AUG 2026</span>
         <span aria-hidden="true">→</span>
       </a>
     </div>
@@ -362,6 +390,19 @@ const network = [
     position: relative;
     min-height: 220px;
   }
+  a.card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+  }
+  .card__eyebrow {
+    margin: 0 0 0.65rem;
+    font-family: var(--font-dm-mono, monospace);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--color-sky);
+  }
   .card h3 {
     font-family: var(--font-agrandir);
     font-size: clamp(1.5rem, 2.5vw, 2rem);
@@ -373,6 +414,44 @@ const network = [
     line-height: 1.45;
     font-size: 14px;
     max-width: 36ch;
+  }
+  .card__lede {
+    max-width: 42ch !important;
+    margin-bottom: 1rem !important;
+    opacity: 0.92;
+  }
+  .card__preview {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.45rem;
+    max-width: 40ch;
+  }
+  .card__preview li {
+    position: relative;
+    padding-left: 0.9rem;
+    font-size: 13px;
+    line-height: 1.35;
+    color: rgb(255 255 255 / 0.88);
+  }
+  .card__preview li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.45em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-sky);
+  }
+  .card__cta {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    font-family: var(--font-dm-mono, monospace);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--color-sky);
   }
   .card--ink { background: #000; color: #fff; }
   .card--ink h3 { color: var(--color-sky); }
@@ -392,7 +471,7 @@ const network = [
     border-radius: 28px;
     display: block;
   }
-  .a { grid-column: 1 / 6; grid-row: 1; }
+  .a { grid-column: 1 / 6; grid-row: 1; min-height: 320px; }
   .b { grid-column: 6 / 13; grid-row: 1; min-height: 320px; }
   .c { grid-column: 1 / 6; grid-row: 2; }
   .d { grid-column: 6 / 13; grid-row: 2; min-height: 280px; }
@@ -434,19 +513,36 @@ const network = [
     text-align: center;
     border: 1px solid rgb(0 0 0 / 0.15);
     border-radius: 16px;
-    padding: 1.5rem 1.25rem;
-    min-height: 88px;
+    padding: 1.75rem 1.5rem;
+    min-height: 112px;
     text-decoration: none;
     color: #000;
-    font-family: var(--font-agrandir);
-    font-weight: 600;
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    line-height: 1.2;
     transition: border-color 0.2s ease;
+  }
+  .org__logo {
+    height: auto;
+    width: auto;
+    max-height: 56px;
+    max-width: min(240px, 100%);
+    object-fit: contain;
+    filter: none;
+    opacity: 1;
   }
   .org:hover {
     border-color: var(--color-signal-red);
+  }
+  .proof__all {
+    display: inline-block;
+    margin-top: 1.75rem;
+    font-family: var(--font-dm-mono, monospace);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
     color: var(--color-signal-red);
+  }
+  .proof__all:hover {
+    text-decoration: underline;
   }
 
   .guides {
