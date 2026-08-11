@@ -1,62 +1,174 @@
 @import "tailwindcss";
 
-/* ==========================================================================
-   Vote4Yu design tokens (Tailwind v4 @theme)
-   Source: 04_Execute/_Studio/horizon-studio/Vote4Yu/efforts/website-build-spec.md
-   Design language reconciles the "LE CAMP" reference (near-monochrome canvas,
-   poster-scale display type, badge illustrations) with campaign credibility.
-   Accent is tokenised for one-line swap (see --color-accent).
-   ========================================================================== */
+/* LE CAMP tokens — Refero style 45267374 + live surface extensions.
+   Fonts: Agrandir / DM Sans / DM Mono from public/fonts/ */
+
+@font-face {
+  font-family: "Agrandir";
+  src: url("/fonts/Agrandir-Variable.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("/fonts/DMSans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("/fonts/DMSans-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Mono";
+  src: url("/fonts/DMMono-Medium.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
-  /* Surfaces */
-  --color-ink: #000000;
-  --color-paper: #ffffff;
-  --color-cream: #f5f0e8;
-  --color-lightgray: #f5f5f5;
-  --color-deephero: #0a0a0a;
+  --color-signal-red: #fe3a3a;
+  --color-carbon-ink: #000000;
+  --color-summit-white: #ffffff;
+  --color-ridge-gray: #767676;
 
-  /* Accent (DECISION SLOT: deep teal, recommended). Swap here to re-skin. */
-  --color-accent: #006d77;
-  --color-accent-light: #83c5be;
-  --color-accent-dark: #00424a;
-  --color-muted: #666666;
+  --color-sky: #a3cbfd;
+  --color-blue: #60a3f4;
+  --color-burgundy: #561515;
+  --color-beige: #f7f1e8;
 
-  /* Type families */
-  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
-  --font-body: "Inter", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
-  --font-cjk-hans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
-  --font-cjk-hant: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --surface-summit-white: #ffffff;
+  --surface-glacier-mist: #f5f5f5;
+  --surface-trail-cream: #f5f0e8;
+  --surface-base-camp-dark: #0a1628;
 
-  /* Radius */
-  --radius-sm: 4px;
-  --radius-md: 10px;
+  --font-agrandir: "Agrandir", "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-dm-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-dm-mono: "DM Mono", ui-monospace, monospace;
+
+  --font-display: var(--font-agrandir);
+  --font-body: var(--font-dm-sans);
+  --font-mono: var(--font-dm-mono);
+
+  --text-caption: 10px;
+  --text-body: 16px;
+  --text-subheading: 26px;
+  --text-display: 90px;
+
+  --spacing-5: 5px;
+  --spacing-10: 10px;
+  --spacing-15: 15px;
+  --spacing-20: 20px;
+  --spacing-30: 30px;
+  --spacing-40: 40px;
+  --spacing-60: 60px;
+  --spacing-section: 60px;
+
+  --breakpoint-content: 1200px;
+
+  --radius-nav: 10px;
+  --radius-cards: 20px;
+  --radius-buttons: 35px;
   --radius-lg: 20px;
   --radius-xl: 35px;
-
-  /* Layout */
-  --spacing-section: 60px;
-  --breakpoint-content: 1200px;
 }
 
 :root {
   color-scheme: light;
+  --color-ink: var(--color-carbon-ink);
+  --color-paper: var(--color-summit-white);
+  --color-signal: var(--color-signal-red);
+  --color-muted: var(--color-ridge-gray);
+  --color-cream: var(--surface-trail-cream);
 }
 
 html {
-  font-family: var(--font-body);
-  color: var(--color-ink);
-  background: var(--color-paper);
+  font-family: var(--font-dm-sans);
+  color: var(--color-carbon-ink);
+  background: var(--color-summit-white);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-html[lang="zh-CN"] { font-family: var(--font-cjk-hans); }
-html[lang="zh-HK"] { font-family: var(--font-cjk-hant); }
-
-body { margin: 0; }
+body {
+  margin: 0;
+}
 
 .container-1200 {
   max-width: var(--breakpoint-content);
   margin-inline: auto;
   padding-inline: 1.5rem;
+}
+
+.section-pad {
+  padding-block: var(--spacing-section);
+}
+
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-buttons);
+  padding: 10px 20px;
+  font-family: var(--font-dm-sans);
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+}
+.btn-pill--red {
+  background: var(--color-signal-red);
+  color: var(--color-summit-white);
+  box-shadow: 0 2px 12px rgba(254, 58, 58, 0.25);
+}
+.btn-pill--ink {
+  background: var(--color-carbon-ink);
+  color: var(--color-summit-white);
+}
+.btn-rect {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-nav);
+  padding: 10px 20px;
+  font-family: var(--font-dm-sans);
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none;
+  border: 0;
+}
+.btn-rect--ink {
+  background: var(--color-carbon-ink);
+  color: var(--color-summit-white);
+}
+.btn-rect--red {
+  background: var(--color-signal-red);
+  color: var(--color-summit-white);
+}
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-nav);
+  padding: 10px 20px;
+  font-family: var(--font-dm-sans);
+  font-size: 14px;
+  text-decoration: none;
+  border: 1px solid currentColor;
+  background: transparent;
+}
+
+.label-mono {
+  font-family: var(--font-dm-mono);
+  font-size: var(--text-caption);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.3;
 }

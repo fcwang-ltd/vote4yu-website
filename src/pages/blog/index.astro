@@ -1,41 +1,17 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Nav from '../../components/ui/Nav.astro';
-import Footer from '../../components/ui/Footer.astro';
-import { getCollection } from 'astro:content';
-import { NAV, PAGE_TITLES } from '../../utils/content';
-import { localizePath } from '../../utils/i18n';
-const locale = 'en' as const;
-const posts = (await getCollection('blog', (e) => e.data.locale === 'en' && !e.data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+import Nav from '../../components/lecamp/Nav.astro';
+import Footer from '../../components/lecamp/Footer.astro';
 ---
 
-<BaseLayout
-  title={PAGE_TITLES[locale].blog}
-  description="Weekly updates and health-policy explainers from Dave Yu, candidate for Markham City Council, Ward 2."
-  locale={locale}
-  path="/blog"
->
-  <Nav locale={locale} path="/blog" navLabels={NAV[locale]} />
-  <main class="container-1200" style="padding-block: 60px;">
-    <h1 style="font-family: var(--font-display); font-size: clamp(32px,6vw,56px); font-weight:800;">Updates</h1>
-    <ul style="list-style:none; padding:0; margin-top: 2rem; display:grid; gap: 1.25rem;">
-      {
-        posts.map((post) => (
-          <li style="border:1px solid var(--color-ink); border-radius: var(--radius-lg); padding: 24px;">
-            <a href={localizePath(`/blog/${post.slug.replace(/^en\//, '')}`, locale)} style="text-decoration:none; color: var(--color-ink);">
-              <h2 style="font-family: var(--font-display); font-weight:600; margin:0;">{post.data.title}</h2>
-              <p style="color: var(--color-muted); font-family: var(--font-mono); font-size: 12px; margin: 0.25rem 0;">
-                {post.data.pubDate.toISOString().slice(0, 10)}
-              </p>
-              <p style="line-height:1.6; margin:0;">{post.data.description}</p>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-    {posts.length === 0 && <p style="color: var(--color-muted);">Posts land here. Launch requires 5+ seeded posts.</p>}
+<BaseLayout title="Blogue | LE CAMP">
+  <Nav />
+  <main class="container-1200" style="padding-block:96px;">
+    <p class="label-mono">BLOGUE</p>
+    <h1 style="font-family:var(--font-agrandir);font-size:clamp(40px,6vw,72px);font-weight:600;line-height:1;margin:0.5rem 0 1rem;">
+      Blogue
+    </h1>
+    <p style="max-width:42ch;line-height:1.5;">Index blogue — mise en page à venir (clone Le Camp).</p>
   </main>
-  <Footer locale={locale} />
+  <Footer />
 </BaseLayout>

@@ -1,0 +1,592 @@
+---
+/**
+ * Le Camp homepage — real HTML/CSS only.
+ * Photos: clean atmosphere + candidate imagery (no screenshot composites with baked UI text).
+ * Stickers: illustrated badge assets (not page crops).
+ */
+const stickers = [
+  { src: '/images/stickers/sticker-ceo.png', class: 's1' },
+  { src: '/images/stickers/sticker-softlanding.png', class: 's2' },
+  { src: '/images/stickers/sticker-basecamp.png', class: 's3' },
+  { src: '/images/stickers/sticker-acceleration.png', class: 's4' },
+  { src: '/images/stickers/sticker-summit.png', class: 's5' },
+  { src: '/images/stickers/sticker-exploration.png', class: 's6' },
+];
+
+const marks = [
+  '/images/marks/mark-lila.png',
+  '/images/marks/mark-rapid.png',
+  '/images/marks/mark-lime.png',
+  '/images/marks/mark-chalets.png',
+  '/images/marks/mark-laylah.png',
+  '/images/marks/mark-propulsion.png',
+];
+---
+
+<div class="home">
+  <section class="hero">
+    {stickers.map((s) => <img class={`sticker ${s.class}`} src={s.src} alt="" aria-hidden="true" />)}
+    <div class="hero__inner">
+      <h1>Un refuge pour votre croissance entrepreneuriale</h1>
+    </div>
+    <div class="hero__foot">
+      <span>ACCÉLÉRATEUR / INCUBATEUR</span>
+      <a class="hero__scroll" href="#intro" aria-label="Défiler">↓</a>
+      <span>DEPUIS 2015</span>
+    </div>
+  </section>
+
+  <section id="intro" class="container-1200 section">
+    <div class="intro">
+      <div class="intro__copy">
+        <p>
+          Depuis 2015, LE CAMP propulse la croissance des entreprises technologiques d'ici et d'ailleurs grâce à des
+          programmes novateurs, un réseau solide de coachs, experts et de partenaires locaux, nationaux et
+          internationaux. Avec une approche humaine et orientée vers les résultats, LE CAMP offre un accompagnement sur
+          mesure pour répondre aux besoins uniques des entreprises, qu'elles soient en démarrage ou en pleine expansion.
+        </p>
+        <a class="btn-rect btn-rect--ink" href="/community">À propos</a>
+      </div>
+      <h2 class="intro__display">
+        <span>10 ans</span>
+        <span>À gravir</span>
+        <span>Tous les sommets</span>
+      </h2>
+    </div>
+    <div class="photos">
+      <img class="photos__a" src="/images/candidate/pagent-coach.jpeg" alt="" />
+      <img class="photos__b" src="/images/candidate/health-interview.jpeg" alt="" />
+      <div class="photos__c-wrap">
+        <img class="photos__c" src="/images/candidate/stage-front.jpeg" alt="" />
+        <img class="photos__badge" src="/images/stickers/sticker-tent-blue.png" alt="" aria-hidden="true" />
+      </div>
+    </div>
+  </section>
+
+  <section class="container-1200 section section--tight">
+    <div class="programs-head">
+      <h2>De l'accompagnement pour tous les stades d'une entreprise</h2>
+      <div class="programs-head__aside">
+        <p>
+          De la validation de marché aux premières ventes, jusqu'à la croissance soutenue : nos programmes vous
+          accompagnent vers chaque étape clé de votre ascension entrepreneuriale.
+        </p>
+        <a class="btn-pill btn-pill--ink" href="/community">Voir tous les programmes</a>
+      </div>
+    </div>
+
+    <div class="bento">
+      <article class="card card--ink a">
+        <h3>Sentier d'approche</h3>
+        <p>
+          Les programmes du sentier d'approche permettent d'avoir tous les outils et les ressources nécessaires pour
+          bien valider l'opportunité d'affaire en débutant par la mise en place d'une structure solide.
+        </p>
+        <span class="arrow" aria-hidden="true">→</span>
+      </article>
+      <img class="img b" src="/images/atmosphere/PLACEHOLDER-AI-canopy-light.png" alt="" />
+
+      <article class="card card--sky c">
+        <h3>Sentier d'ascension</h3>
+        <p>
+          Les programmes du sentier d'ascension sont spécialement réfléchis pour soutenir les entrepreneurs dans leurs
+          enjeux de croissance tels que le financement, la gestion des ressources humaines, la stratégie de
+          commercialisation et d'expansion internationale, la gouvernance, et bien plus.
+        </p>
+        <span class="arrow" aria-hidden="true">→</span>
+      </article>
+      <img class="img d" src="/images/atmosphere/PLACEHOLDER-AI-fern-light.png" alt="" />
+
+      <img class="img e" src="/images/atmosphere/PLACEHOLDER-AI-path-walk.png" alt="" />
+      <article class="card card--cream f">
+        <h3>Passerelles internationales</h3>
+        <p>
+          Les passerelles internationales offrent une gamme complète de programmes, de missions et de partenariats qui
+          facilitent l'implantation d'une entreprise internationale au Québec.
+        </p>
+        <span class="arrow arrow--red" aria-hidden="true">→</span>
+      </article>
+    </div>
+  </section>
+
+  <section class="container-1200 section proof">
+    <p class="label-mono">ENTREPRISES</p>
+    <h2>Plus de 500 entreprises sont passées par ici</h2>
+    <div class="proof__row" aria-label="Marques partenaires (placeholders)">
+      {marks.map((src) => <img src={src} alt="" />)}
+    </div>
+  </section>
+
+  <section class="container-1200 section">
+    <div class="guides">
+      <div class="guides__body">
+        <p class="label-mono guides__label">COACHS &amp; EXPERTS</p>
+        <h2>Des guides pour tous les sommets</h2>
+        <p>
+          Être accompagné par LE CAMP permet d'accéder à un réseau de coachs et d'experts spécialisés dans chaque aspect
+          de la croissance d'une entreprise. Ce soutien personnalisé permet de surmonter les défis entrepreneuriaux
+          étape par étape, avec des personnes qui ont votre succès à cœur.
+        </p>
+        <a class="btn-rect btn-rect--red" href="/community">Parcourir les coachs et experts</a>
+      </div>
+      <div class="guides__media">
+        <img src="/images/candidate/stage-front.jpeg" alt="" />
+        <img class="guides__badge" src="/images/stickers/sticker-tent-coral.png" alt="" aria-hidden="true" />
+      </div>
+    </div>
+  </section>
+
+  <section class="container-1200 section">
+    <div class="events">
+      <div class="events__copy">
+        <p class="label-mono">ÉVÉNEMENTS &amp; ACTIVITÉS</p>
+        <h2>Expéditions variées</h2>
+        <p>
+          Dynamiser l'écosystème entrepreneurial techno de la ville de Québec fait partie de notre ADN. Nos événements
+          et activités offrent des occasions uniques d'apprendre, de saisir des opportunités et de créer des liens.
+        </p>
+        <a class="btn-pill btn-pill--ink" href="/events">Toutes les expéditions</a>
+      </div>
+      <div class="events__cards">
+        <a class="event event--low" href="/events">
+          <div class="event__media">
+            <img src="/images/atmosphere/PLACEHOLDER-AI-markham-atmosphere.png" alt="" />
+            <div class="chips">
+              <span class="chip">EN PERSONNE</span>
+              <span class="chip">MISSIONS</span>
+            </div>
+          </div>
+          <div class="event__foot event__foot--red">
+            <p class="meta">16 AU 20 NOV. 2026</p>
+            <h3>Mission commerciale | Rennes 2026</h3>
+            <span class="arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+        <a class="event event--high" href="/events">
+          <div class="event__media">
+            <img src="/images/candidate/pagent-coach.jpeg" alt="" />
+            <div class="chips">
+              <span class="chip">EN PERSONNE</span>
+              <span class="chip">RÉSEAUTAGE</span>
+            </div>
+          </div>
+          <div class="event__foot event__foot--burgundy">
+            <p class="meta">15 SEPT. 2026 · 17:00 À 19:30</p>
+            <h3>LE CAMP de la rentrée | Réseautage</h3>
+            <span class="arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-1200 section section--journal">
+    <div class="journal">
+      <p class="label-mono">BLOGUE</p>
+      <h2>Journal de bord</h2>
+      <a class="journal__row" href="/blog">
+        <span class="journal__title">En direct du front — Partir pour mieux revenir: Mon retour au coaching</span>
+        <span class="journal__badge">ARTICLE</span>
+        <span class="journal__date">27 MARS 2025</span>
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+</div>
+
+<style>
+  .home {
+    background: #fff;
+    color: #000;
+    font-family: var(--font-dm-sans);
+  }
+  .section { padding-block: 60px; }
+  .section--tight { padding-top: 24px; }
+  .section--journal { padding-top: 24px; padding-bottom: 40px; }
+
+  /* Hero: clean night photo only — headline is live HTML */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background:
+      linear-gradient(rgb(8 12 18 / 0.35), rgb(8 12 18 / 0.5)),
+      url('/images/atmosphere/PLACEHOLDER-AI-night-summit.png') center / cover no-repeat;
+    overflow: hidden;
+    border-radius: 0 0 40px 40px;
+  }
+  .hero__inner {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 140px 1.5rem 120px;
+    max-width: 920px;
+  }
+  .hero h1 {
+    font-family: var(--font-agrandir);
+    font-weight: 600;
+    font-size: clamp(40px, 6.5vw, 72px);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    max-width: 16ch;
+    margin: 0 auto;
+    text-shadow: none;
+  }
+  .sticker {
+    position: absolute;
+    z-index: 2;
+    width: clamp(72px, 9vw, 120px);
+    height: auto;
+    filter: drop-shadow(0 4px 20px rgba(10, 22, 40, 0.45));
+    pointer-events: none;
+  }
+  .s1 { top: 16%; left: 7%; }
+  .s2 { top: 10%; left: 42%; width: clamp(70px, 8vw, 105px); }
+  .s3 { top: 15%; right: 8%; }
+  .s4 { bottom: 20%; left: 4%; width: clamp(100px, 12vw, 150px); }
+  .s5 { bottom: 12%; left: 45%; width: clamp(70px, 8vw, 100px); }
+  .s6 { bottom: 18%; right: 6%; width: clamp(100px, 12vw, 150px); }
+
+  .hero__foot {
+    position: absolute;
+    left: 0; right: 0; bottom: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: clamp(1.5rem, 4vw, 3rem);
+    font-family: var(--font-dm-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    z-index: 2;
+  }
+  .hero__scroll {
+    width: 40px; height: 40px;
+    border-radius: 9999px;
+    border: 1px solid rgb(255 255 255 / 0.55);
+    display: grid; place-items: center;
+    color: #fff; text-decoration: none;
+  }
+
+  .intro {
+    display: grid;
+    grid-template-columns: 0.85fr 1.35fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+  .intro__copy p {
+    font-size: 14px;
+    line-height: 1.45;
+    max-width: 42ch;
+    margin: 0 0 1.5rem;
+  }
+  .intro__display {
+    font-family: var(--font-agrandir);
+    font-weight: 600;
+    font-size: clamp(44px, 7vw, 90px);
+    line-height: 1;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .photos {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+  .photos img {
+    object-fit: cover;
+    border-radius: 28px;
+    display: block;
+  }
+  .photos__a { flex: 1.05; height: 280px; width: 100%; }
+  .photos__b { flex: 0.95; height: 380px; width: 100%; }
+  .photos__c-wrap { position: relative; flex: 1.15; }
+  .photos__c { width: 100%; height: 520px; }
+  .photos__badge {
+    position: absolute;
+    top: -16px; right: -10px;
+    width: 56px; height: auto;
+  }
+
+  .programs-head {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  .programs-head h2 {
+    font-family: var(--font-agrandir);
+    font-weight: 600;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.08;
+    margin: 0;
+    max-width: 18ch;
+  }
+  .programs-head__aside {
+    text-align: right;
+    justify-self: end;
+    max-width: 36ch;
+  }
+  .programs-head__aside p {
+    margin: 0 0 1.25rem;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.25rem;
+  }
+  .card {
+    border-radius: 28px;
+    padding: 2rem 2rem 2.5rem;
+    position: relative;
+    min-height: 220px;
+  }
+  .card h3 {
+    font-family: var(--font-agrandir);
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 600;
+    margin: 0 0 0.85rem;
+  }
+  .card p {
+    margin: 0;
+    line-height: 1.45;
+    font-size: 14px;
+    max-width: 36ch;
+  }
+  .card--ink { background: #000; color: #fff; }
+  .card--ink h3 { color: var(--color-sky); }
+  .card--sky { background: var(--color-sky); color: #000; }
+  .card--cream { background: var(--surface-trail-cream); color: var(--color-signal-red); }
+  .arrow {
+    position: absolute;
+    right: 1.5rem;
+    bottom: 1.25rem;
+    font-size: 1.25rem;
+  }
+  .arrow--red { color: var(--color-signal-red); }
+  .img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 28px;
+    display: block;
+  }
+  .a { grid-column: 1 / 6; grid-row: 1; }
+  .b { grid-column: 6 / 13; grid-row: 1; min-height: 320px; }
+  .c { grid-column: 1 / 6; grid-row: 2; }
+  .d { grid-column: 6 / 13; grid-row: 2; min-height: 280px; }
+  .e { grid-column: 1 / 8; grid-row: 3; min-height: 300px; transform: rotate(-1.25deg); }
+  .f { grid-column: 8 / 13; grid-row: 3; }
+
+  .proof { text-align: center; }
+  .proof .label-mono { margin: 0 0 0.75rem; }
+  .proof h2 {
+    font-family: var(--font-agrandir);
+    font-weight: 600;
+    font-size: clamp(28px, 4vw, 42px);
+    margin: 0 auto 2rem;
+    max-width: 22ch;
+    line-height: 1.1;
+  }
+  .proof__row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .proof__row img {
+    width: 100%;
+    max-height: 44px;
+    object-fit: contain;
+    filter: grayscale(1);
+    opacity: 0.85;
+  }
+
+  .guides {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    background: var(--surface-trail-cream);
+    border-radius: 40px;
+    padding: 2.5rem 0 2.5rem 2.5rem;
+    align-items: center;
+  }
+  .guides__body { padding-right: 2rem; color: var(--color-signal-red); }
+  .guides__label { color: var(--color-signal-red); margin: 0 0 0.75rem; }
+  .guides__body h2 {
+    font-family: var(--font-agrandir);
+    font-weight: 600;
+    font-size: clamp(32px, 4vw, 44px);
+    margin: 0 0 1rem;
+    line-height: 1.1;
+  }
+  .guides__body p {
+    margin: 0 0 1.5rem;
+    line-height: 1.55;
+    max-width: 38ch;
+    font-size: 16px;
+  }
+  .guides__media {
+    position: relative;
+    margin-block: -48px;
+    margin-right: 1.5rem;
+  }
+  .guides__media > img:first-child {
+    width: 100%;
+    min-height: 420px;
+    object-fit: cover;
+    border-radius: 28px;
+    display: block;
+  }
+  .guides__badge {
+    position: absolute;
+    left: -12px;
+    bottom: 24px;
+    width: 64px;
+    height: auto;
+  }
+
+  .events {
+    display: grid;
+    grid-template-columns: 0.85fr 1.35fr;
+    gap: 2.5rem;
+  }
+  .events__copy .label-mono { margin: 0 0 0.5rem; }
+  .events__copy h2 {
+    font-family: var(--font-agrandir);
+    font-weight: 600;
+    font-size: clamp(36px, 5vw, 52px);
+    margin: 0 0 1rem;
+    line-height: 1.05;
+  }
+  .events__copy p {
+    margin: 0 0 1.5rem;
+    line-height: 1.5;
+    max-width: 36ch;
+    font-size: 14px;
+  }
+  .events__cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    align-items: start;
+  }
+  .event {
+    border-radius: 28px;
+    overflow: hidden;
+    text-decoration: none;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    background: #111;
+  }
+  .event--low { margin-top: 48px; }
+  .event__media { position: relative; aspect-ratio: 1; }
+  .event__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .chips {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .chip {
+    background: rgb(15 15 17 / 0.85);
+    font-family: var(--font-dm-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+  .event__foot {
+    position: relative;
+    padding: 1.25rem 1.35rem 1.5rem;
+    min-height: 150px;
+  }
+  .event__foot--red { background: var(--color-signal-red); }
+  .event__foot--burgundy { background: var(--color-burgundy); }
+  .meta {
+    font-family: var(--font-dm-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 0 0 0.65rem;
+  }
+  .event h3 {
+    font-family: var(--font-agrandir);
+    font-size: 1.25rem;
+    margin: 0;
+    line-height: 1.2;
+    max-width: 14ch;
+    font-weight: 600;
+  }
+  .event__foot .arrow {
+    position: absolute;
+    right: 1.25rem;
+    bottom: 1.15rem;
+  }
+
+  .journal {
+    background: var(--color-sky);
+    border-radius: 40px;
+    padding: 2.5rem 2.5rem 2rem;
+  }
+  .journal .label-mono { margin: 0 0 0.5rem; }
+  .journal h2 {
+    font-family: var(--font-agrandir);
+    font-weight: 600;
+    font-size: clamp(36px, 5vw, 52px);
+    margin: 0 0 2.5rem;
+    line-height: 1;
+  }
+  .journal__row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem 0 1rem 1rem;
+    border-left: 1px solid rgb(0 0 0 / 0.25);
+    border-bottom: 1px solid rgb(0 0 0 / 0.25);
+    text-decoration: none;
+    color: inherit;
+  }
+  .journal__badge {
+    background: #fff;
+    font-family: var(--font-dm-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  .journal__date {
+    font-family: var(--font-dm-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 900px) {
+    .intro, .programs-head, .guides, .events, .bento, .events__cards, .journal__row, .photos, .proof__row {
+      display: flex;
+      flex-direction: column;
+    }
+    .programs-head__aside { text-align: left; justify-self: start; }
+    .a, .b, .c, .d, .e, .f { transform: none; min-height: 240px; }
+    .guides { padding: 1.5rem; }
+    .guides__media { margin: 0; }
+    .guides__media > img:first-child { min-height: 280px; }
+    .event--low { margin-top: 0; }
+    .photos__a, .photos__b, .photos__c { height: 220px; }
+    .s4, .s5, .s6 { display: none; }
+  }
+</style>

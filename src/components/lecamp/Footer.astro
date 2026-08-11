@@ -1,0 +1,172 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="lc-footer-wrap" id="contact">
+  <div class="container-1200">
+    <div class="lc-footer">
+      <div class="lc-footer__cta">
+        <div>
+          <h2>Prêt à gravir les sommets</h2>
+          <p>Vous souhaitez bénéficier de notre accompagnement pour accélérer votre croissance?</p>
+        </div>
+        <a class="btn-rect btn-rect--red" href="mailto:hello@vote4yu.ca">Contactez-nous</a>
+      </div>
+
+      <hr class="lc-footer__rule" />
+
+      <div class="lc-footer__lower">
+        <div class="lc-footer__cols">
+          <div>
+            <p class="label-mono">Accompagnement</p>
+            <a href="/">Programmes</a>
+            <a href="/community">Coachs et experts</a>
+            <a href="/community">Entreprises</a>
+          </div>
+          <div>
+            <p class="label-mono">LE CAMP</p>
+            <a href="/blog">Blogue</a>
+            <a href="/events">Événements</a>
+            <a href="/community">Partenaires</a>
+          </div>
+          <div>
+            <p class="label-mono">Contact</p>
+            <a href="mailto:hello@vote4yu.ca">Contact</a>
+            <a href="/blog">Salle de presse</a>
+          </div>
+        </div>
+
+        <div class="lc-footer__news">
+          <p class="label-mono">Abonnez-vous à notre infolettre</p>
+          <form class="lc-footer__form" action="#" method="get" onsubmit="return false;">
+            <label class="sr-only" for="nl">Courriel</label>
+            <input id="nl" type="email" placeholder="votre@courriel.com" disabled />
+            <span aria-hidden="true">→</span>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="lc-footer-legal">
+      <p>&copy; 2015–{year} LE CAMP</p>
+      <p>Politique de confidentialité</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .lc-footer-wrap {
+    background: #fff;
+    padding: 24px 0 32px;
+  }
+  .lc-footer {
+    background:
+      linear-gradient(rgb(10 22 40 / 0.88), rgb(10 22 40 / 0.94)),
+      url('/images/atmosphere/PLACEHOLDER-AI-night-summit.png') center bottom / cover no-repeat;
+    color: #fff;
+    border-radius: 40px;
+    padding: 56px clamp(1.5rem, 4vw, 3rem) 40px;
+  }
+  .lc-footer__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .lc-footer__cta h2 {
+    font-family: var(--font-agrandir);
+    font-weight: 600;
+    font-size: clamp(32px, 5vw, 56px);
+    line-height: 1.05;
+    margin: 0 0 0.75rem;
+    max-width: 14ch;
+  }
+  .lc-footer__cta p {
+    margin: 0;
+    max-width: 42ch;
+    line-height: 1.6;
+    color: rgb(255 255 255 / 0.85);
+    font-size: 16px;
+  }
+  .lc-footer__rule {
+    border: 0;
+    border-top: 1px solid rgb(255 255 255 / 0.2);
+    margin: 0 0 2rem;
+  }
+  .lc-footer__lower {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 2rem;
+  }
+  .lc-footer__cols {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+  .lc-footer__cols .label-mono {
+    color: rgb(255 255 255 / 0.55);
+    margin: 0 0 0.75rem;
+  }
+  .lc-footer__cols a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-dm-sans);
+    margin-bottom: 0.4rem;
+    font-size: 14px;
+  }
+  .lc-footer__news .label-mono {
+    color: rgb(255 255 255 / 0.55);
+    margin: 0 0 0.75rem;
+  }
+  .lc-footer__form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid rgb(255 255 255 / 0.35);
+    border-radius: 10px;
+    padding: 8px 12px;
+    max-width: 320px;
+  }
+  .lc-footer__form input {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    color: #fff;
+    font-family: var(--font-dm-sans);
+    outline: none;
+  }
+  .lc-footer__form input::placeholder {
+    color: rgb(255 255 255 / 0.55);
+  }
+  .lc-footer-legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1rem 0.5rem 0;
+    font-family: var(--font-dm-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ridge-gray);
+  }
+  .lc-footer-legal p {
+    margin: 0;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+  @media (max-width: 900px) {
+    .lc-footer__lower,
+    .lc-footer__cols {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

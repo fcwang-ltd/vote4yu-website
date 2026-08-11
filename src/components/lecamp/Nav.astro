@@ -1,0 +1,143 @@
+---
+interface Props {
+  onDark?: boolean;
+}
+const { onDark = false } = Astro.props;
+---
+
+<header class:list={['lc-nav', onDark && 'lc-nav--dark']}>
+  <div class="container-1200 lc-nav__inner">
+    <a class="lc-nav__brand" href="/" aria-label="LE CAMP">
+      <span class="lc-nav__mark" aria-hidden="true"></span>
+      <span class="lc-nav__word">LE CAMP</span>
+    </a>
+    <div class="lc-nav__actions">
+      <a class="btn-rect btn-rect--red" href="#contact">Contactez-nous</a>
+      <details class="lc-menu">
+        <summary class="lc-menu__summary">
+          <span class="lc-menu__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+          Menu
+        </summary>
+        <nav class="lc-menu__panel" aria-label="Navigation">
+          <a href="/">Accueil</a>
+          <a href="/community">Partenaires</a>
+          <a href="/blog">Blogue</a>
+          <a href="/events">Événements</a>
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<style>
+  .lc-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--color-summit-white);
+  }
+  .lc-nav--dark {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: transparent;
+  }
+  .lc-nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 15px;
+    gap: 1rem;
+  }
+  .lc-nav__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    text-decoration: none;
+    color: inherit;
+  }
+  .lc-nav--dark .lc-nav__brand {
+    color: var(--color-summit-white);
+  }
+  .lc-nav__mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+    background: var(--color-signal-red);
+    position: relative;
+  }
+  .lc-nav__mark::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 54%;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 14px solid #fff;
+    transform: translate(-50%, -50%);
+  }
+  .lc-nav__word {
+    font-family: var(--font-agrandir);
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 0.04em;
+  }
+  .lc-nav__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .lc-menu {
+    position: relative;
+  }
+  .lc-menu__summary {
+    list-style: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    border: 1px solid currentColor;
+    border-radius: var(--radius-nav);
+    padding: 10px 16px;
+    font-family: var(--font-dm-sans);
+    font-size: 14px;
+  }
+  .lc-nav--dark .lc-menu__summary {
+    color: #fff;
+  }
+  .lc-menu__summary::-webkit-details-marker {
+    display: none;
+  }
+  .lc-menu__bars {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 14px;
+  }
+  .lc-menu__bars i {
+    display: block;
+    height: 1.5px;
+    background: currentColor;
+  }
+  .lc-menu__panel {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    background: #fff;
+    color: #000;
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 16px 40px rgb(0 0 0 / 0.18);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 180px;
+  }
+  .lc-menu__panel a {
+    text-decoration: none;
+    color: #000;
+    font-family: var(--font-dm-sans);
+  }
+</style>
