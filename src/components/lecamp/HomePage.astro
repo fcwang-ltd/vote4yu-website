@@ -1,20 +1,18 @@
 ---
 /**
- * Le Camp homepage — real HTML/CSS only.
- * Photos: clean atmosphere + candidate imagery (no screenshot composites with baked UI text).
- * Stickers: CQCM-style chromatic panels + dot icons (HealthStickers).
+ * VOTE4YU homepage — Dave Yu, Markham Ward 2, 2026.
+ * Layout adapted from the LE CAMP reference; all copy is campaign content.
+ * Photos: candidate + atmosphere placeholders (real shoot pending).
  */
 import Nav from './Nav.astro';
 import HealthStickers from './HealthStickers.astro';
 import HealthCascade from './HealthCascade.astro';
 
-const marks = [
-  '/images/marks/mark-lila.png',
-  '/images/marks/mark-rapid.png',
-  '/images/marks/mark-lime.png',
-  '/images/marks/mark-chalets.png',
-  '/images/marks/mark-laylah.png',
-  '/images/marks/mark-propulsion.png',
+// Local health-community organisations Dave works within (real, linkable).
+// Framed as network context, not endorsements.
+const network = [
+  { name: 'Dr. Jerry Leung Medical Club', href: 'https://www.drjerryleung.ca/' },
+  { name: 'Up&Fit Fitness', href: 'https://www.upandfit.ca/' },
 ];
 ---
 
@@ -26,12 +24,12 @@ const marks = [
         <Nav onDark />
         <HealthStickers />
         <div class="hero__inner">
-          <h1>Un refuge pour votre croissance entrepreneuriale</h1>
+          <h1>For your family's health, your street, your Markham.</h1>
         </div>
         <div class="hero__foot">
-          <span>ACCÉLÉRATEUR / INCUBATEUR</span>
-          <a class="hero__scroll" href="#health" aria-label="Défiler">↓</a>
-          <span>DEPUIS 2015</span>
+          <span>MARKHAM · WARD 2</span>
+          <a class="hero__scroll" href="#health" aria-label="Scroll">↓</a>
+          <span>MUNICIPAL ELECTION 2026</span>
         </div>
       </section>
     </div>
@@ -43,17 +41,17 @@ const marks = [
     <div class="intro">
       <div class="intro__copy">
         <p>
-          Depuis 2015, LE CAMP propulse la croissance des entreprises technologiques d'ici et d'ailleurs grâce à des
-          programmes novateurs, un réseau solide de coachs, experts et de partenaires locaux, nationaux et
-          internationaux. Avec une approche humaine et orientée vers les résultats, LE CAMP offre un accompagnement sur
-          mesure pour répondre aux besoins uniques des entreprises, qu'elles soient en démarrage ou en pleine expansion.
+          For ten years I have helped Markham families get healthier, one person at a time. My team and I have trained
+          more than 6,000 residents, and I have worked alongside local doctors, clinics, and community health providers.
+          I am running for Ward 2 council to bring that same practical, close-to-the-ground care to the decisions that
+          shape our neighbourhood.
         </p>
-        <a class="btn-rect btn-rect--ink" href="/community">À propos</a>
+        <a class="btn-rect btn-rect--ink" href="/about">About Dave</a>
       </div>
       <h2 class="intro__display">
-        <span>10 ans</span>
-        <span>À gravir</span>
-        <span>Tous les sommets</span>
+        <span>A decade</span>
+        <span>serving</span>
+        <span>Markham</span>
       </h2>
     </div>
     <div class="photos">
@@ -68,33 +66,32 @@ const marks = [
 
   <section class="container-1200 section section--tight">
     <div class="programs-head">
-      <h2>De l'accompagnement pour tous les stades d'une entreprise</h2>
+      <h2>How I will serve Ward 2</h2>
       <div class="programs-head__aside">
         <p>
-          De la validation de marché aux premières ventes, jusqu'à la croissance soutenue : nos programmes vous
-          accompagnent vers chaque étape clé de votre ascension entrepreneuriale.
+          Health is the through-line of local decisions: how we reach care, how safe our streets feel, and how present
+          our councillor is. These are the areas I will push on first.
         </p>
-        <a class="btn-pill btn-pill--ink" href="/community">Voir tous les programmes</a>
+        <a class="btn-pill btn-pill--ink" href="/platform">See the full platform</a>
       </div>
     </div>
 
     <div class="bento">
       <article class="card card--ink a">
-        <h3>Sentier d'approche</h3>
+        <h3>Accessibility</h3>
         <p>
-          Les programmes du sentier d'approche permettent d'avoir tous les outils et les ressources nécessaires pour
-          bien valider l'opportunité d'affaire en débutant par la mise en place d'une structure solide.
+          Shorter waits to find a family doctor, barrier-free services, and clear help navigating the health system in
+          the language you speak at home.
         </p>
         <span class="arrow" aria-hidden="true">→</span>
       </article>
       <img class="img b" src="/images/atmosphere/PLACEHOLDER-AI-canopy-light.png" alt="" />
 
       <article class="card card--sky c">
-        <h3>Sentier d'ascension</h3>
+        <h3>Living quality</h3>
         <p>
-          Les programmes du sentier d'ascension sont spécialement réfléchis pour soutenir les entrepreneurs dans leurs
-          enjeux de croissance tels que le financement, la gestion des ressources humaines, la stratégie de
-          commercialisation et d'expansion internationale, la gouvernance, et bien plus.
+          Safe, clean, well-kept neighbourhoods. The everyday municipal work that makes a street feel cared for, from
+          lighting and parks to seniors' safety.
         </p>
         <span class="arrow" aria-hidden="true">→</span>
       </article>
@@ -102,10 +99,10 @@ const marks = [
 
       <img class="img e" src="/images/atmosphere/PLACEHOLDER-AI-path-walk.png" alt="" />
       <article class="card card--cream f">
-        <h3>Passerelles internationales</h3>
+        <h3>Hospitality</h3>
         <p>
-          Les passerelles internationales offrent une gamme complète de programmes, de missions et de partenariats qui
-          facilitent l'implantation d'une entreprise internationale au Québec.
+          A councillor who shows up. Regular community office hours, service in three languages, and a door that stays
+          open to every resident.
         </p>
         <span class="arrow arrow--red" aria-hidden="true">→</span>
       </article>
@@ -113,24 +110,30 @@ const marks = [
   </section>
 
   <section class="container-1200 section proof">
-    <p class="label-mono">ENTREPRISES</p>
-    <h2>Plus de 500 entreprises sont passées par ici</h2>
-    <div class="proof__row" aria-label="Marques partenaires (placeholders)">
-      {marks.map((src) => <img src={src} alt="" />)}
+    <p class="label-mono">MARKHAM HEALTH COMMUNITY</p>
+    <h2>Rooted in Markham's health community</h2>
+    <div class="proof__row proof__row--orgs" aria-label="Local health-community organisations">
+      {
+        network.map((org) => (
+          <a class="org" href={org.href} target="_blank" rel="noopener noreferrer">
+            {org.name}
+          </a>
+        ))
+      }
     </div>
   </section>
 
   <section class="container-1200 section">
     <div class="guides">
       <div class="guides__body">
-        <p class="label-mono guides__label">COACHS &amp; EXPERTS</p>
-        <h2>Des guides pour tous les sommets</h2>
+        <p class="label-mono guides__label">HEALTH IS THE THROUGH-LINE</p>
+        <h2>A decade of health, brought to the council table</h2>
         <p>
-          Être accompagné par LE CAMP permet d'accéder à un réseau de coachs et d'experts spécialisés dans chaque aspect
-          de la croissance d'une entreprise. Ce soutien personnalisé permet de surmonter les défis entrepreneuriaux
-          étape par étape, avec des personnes qui ont votre succès à cœur.
+          I hold a health-science degree and have spent my career in community and personal health, working with
+          doctors, clinics, and thousands of Markham residents. That experience is exactly what Ward 2 needs on
+          council: someone who understands how people actually reach care, and who will advocate for it.
         </p>
-        <a class="btn-rect btn-rect--red" href="/community">Parcourir les coachs et experts</a>
+        <a class="btn-rect btn-rect--red" href="/about">Read Dave's story</a>
       </div>
       <div class="guides__media">
         <img src="/images/candidate/stage-front.jpeg" alt="" />
@@ -142,26 +145,26 @@ const marks = [
   <section class="container-1200 section">
     <div class="events">
       <div class="events__copy">
-        <p class="label-mono">ÉVÉNEMENTS &amp; ACTIVITÉS</p>
-        <h2>Expéditions variées</h2>
+        <p class="label-mono">IN THE COMMUNITY</p>
+        <h2>Where to find me</h2>
         <p>
-          Dynamiser l'écosystème entrepreneurial techno de la ville de Québec fait partie de notre ADN. Nos événements
-          et activités offrent des occasions uniques d'apprendre, de saisir des opportunités et de créer des liens.
+          The best way to know a candidate is to meet them. I am out in Ward 2 regularly. Come say hello, and tell me
+          what matters on your street.
         </p>
-        <a class="btn-pill btn-pill--ink" href="/events">Toutes les expéditions</a>
+        <a class="btn-pill btn-pill--ink" href="/events">All community events</a>
       </div>
       <div class="events__cards">
         <a class="event event--low" href="/events">
           <div class="event__media">
             <img src="/images/atmosphere/PLACEHOLDER-AI-markham-atmosphere.png" alt="" />
             <div class="chips">
-              <span class="chip">EN PERSONNE</span>
-              <span class="chip">MISSIONS</span>
+              <span class="chip">IN PERSON</span>
+              <span class="chip">SENIORS</span>
             </div>
           </div>
           <div class="event__foot event__foot--red">
-            <p class="meta">16 AU 20 NOV. 2026</p>
-            <h3>Mission commerciale | Rennes 2026</h3>
+            <p class="meta">DATE TO BE CONFIRMED</p>
+            <h3>Ward 2 Seniors Health Info Session</h3>
             <span class="arrow" aria-hidden="true">→</span>
           </div>
         </a>
@@ -169,13 +172,13 @@ const marks = [
           <div class="event__media">
             <img src="/images/candidate/pagent-coach.jpeg" alt="" />
             <div class="chips">
-              <span class="chip">EN PERSONNE</span>
-              <span class="chip">RÉSEAUTAGE</span>
+              <span class="chip">IN PERSON</span>
+              <span class="chip">COMMUNITY</span>
             </div>
           </div>
           <div class="event__foot event__foot--burgundy">
-            <p class="meta">15 SEPT. 2026 · 17:00 À 19:30</p>
-            <h3>LE CAMP de la rentrée | Réseautage</h3>
+            <p class="meta">DATE TO BE CONFIRMED</p>
+            <h3>Community Walk and Talk</h3>
             <span class="arrow" aria-hidden="true">→</span>
           </div>
         </a>
@@ -185,12 +188,18 @@ const marks = [
 
   <section class="container-1200 section section--journal">
     <div class="journal">
-      <p class="label-mono">BLOGUE</p>
-      <h2>Journal de bord</h2>
-      <a class="journal__row" href="/blog">
-        <span class="journal__title">En direct du front — Partir pour mieux revenir: Mon retour au coaching</span>
+      <p class="label-mono">UPDATES</p>
+      <h2>From the campaign</h2>
+      <a class="journal__row" href="/blog/building-a-healthier-markham">
+        <span class="journal__title">Building a HEALTHier Markham: the six-pillar platform</span>
         <span class="journal__badge">ARTICLE</span>
-        <span class="journal__date">27 MARS 2025</span>
+        <span class="journal__date">11 AUG 2026</span>
+        <span aria-hidden="true">→</span>
+      </a>
+      <a class="journal__row" href="/blog/family-doctor-wait">
+        <span class="journal__title">The family-doctor wait is a Ward 2 problem</span>
+        <span class="journal__badge">ARTICLE</span>
+        <span class="journal__date">12 AUG 2026</span>
         <span aria-hidden="true">→</span>
       </a>
     </div>
@@ -412,6 +421,32 @@ const marks = [
     object-fit: contain;
     filter: grayscale(1);
     opacity: 0.85;
+  }
+  .proof__row--orgs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+    max-width: 720px;
+    margin-inline: auto;
+  }
+  .org {
+    display: grid;
+    place-items: center;
+    text-align: center;
+    border: 1px solid rgb(0 0 0 / 0.15);
+    border-radius: 16px;
+    padding: 1.5rem 1.25rem;
+    min-height: 88px;
+    text-decoration: none;
+    color: #000;
+    font-family: var(--font-agrandir);
+    font-weight: 600;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.2;
+    transition: border-color 0.2s ease;
+  }
+  .org:hover {
+    border-color: var(--color-signal-red);
+    color: var(--color-signal-red);
   }
 
   .guides {

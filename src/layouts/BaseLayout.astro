@@ -5,12 +5,55 @@ interface Props {
   title?: string;
   description?: string;
   locale?: string;
+  /** Root-relative path of this page, e.g. "/" or "/platform". Used for hreflang alternates. */
+  path?: string;
 }
 const {
-  title = 'VOTE4YU — Markham Ward 2',
-  description = 'Dave Yu is a candidate for Markham City Council, Ward 2, in the 2026 municipal election.',
-  locale = 'fr',
+  title = 'VOTE4YU — Dave Yu for Markham Ward 2',
+  description = 'Dave Yu is a candidate for Markham City Council, Ward 2, in the 2026 municipal election, running on a health-first platform.',
+  locale = 'en',
+  path = '/',
 } = Astro.props;
+
+const SITE_URL = 'https://vote4yu.ca';
+
+// Locale prefixes match the physical folder names so URLs resolve on
+// case-sensitive hosts (GitHub Pages). en serves at root.
+const LOCALE_PREFIX: Record<string, string> = {
+  en: '',
+  'zh-CN': '/zh-CN',
+  'zh-HK': '/zh-HK',
+};
+const LOCALE_HREFLANG: Record<string, string> = {
+  en: 'en-CA',
+  'zh-CN': 'zh-CN',
+  'zh-HK': 'zh-HK',
+};
+
+function localizePath(p: string, loc: string): string {
+  const clean = p.startsWith('/') ? p : `/${p}`;
+  const prefix = LOCALE_PREFIX[loc] ?? '';
+  if (clean === '/') return prefix === '' ? '/' : `${prefix}/`;
+  return `${prefix}${clean}`;
+}
+
+const canonical = new URL(localizePath(path, locale), SITE_URL).href;
+
+// JSON-LD Person schema for the candidate (AEO). Present on every page.
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Dave Yu',
+  jobTitle: 'Candidate for Markham City Council, Ward 2',
+  url: SITE_URL,
+  knowsLanguage: ['en-CA', 'zh-CN', 'zh-HK'],
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Markham',
+    addressRegion: 'ON',
+    addressCountry: 'CA',
+  },
+};
 ---
 
 <!doctype html>
@@ -20,7 +63,21 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    {
+      Object.keys(LOCALE_PREFIX).map((l) => (
+        <link
+          rel="alternate"
+          hreflang={LOCALE_HREFLANG[l]}
+          href={new URL(localizePath(path, l), SITE_URL).href}
+        />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={new URL(localizePath(path, 'en'), SITE_URL).href} />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
   </head>
   <body>
     <slot />

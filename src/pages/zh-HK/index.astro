@@ -4,7 +4,25 @@ import Footer from '../../components/lecamp/Footer.astro';
 import HomePage from '../../components/lecamp/HomePage.astro';
 ---
 
-<BaseLayout locale="zh-HK" title="LE CAMP — Accueil [DRAFT]">
+<BaseLayout
+  locale="zh-HK"
+  path="/"
+  title="Vote4Yu — Dave Yu 競選萬錦市 2 區議員 [DRAFT]"
+  description="Dave Yu 是 2026 萬錦市選舉 2 區市議員候選人，以健康為核心政綱。[DRAFT: 待母語審校]"
+>
+  <div class="draft-banner" role="note">繁體中文翻譯待母語審校 · Traditional Chinese translation pending review</div>
   <HomePage />
   <Footer />
 </BaseLayout>
+
+<style>
+  .draft-banner {
+    background: var(--color-signal-red);
+    color: #fff;
+    text-align: center;
+    font-family: var(--font-dm-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    padding: 8px 12px;
+  }
+</style>
