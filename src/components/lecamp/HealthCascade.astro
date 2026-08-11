@@ -44,6 +44,9 @@ import { HEALTH_DIMENSIONS } from '../../utils/healthDots';
           <span>for a healthier</span>
           <span>Markham</span>
         </h2>
+        <a class="btn-rect btn-rect--ink health-copy__cta" href="/blog/building-a-healthier-markham">
+          Read the HEALTH platform
+        </a>
       </div>
     </div>
   </div>
@@ -159,6 +162,10 @@ import { HEALTH_DIMENSIONS } from '../../utils/healthDots';
 
   .health-copy {
     padding-top: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
   }
   .health-copy__title {
     margin: 0;
@@ -172,6 +179,9 @@ import { HEALTH_DIMENSIONS } from '../../utils/healthDots';
   }
   .health-copy__title span {
     display: block;
+  }
+  .health-copy__cta {
+    text-decoration: none;
   }
 
   @media (max-width: 900px) {

@@ -11,17 +11,16 @@ const { onDark = false } = Astro.props;
   <div class="container-1200 lc-nav__inner">
     <Wordmark href="/" size="md" onDark={onDark} />
     <div class="lc-nav__actions">
-      <a class="btn-rect btn-rect--red" href="#contact">Contactez-nous</a>
+      <a class="btn-rect btn-rect--red" href="/get-involved">Get Involved</a>
       <details class="lc-menu">
         <summary class="lc-menu__summary">
           <span class="lc-menu__bars" aria-hidden="true"><i></i><i></i><i></i></span>
           Menu
         </summary>
         <nav class="lc-menu__panel" aria-label="Navigation">
-          <a href="/">Accueil</a>
-          <a href="/community">Partenaires</a>
-          <a href="/blog">Blogue</a>
-          <a href="/events">Événements</a>
+          <a href="/community">Communities</a>
+          <a href="/blog">Blog and Media</a>
+          <a href="/events">Events</a>
         </nav>
       </details>
     </div>
@@ -97,7 +96,7 @@ const { onDark = false } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    min-width: 180px;
+    min-width: 200px;
   }
   .lc-menu__panel a {
     text-decoration: none;

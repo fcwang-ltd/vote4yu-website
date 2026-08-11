@@ -1,17 +1,106 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/lecamp/Nav.astro';
 import Footer from '../../components/lecamp/Footer.astro';
+
+const posts = (await getCollection('blog', ({ data }) => data.locale === 'en' && !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+function hrefFor(id: string) {
+  const slug = id.split('/').pop()?.replace(/\.mdx?$/, '') ?? id;
+  return `/blog/${slug}`;
+}
 ---
 
-<BaseLayout title="Blogue | LE CAMP">
+<BaseLayout title="Blog and Media | VOTE4YU">
   <Nav />
-  <main class="container-1200" style="padding-block:96px;">
-    <p class="label-mono">BLOGUE</p>
-    <h1 style="font-family:var(--font-agrandir);font-size:clamp(40px,6vw,72px);font-weight:600;line-height:1;margin:0.5rem 0 1rem;">
-      Blogue
-    </h1>
-    <p style="max-width:42ch;line-height:1.5;">Index blogue — mise en page à venir (clone Le Camp).</p>
+  <main class="container-1200 blog-index">
+    <p class="label-mono">BLOG AND MEDIA</p>
+    <h1 class="blog-index__title">Blog and Media</h1>
+    <ul class="blog-index__list">
+      {
+        posts.map((post) => (
+          <li>
+            <a class="blog-index__card" href={hrefFor(post.id)}>
+              {post.data.heroImage && (
+                <img src={post.data.heroImage.src} alt={post.data.heroImage.alt} />
+              )}
+              <div>
+                <h2>{post.data.title}</h2>
+                <p>{post.data.description}</p>
+                <time datetime={post.data.pubDate.toISOString()}>
+                  {post.data.pubDate.toLocaleDateString('en-CA', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </time>
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
   </main>
   <Footer />
 </BaseLayout>
+
+<style>
+  .blog-index {
+    padding-block: 96px;
+  }
+  .blog-index__title {
+    font-family: var(--font-agrandir);
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 600;
+    line-height: 1;
+    margin: 0.5rem 0 2.5rem;
+  }
+  .blog-index__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .blog-index__card {
+    display: grid;
+    grid-template-columns: minmax(0, 220px) 1fr;
+    gap: 1.5rem;
+    text-decoration: none;
+    color: #000;
+    align-items: start;
+  }
+  .blog-index__card img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+  .blog-index__card h2 {
+    font-family: var(--font-agrandir);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+  }
+  .blog-index__card p {
+    margin: 0 0 0.75rem;
+    max-width: 48ch;
+    line-height: 1.45;
+    font-family: var(--font-dm-sans);
+  }
+  .blog-index__card time {
+    font-family: var(--font-dm-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--color-ridge-gray);
+  }
+  @media (max-width: 700px) {
+    .blog-index__card {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

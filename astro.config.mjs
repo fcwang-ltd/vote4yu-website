@@ -41,7 +41,6 @@ export default defineConfig({
     '/about': '/',
     '/platform': '/community',
     '/partners': '/community',
-    '/get-involved': '/events',
     '/zh-CN/about': '/zh-CN/',
     '/zh-CN/platform': '/zh-CN/community',
     '/zh-HK/about': '/zh-HK/',
