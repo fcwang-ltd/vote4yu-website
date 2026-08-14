@@ -29,4 +29,4 @@ I will be honest about that line between what the city controls and what it does
 
 Over the coming weeks I will publish plain-language guides to finding primary care in our area, and I will keep pressing for more of it. If you have a story about your own search for a doctor, I want to hear it.
 
-Read the full platform on the [Platform page](/platform), or [get involved](/get-involved) with the campaign.
+Read the full platform in [Building a HEALTHier Markham](/blog/building-a-healthier-markham), or [get involved](/get-involved) with the campaign.

@@ -2,16 +2,98 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Nav from '../../components/lecamp/Nav.astro';
 import Footer from '../../components/lecamp/Footer.astro';
+
+const events = [
+  {
+    title: 'Ward 2 Seniors Health Info Session',
+    meta: 'Date TBA · In person',
+    blurb: 'A community conversation on navigating local health information and services for seniors and caregivers.',
+  },
+  {
+    title: 'Community Walk and Talk',
+    meta: 'Date TBA · In person',
+    blurb: 'Meet Dave on a Ward 2 street walk. Bring neighbourhood questions about safety, parks, and everyday care.',
+  },
+];
 ---
 
 <BaseLayout title="Events | VOTE4YU">
   <Nav />
-  <main class="container-1200" style="padding-block:96px;">
+  <main class="container-1200 events-page">
     <p class="label-mono">EVENTS</p>
-    <h1 style="font-family:var(--font-agrandir);font-size:clamp(40px,6vw,72px);font-weight:600;line-height:1;margin:0.5rem 0 1rem;">
-      Events
-    </h1>
-    <p style="max-width:42ch;line-height:1.5;">Events index — layout to come.</p>
+    <h1>Events</h1>
+    <p class="events-page__lede">
+      The best way to know a candidate is to meet them. Dates will be posted here as they are confirmed. Email
+      <a href="mailto:dave@vote4yu.ca">dave@vote4yu.ca</a> to host or suggest a gathering.
+    </p>
+
+    <ul class="events-page__list">
+      {
+        events.map((event) => (
+          <li>
+            <p class="events-page__meta">{event.meta}</p>
+            <h2>{event.title}</h2>
+            <p>{event.blurb}</p>
+          </li>
+        ))
+      }
+    </ul>
   </main>
   <Footer />
 </BaseLayout>
+
+<style>
+  .events-page {
+    padding-block: 96px;
+  }
+  .events-page .label-mono {
+    margin: 0 0 0.75rem;
+  }
+  .events-page h1 {
+    font-family: var(--font-agrandir);
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 600;
+    line-height: 1;
+    margin: 0 0 1rem;
+  }
+  .events-page__lede {
+    max-width: 46ch;
+    line-height: 1.55;
+    margin: 0 0 2.5rem;
+    font-size: 17px;
+  }
+  .events-page__lede a {
+    color: var(--color-signal-red);
+  }
+  .events-page__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+    max-width: 52ch;
+  }
+  .events-page__list li {
+    border-top: 1px solid rgb(0 0 0 / 0.12);
+    padding-top: 1.25rem;
+  }
+  .events-page__meta {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-dm-mono, monospace);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .events-page__list h2 {
+    font-family: var(--font-agrandir);
+    font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+    line-height: 1.2;
+  }
+  .events-page__list p:last-child {
+    margin: 0;
+    line-height: 1.5;
+    font-size: 15px;
+  }
+</style>

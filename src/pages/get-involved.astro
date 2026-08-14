@@ -6,14 +6,76 @@ import Footer from '../components/lecamp/Footer.astro';
 
 <BaseLayout title="Get Involved | VOTE4YU">
   <Nav />
-  <main class="container-1200" style="padding-block:96px;">
+  <main class="container-1200 involved">
     <p class="label-mono">GET INVOLVED</p>
-    <h1 style="font-family:var(--font-agrandir);font-size:clamp(40px,6vw,64px);font-weight:600;line-height:1;margin:0.5rem 0 1rem;">
-      Get Involved
-    </h1>
-    <p style="max-width:42ch;line-height:1.5;">
-      Volunteer, host, donate, and share the campaign. Full involvement pathways coming soon.
+    <h1>Get Involved</h1>
+    <p class="involved__lede">
+      Help build a healthier Ward 2. Volunteer on the doorstep, host a kitchen-table conversation, share the campaign
+      with neighbours, or write to tell us what matters on your street.
     </p>
+
+    <ul class="involved__list">
+      <li>
+        <strong>Email the campaign</strong>
+        <span>Reach Dave and the team at <a href="mailto:dave@vote4yu.ca">dave@vote4yu.ca</a>.</span>
+      </li>
+      <li>
+        <strong>Volunteer or host</strong>
+        <span>Offer time for canvassing, phone banking, translation, or a small gathering in your home.</span>
+      </li>
+      <li>
+        <strong>Stay in the loop</strong>
+        <span>
+          Read <a href="/blog">campaign updates</a> and check <a href="/events">community events</a> for where to meet
+          Dave in person.
+        </span>
+      </li>
+    </ul>
   </main>
   <Footer />
 </BaseLayout>
+
+<style>
+  .involved {
+    padding-block: 96px;
+  }
+  .involved .label-mono {
+    margin: 0 0 0.75rem;
+  }
+  .involved h1 {
+    font-family: var(--font-agrandir);
+    font-size: clamp(40px, 6vw, 64px);
+    font-weight: 600;
+    line-height: 1;
+    margin: 0 0 1rem;
+  }
+  .involved__lede {
+    max-width: 46ch;
+    line-height: 1.55;
+    margin: 0 0 2rem;
+    font-size: 17px;
+  }
+  .involved__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.25rem;
+    max-width: 52ch;
+  }
+  .involved__list li {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .involved__list strong {
+    font-family: var(--font-agrandir);
+    font-size: 1.15rem;
+  }
+  .involved__list span {
+    line-height: 1.5;
+    font-size: 15px;
+  }
+  .involved__list a {
+    color: var(--color-signal-red);
+  }
+</style>

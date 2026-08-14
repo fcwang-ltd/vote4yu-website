@@ -6,10 +6,12 @@ locale: en
 draft: false
 heroImage:
   src: /images/blog/PLACEHOLDER-AI-blog-healthy-cities.png
-  alt: Placeholder atmosphere image for a healthier Markham
+  alt: Flat illustration of a green city park with a path, bridge, and skyline
 ---
 
 Markham Ward 2 deserves a councillor who treats **health** as the through-line of local decisions: how we house neighbours, how we learn, how we move, how we live, how we use technology, and how we welcome one another.
+
+A city councillor advocates, informs, and connects residents to services. Provincial and federal benefits are set outside City Hall; this platform is about showing up locally so Ward 2 is not left behind.
 
 ## What HEALTH stands for
 
@@ -24,10 +26,6 @@ Markham Ward 2 deserves a councillor who treats **health** as the through-line o
 **T — Technology.** Practical tools that connect residents to information and each other, without leaving anyone behind.
 
 **H — Hospitality.** A Ward 2 that welcomes newcomers and long-time residents alike, and that builds belonging in public life.
-
-## Placeholder note
-
-This article is scaffolding for the campaign blog. Final English copy will be locked from the Vote4Yu vault before ship. Program specifics that need verification will stay marked until confirmed; municipal office connects and advocates, and it does not grant provincial or federal benefits.
 
 ## Next steps
 

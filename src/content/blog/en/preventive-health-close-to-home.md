@@ -29,4 +29,4 @@ I will not overstate what city hall controls. Many benefits are provincial or fe
 
 ## Let's build it together
 
-Preventive health works best when a whole community leans into it. Read the [Platform page](/platform) to see how this connects to the rest of my plan, and [get involved](/get-involved) to help make it real.
+Preventive health works best when a whole community leans into it. Read [Building a HEALTHier Markham](/blog/building-a-healthier-markham) to see how this connects to the rest of my plan, and [get involved](/get-involved) to help make it real.

@@ -1,3 +1,5 @@
 ---
-return Astro.redirect('/blog/about-dave');
+import SilentRedirect from '../layouts/SilentRedirect.astro';
 ---
+
+<SilentRedirect to="/blog/about-dave" />

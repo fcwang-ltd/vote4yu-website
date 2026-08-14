@@ -31,4 +31,4 @@ The programs that fund long-term care and home care are largely provincial. A co
 
 If you are caring for an aging parent in Ward 2, your experience should shape this platform. Tell me what has helped and what has failed you.
 
-See the [Platform page](/platform) for the full picture, or [get involved](/get-involved).
+See [Building a HEALTHier Markham](/blog/building-a-healthier-markham) for the full picture, or [get involved](/get-involved).
