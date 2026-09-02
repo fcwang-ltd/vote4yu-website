@@ -1,0 +1,176 @@
+/* Vote 4 Yu design tokens.
+   Copied verbatim from the bound design system:
+   project/_ds/vote-4-yu-design-system-e1ff1113-0f2c-4ff8-a03d-9a62cec785e6/tokens/
+   Edit there first, then re-copy — do not diverge. */
+
+/* ---- tokens/colors.css ---- */
+:root{
+  /* ---- Brand pink (accent) — sampled from the flyer banners and the YU brush mark ---- */
+  --pink-700:#a80465;
+  --pink-600:#c90576;
+  --pink-500:#ec078d;
+  --pink-400:#f24da8;
+  --pink-300:#e78bb2;
+  --pink-200:#f9c8dd;
+  --pink-100:#fdeaf4;
+
+  /* ---- Brand blue (primary) ---- */
+  --blue-800:#1d2c58;
+  --blue-700:#22376e;
+  --blue-600:#344c96;
+  --blue-500:#2a55a6;
+  --blue-400:#6474b8;
+  --blue-200:#c3cbe8;
+  --blue-100:#dde3f2;
+  --blue-50:#eff2fa;
+
+  /* ---- Warm neutrals — the taupe/greige of the flyer stock and brush texture ---- */
+  --ink-900:#222222;
+  --ink-800:#2e3546;
+  --ink-600:#4b5163;
+  --ink-500:#6d6868;
+  --ink-400:#979191;
+  --taupe-300:#cbbfc1;
+  --taupe-200:#dfd4d5;
+  --taupe-100:#f3edee;
+  --taupe-50:#faf7f7;
+  --paper:#ffffff;
+
+  /* ---- Semantic aliases ---- */
+  --text-primary:var(--ink-900);
+  --text-heading:var(--ink-800);
+  --text-secondary:var(--ink-600);
+  --text-muted:var(--ink-500);
+  --text-inverse:var(--paper);
+  --text-link:var(--blue-500);
+  --text-link-hover:var(--blue-700);
+  --text-accent:var(--pink-500);
+
+  --surface-page:var(--paper);
+  --surface-muted:var(--taupe-100);
+  --surface-stock:var(--taupe-200);
+  --surface-card:var(--paper);
+  --surface-brand:var(--blue-600);
+  --surface-brand-deep:var(--blue-700);
+  --surface-accent:var(--pink-500);
+  --surface-accent-soft:var(--pink-100);
+
+  --border-subtle:var(--taupe-200);
+  --border-strong:var(--ink-800);
+  --border-accent:var(--pink-500);
+
+  --focus-ring:var(--pink-500);
+
+  /* ---- Signature gradients / washes (used only as large flat diagonals, never as button fills) ---- */
+  --wash-stock:linear-gradient(180deg,var(--taupe-200),var(--taupe-300));
+  --diagonal-pink:var(--pink-300);
+  --diagonal-blue:var(--blue-600);
+}
+
+/* ---- tokens/typography.css ---- */
+:root{
+  --font-sans:"Inter","Helvetica Neue",Arial,sans-serif;
+  --font-zh:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Inter",sans-serif;
+  --font-mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  /* type scale (px, 1.25-ish, print-derived) */
+  --text-xs:12px;
+  --text-sm:14px;
+  --text-base:17px;
+  --text-md:19px;
+  --text-lg:22px;
+  --text-xl:28px;
+  --text-2xl:34px;
+  --text-3xl:44px;
+  --text-4xl:56px;
+  --text-5xl:72px;
+  --text-6xl:96px;
+
+  --weight-regular:400;
+  --weight-medium:500;
+  --weight-semibold:600;
+  --weight-bold:700;
+  --weight-extrabold:800;
+  --weight-black:900;
+
+  --leading-tight:1.02;
+  --leading-snug:1.14;
+  --leading-normal:1.35;
+  --leading-relaxed:1.5;
+
+  --tracking-tighter:-0.03em;
+  --tracking-tight:-0.015em;
+  --tracking-normal:0;
+  --tracking-banner:0.06em;
+  --tracking-wide:0.12em;
+
+  /* named roles */
+  --type-banner:var(--weight-black) var(--text-2xl)/var(--leading-tight) var(--font-sans);
+  --type-display:var(--weight-black) var(--text-4xl)/var(--leading-tight) var(--font-sans);
+  --type-headline:var(--weight-extrabold) var(--text-2xl)/var(--leading-snug) var(--font-sans);
+  --type-title:var(--weight-bold) var(--text-lg)/var(--leading-snug) var(--font-sans);
+  --type-body:var(--weight-regular) var(--text-base)/var(--leading-normal) var(--font-sans);
+  --type-body-strong:var(--weight-semibold) var(--text-base)/var(--leading-normal) var(--font-sans);
+  --type-small:var(--weight-regular) var(--text-sm)/var(--leading-relaxed) var(--font-sans);
+  --type-caption:var(--weight-medium) var(--text-xs)/var(--leading-relaxed) var(--font-sans);
+}
+
+/* ---- tokens/spacing.css ---- */
+:root{
+  --space-0:0px;
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-5:20px;
+  --space-6:24px;
+  --space-8:32px;
+  --space-10:40px;
+  --space-12:48px;
+  --space-16:64px;
+  --space-20:80px;
+  --space-24:96px;
+  --space-32:128px;
+
+  --gutter-page:24px;
+  --gutter-page-lg:64px;
+  --measure-narrow:38ch;
+  --measure-body:62ch;
+  --container-max:1200px;
+  --section-y:var(--space-20);
+  --section-y-lg:var(--space-24);
+}
+
+/* ---- tokens/radius-shadow.css ---- */
+:root{
+  /* The flyers are hard-edged: banners, bands and image crops are square. Radius is reserved
+     for small interactive elements only. */
+  --radius-none:0px;
+  --radius-sm:2px;
+  --radius-md:4px;
+  --radius-lg:8px;
+  --radius-pill:999px;
+
+  --border-hairline:1px;
+  --border-rule:2px;
+  --border-heavy:4px;
+
+  --shadow-none:none;
+  --shadow-card:0 1px 2px rgba(34,34,34,.06),0 8px 24px rgba(34,34,34,.06);
+  --shadow-raise:0 2px 4px rgba(34,34,34,.08),0 16px 40px rgba(34,34,34,.10);
+  --shadow-inset-rule:inset 0 -2px 0 var(--pink-500);
+  --overlay-scrim:linear-gradient(180deg,rgba(34,34,34,0) 40%,rgba(34,34,34,.55) 100%); /* @kind color */
+}
+
+/* ---- tokens/motion.css ---- */
+:root{
+  --duration-fast:120ms; /* @kind other */
+  --duration-base:200ms; /* @kind other */
+  --duration-slow:320ms; /* @kind other */
+  --ease-out:cubic-bezier(.2,.7,.2,1); /* @kind other */
+  --ease-in-out:cubic-bezier(.4,0,.2,1); /* @kind other */
+  --transition-color:color var(--duration-fast) var(--ease-out),background-color var(--duration-fast) var(--ease-out),border-color var(--duration-fast) var(--ease-out);
+  --transition-transform:transform var(--duration-base) var(--ease-out);
+  --press-scale:0.985; /* @kind other */
+}
+

@@ -1,0 +1,252 @@
+<title>Vote 4 Yu Build Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Shell tokens. The site inside the frame carries the campaign's own design system; this
+     chrome stays quiet around it — a viewport inspector, not a second brand. */
+  :root {
+    --ground: #e8e4e1;
+    --surface: #ffffff;
+    --hairline: #d3ccc8;
+    --ink: #2e3546;
+    --ink-muted: #6f7686;
+    --accent: #ec078d;
+    --accent-ink: #ffffff;
+    --shadow: 0 1px 3px rgba(46, 53, 70, .12), 0 12px 32px rgba(46, 53, 70, .10);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #14171d;
+      --surface: #1e232c;
+      --hairline: #333a48;
+      --ink: #e7e4e2;
+      --ink-muted: #9aa1b0;
+      --accent: #ff2ba3;
+      --accent-ink: #14171d;
+      --shadow: 0 1px 3px rgba(0, 0, 0, .5), 0 16px 40px rgba(0, 0, 0, .45);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #14171d;
+    --surface: #1e232c;
+    --hairline: #333a48;
+    --ink: #e7e4e2;
+    --ink-muted: #9aa1b0;
+    --accent: #ff2ba3;
+    --accent-ink: #14171d;
+    --shadow: 0 1px 3px rgba(0, 0, 0, .5), 0 16px 40px rgba(0, 0, 0, .45);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--ground);
+    color: var(--ink);
+    font: 400 14px/1.4 Inter, system-ui, sans-serif;
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .brand {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .brand .yu { color: var(--accent); }
+  .brand .kicker {
+    font: 400 11px/1 "IBM Plex Mono", ui-monospace, monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .tabs {
+    display: flex;
+    gap: 2px;
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font: 500 14px/1 Inter, system-ui, sans-serif;
+    color: var(--ink-muted);
+    padding: 8px 12px;
+    border-radius: 6px;
+  }
+  .tab:hover {
+    color: var(--ink);
+    background: color-mix(in srgb, var(--ink) 7%, transparent);
+  }
+  .tab[aria-current="true"] {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  .viewport {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .size {
+    border: 1px solid var(--hairline);
+    background: none;
+    cursor: pointer;
+    font: 500 12px/1 "IBM Plex Mono", ui-monospace, monospace;
+    color: var(--ink-muted);
+    padding: 7px 10px;
+    border-radius: 5px;
+  }
+  .size:hover { color: var(--ink); }
+  .size[aria-pressed="true"] {
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+
+  .readout {
+    font: 400 12px/1 "IBM Plex Mono", ui-monospace, monospace;
+    color: var(--ink-muted);
+    min-width: 74px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stage {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    justify-content: center;
+    padding: 16px;
+    overflow: auto;
+  }
+
+  #frame {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    background: #ffffff;
+    box-shadow: var(--shadow);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 720px) {
+    .viewport { margin-left: 0; }
+    .stage { padding: 8px; }
+  }
+</style>
+
+<header class="bar">
+  <div class="brand">VOTE 4 <span class="yu">YU</span> <span class="kicker">build preview</span></div>
+  <nav class="tabs" aria-label="Pages">
+/*__TABS__*/
+  </nav>
+  <div class="viewport">
+    <button class="size" type="button" data-width="0" aria-pressed="true">Fit</button>
+    <button class="size" type="button" data-width="1024" aria-pressed="false">1024</button>
+    <button class="size" type="button" data-width="390" aria-pressed="false">390</button>
+    <span class="readout" id="readout">— px</span>
+  </div>
+</header>
+
+<div class="stage">
+  <iframe id="frame" title="Vote 4 Yu website preview"></iframe>
+</div>
+
+<script>
+  const PAGES = /*__PAGES__*/;
+  const ASSETS = /*__ASSETS__*/;
+
+  const stage = document.querySelector('.stage');
+  const readout = document.getElementById('readout');
+  let frame = document.getElementById('frame');
+  let width = 0;
+
+  // Each page gets a fresh iframe: re-assigning srcdoc on a live frame does not reliably
+  // re-run the document's scripts, which the site needs for its language toggle and tabs.
+  function show(href) {
+    const [file, hash] = href.split('#');
+    const html = PAGES[file] ? file : 'index.html';
+    document.querySelectorAll('.tab').forEach(function (tab) {
+      tab.setAttribute('aria-current', String(tab.dataset.page === html));
+    });
+
+    const next = document.createElement('iframe');
+    next.id = 'frame';
+    next.title = 'Vote 4 Yu website preview';
+    applyWidth(next);
+    // The hash rides along in the document itself so the page's own hashchange wiring runs.
+    next.srcdoc = hash
+      ? PAGES[html].replace('</body>', '<script>history.replaceState(null,"","#' + hash + '");' +
+          'window.dispatchEvent(new HashChangeEvent("hashchange"));<\/script></body>')
+      : PAGES[html];
+
+    frame.replaceWith(next);
+    frame = next;
+    observer.disconnect();
+    observer.observe(frame);
+  }
+
+  function applyWidth(el) {
+    el.style.width = width ? width + 'px' : '100%';
+    el.style.flex = width ? '0 0 auto' : '';
+  }
+
+  window.addEventListener('message', function (event) {
+    // Answer the window that announced itself — during a srcdoc swap, frame.contentWindow can
+    // still point at the outgoing document.
+    if (event.data && event.data.v4yReady && event.source) {
+      event.source.postMessage({ v4yAssets: ASSETS }, '*');
+    }
+    if (event.data && event.data.v4yNavigate) {
+      show(event.data.v4yNavigate);
+    }
+  });
+
+  document.querySelectorAll('.tab').forEach(function (tab) {
+    tab.addEventListener('click', function () { show(tab.dataset.page); });
+  });
+
+  document.querySelectorAll('.size').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      width = Number(btn.dataset.width);
+      applyWidth(frame);
+      document.querySelectorAll('.size').forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b === btn));
+      });
+    });
+  });
+
+  const observer = new ResizeObserver(function (entries) {
+    const box = entries[0].borderBoxSize && entries[0].borderBoxSize[0];
+    readout.textContent = Math.round(box ? box.inlineSize : entries[0].contentRect.width) + ' px';
+  });
+  observer.observe(frame);
+
+  show('index.html');
+</script>
