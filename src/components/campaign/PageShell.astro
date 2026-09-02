@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from './Nav.astro';
+import Footer from './Footer.astro';
+import VoteTicker from './VoteTicker.astro';
+import type { Locale } from '../../utils/i18n';
+
+interface Props {
+  locale?: Locale;
+  title?: string;
+  description?: string;
+  path: string;
+  active?: string;
+}
+const { locale = 'en', title, description, path, active = '' } = Astro.props;
+---
+
+<BaseLayout locale={locale} title={title} description={description} path={path}>
+  <div class="site-chrome">
+    <Nav locale={locale} active={active} />
+    <VoteTicker direction="ltr" />
+  </div>
+  <main>
+    <slot />
+  </main>
+  <Footer locale={locale} />
+</BaseLayout>
+
+<script is:inline>
+  (function () {
+    var chrome = document.querySelector('.site-chrome');
+    if (!chrome) return;
+    var ticker = chrome.querySelector('.vote-ticker');
+    if (!ticker) return;
+
+    function overlaps(a, b) {
+      return a.top < b.bottom && a.bottom > b.top && a.left < b.right && a.right > b.left;
+    }
+
+    function updateTickerContrast() {
+      var chromeBox = chrome.getBoundingClientRect();
+      /* Prefer the ticker strip itself; fall back to full chrome if missing. */
+      var band = ticker.getBoundingClientRect();
+      var probe = {
+        top: band.top,
+        bottom: band.bottom,
+        left: chromeBox.left,
+        right: chromeBox.right,
+      };
+      var darks = document.querySelectorAll('[data-ticker-dark]');
+      var onDark = false;
+      for (var i = 0; i < darks.length; i++) {
+        if (overlaps(probe, darks[i].getBoundingClientRect())) {
+          onDark = true;
+          break;
+        }
+      }
+      ticker.classList.toggle('vote-ticker--on-dark', onDark);
+    }
+
+    var ticking = false;
+    function onScrollOrResize() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        ticking = false;
+        updateTickerContrast();
+      });
+    }
+
+    updateTickerContrast();
+    window.addEventListener('scroll', onScrollOrResize, { passive: true });
+    window.addEventListener('resize', onScrollOrResize);
+  })();
+</script>
+
+<style is:global>
+  .site-chrome {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+  }
+  .site-chrome .vote-ticker {
+    background: transparent;
+  }
+</style>

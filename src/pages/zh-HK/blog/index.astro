@@ -1,11 +1,37 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import Nav from '../../../components/lecamp/Nav.astro';
-import Footer from '../../../components/lecamp/Footer.astro';
+import { getCollection } from 'astro:content';
+import PageShell from '../../../components/campaign/PageShell.astro';
+import { localizePath } from '../../../utils/i18n';
+
+const locale = 'zh-HK' as const;
+const posts = (await getCollection('blog', ({ data }) => data.locale === 'en' && !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+function hrefFor(id: string) {
+  const slug = id.split('/').pop()?.replace(/\.mdx?$/, '') ?? id;
+  return localizePath(`/blog/${slug}`, 'en');
+}
 ---
 
-<BaseLayout locale="zh-HK" title="Blogue | LE CAMP [DRAFT]">
-  <Nav />
-  <main class="container-1200" style="padding-block:96px;"><h1 style="font-family:var(--font-agrandir);font-weight:600;">Blogue [DRAFT]</h1></main>
-  <Footer />
-</BaseLayout>
+<PageShell locale={locale} path="/blog" active="events" title="最新消息: Vote 4 Yu">
+  <section class="section-pad">
+    <div class="container-1200">
+      <span class="badge">消息</span>
+      <h1 style="font-family:var(--font-display);font-size:clamp(2rem,5vw,3rem)">最新消息</h1>
+      <p>繁體全文尚待審校。以下為英文更新（連結至英文頁）。</p>
+      <ul style="list-style:none;padding:0;display:grid;gap:1rem">
+        {
+          posts.map((post) => (
+            <li style="border-top:3px solid var(--color-pink-500);padding-top:1rem">
+              <a href={hrefFor(post.id)} style="text-decoration:none;color:inherit">
+                <h2 style="margin:0 0 0.35rem">{post.data.title}</h2>
+                <p style="color:var(--color-ink-600)">{post.data.description}</p>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</PageShell>

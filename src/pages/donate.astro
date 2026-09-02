@@ -1,0 +1,257 @@
+---
+import PageShell from '../components/campaign/PageShell.astro';
+import FormSubmitScript from '../components/campaign/FormSubmitScript.astro';
+import { getContent, OFFICE } from '../utils/content';
+import { formsEndpoint } from '../utils/forms';
+
+const locale = 'en' as const;
+const t = getContent(locale);
+const endpoint = formsEndpoint() ?? '';
+const amounts = [25, 50, 100, 250, 500, 1000];
+---
+
+<PageShell locale={locale} path="/donate" active="involved" title={`${t.donate.title}: Vote 4 Yu`}>
+  <FormSubmitScript />
+  <section class="donate">
+    <div class="donate__media">
+      <img src="/images/candidate/yu-photo-white-side.png" alt="Haohui Yu" width="800" height="1000" />
+    </div>
+    <div class="donate__panel">
+      <span class="badge">{t.donate.badge}</span>
+      <h1>{t.donate.title}</h1>
+      <p class="donate__sub">{t.donate.subtitle}</p>
+
+      <ol class="donate__steps" aria-label="Progress">
+        <li class="is-active" data-step-indicator="1">{t.donate.stepAmount}</li>
+        <li data-step-indicator="2">{t.donate.stepContact}</li>
+        <li data-step-indicator="3">{t.donate.stepPay}</li>
+      </ol>
+
+      <div class="donate__step" data-step="1">
+        <p class="donate__label">{t.donate.amountLabel}</p>
+        <div class="donate__amounts">
+          {
+            amounts.map((n) => (
+              <button type="button" class="donate__amt" data-amount={String(n)}>
+                ${n}
+              </button>
+            ))
+          }
+        </div>
+        <div class="field" style="margin-top:1rem">
+          <label for="custom-amt">{t.donate.custom}</label>
+          <input id="custom-amt" type="number" min="1" step="1" data-custom-amount />
+        </div>
+        <button type="button" class="btn btn--pink" data-next="2" style="margin-top:1rem"
+          >{t.donate.next}</button
+        >
+      </div>
+
+      <div class="donate__step" data-step="2" hidden>
+        <form
+          id="donate-intent"
+          data-form="donateIntent"
+          data-locale={locale}
+          data-endpoint={endpoint}
+          data-sending={t.common.sending}
+          data-sent={t.common.sent}
+          data-error={t.common.sendError}
+          data-unavailable={t.common.formsUnavailable}
+        >
+          <input type="hidden" name="amount" data-amount-field value="" />
+          <div class="field" style="margin-bottom:0.75rem">
+            <label for="don-name">{t.donate.name}</label>
+            <input id="don-name" name="name" autocomplete="name" />
+          </div>
+          <div class="field" style="margin-bottom:0.75rem">
+            <label for="don-email">{t.donate.email}</label>
+            <input id="don-email" name="email" type="email" autocomplete="email" />
+          </div>
+          <div class="field" style="margin-bottom:0.75rem">
+            <label for="don-postal">{t.donate.postal}</label>
+            <input id="don-postal" name="postal" autocomplete="postal-code" />
+          </div>
+          <label class="donate__check">
+            <input type="checkbox" name="logIntent" value="yes" checked />
+            {t.donate.logIntent}
+          </label>
+          <input class="honeypot" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <div style="display:flex;gap:0.75rem;margin-top:1rem;flex-wrap:wrap">
+            <button type="button" class="btn btn--outline-pink" data-back="1">{t.donate.back}</button>
+            <button type="button" class="btn btn--pink" data-to-pay>{t.donate.next}</button>
+          </div>
+          <p data-status hidden style="margin-top:0.75rem;font-weight:600"></p>
+        </form>
+      </div>
+
+      <div class="donate__step" data-step="3" hidden>
+        <p data-amount-display style="font-weight:800;color:var(--color-pink-500);font-size:1.25rem"></p>
+        <h2>{t.donate.emtTitle}</h2>
+        <p>{t.donate.emtBody}</p>
+        <p class="donate__email">
+          <a href={`mailto:${OFFICE.donateEmail}`}>{OFFICE.donateEmail}</a>
+        </p>
+        <p>{t.donate.emtMemo}</p>
+        <p>
+          <strong>{t.donate.emtOffice}</strong><br />
+          {OFFICE.line1}<br />
+          {OFFICE.line2}
+        </p>
+        <h3>{t.donate.rebateTitle}</h3>
+        <p>{t.donate.rebateBody}</p>
+        <div style="display:flex;gap:0.75rem;margin-top:1rem;flex-wrap:wrap">
+          <button type="button" class="btn btn--outline-pink" data-back="2">{t.donate.back}</button>
+          <a class="btn btn--pink" href={`mailto:${OFFICE.donateEmail}?subject=Donation`}>{t.donate.done}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</PageShell>
+
+<script is:inline>
+  (function () {
+    var amount = '';
+    var root = document.querySelector('.donate');
+    if (!root) return;
+    function showStep(n) {
+      root.querySelectorAll('[data-step]').forEach(function (el) {
+        el.hidden = el.getAttribute('data-step') !== String(n);
+      });
+      root.querySelectorAll('[data-step-indicator]').forEach(function (el) {
+        el.classList.toggle('is-active', Number(el.getAttribute('data-step-indicator')) <= n);
+      });
+    }
+    root.querySelectorAll('[data-amount]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        amount = btn.getAttribute('data-amount') || '';
+        root.querySelectorAll('[data-amount]').forEach(function (b) {
+          b.classList.toggle('is-selected', b === btn);
+        });
+        var custom = root.querySelector('[data-custom-amount]');
+        if (custom) custom.value = '';
+      });
+    });
+    var custom = root.querySelector('[data-custom-amount]');
+    if (custom) {
+      custom.addEventListener('input', function () {
+        amount = custom.value;
+        root.querySelectorAll('[data-amount]').forEach(function (b) {
+          b.classList.remove('is-selected');
+        });
+      });
+    }
+    root.querySelectorAll('[data-next]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (!amount) amount = 'custom';
+        showStep(Number(btn.getAttribute('data-next')));
+      });
+    });
+    root.querySelectorAll('[data-back]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        showStep(Number(btn.getAttribute('data-back')));
+      });
+    });
+    var toPay = root.querySelector('[data-to-pay]');
+    if (toPay) {
+      toPay.addEventListener('click', function () {
+        var field = root.querySelector('[data-amount-field]');
+        if (field) field.value = amount;
+        var display = root.querySelector('[data-amount-display]');
+        if (display) display.textContent = 'Amount: $' + amount;
+        var form = document.getElementById('donate-intent');
+        var log = form && form.querySelector('input[name="logIntent"]');
+        if (form && log && log.checked) {
+          form.requestSubmit();
+        }
+        showStep(3);
+      });
+    }
+  })();
+</script>
+
+<style>
+  .donate {
+    display: grid;
+    min-height: calc(100vh - 4rem);
+  }
+  .donate__media {
+    display: none;
+    background: var(--color-blue-800);
+  }
+  .donate__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  .donate__panel {
+    padding: 2rem 1.5rem 3rem;
+    max-width: 32rem;
+  }
+  .donate__panel h1 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    margin: 0.75rem 0 0.25rem;
+    color: var(--color-pink-500);
+  }
+  .donate__sub {
+    margin: 0 0 1.5rem;
+    color: var(--color-ink-500);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+  }
+  .donate__steps {
+    display: flex;
+    gap: 0.75rem;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-ink-400);
+  }
+  .donate__steps .is-active {
+    color: var(--color-pink-500);
+  }
+  .donate__amounts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+  .donate__amt {
+    padding: 0.75rem;
+    border: 1px solid var(--color-taupe-200);
+    background: var(--color-paper);
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .donate__amt.is-selected {
+    border-color: var(--color-pink-500);
+    color: var(--color-pink-500);
+  }
+  .donate__email {
+    font-size: 1.25rem;
+    font-weight: 800;
+  }
+  .donate__email a {
+    color: var(--color-pink-500);
+  }
+  .donate__check {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    font-size: 0.9rem;
+  }
+  @media (min-width: 900px) {
+    .donate {
+      grid-template-columns: 1fr 1fr;
+    }
+    .donate__media {
+      display: block;
+    }
+    .donate__panel {
+      padding: 3rem;
+    }
+  }
+</style>

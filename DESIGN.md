@@ -1,54 +1,49 @@
-# LE CAMP — Style Reference
+# Vote4Yu — Style Reference
 
-> Source: [Refero Styles](https://styles.refero.design/style/45267374-ee40-43d9-8bfe-8d6566ce852d)  
-> Alpine summit base camp at dusk — a field command post where one red signal flare cuts through mountain twilight, and everything else is topo-line restraint.
+> Pink / blue campaign flyer system, ported from the Claude Design handoff (`design-build` on branch `v2`) and the homepage concept.
 
 **Theme:** light
 
-LE CAMP reads as an alpine expedition outpost translated into a digital surface: a near-monochrome canvas pierced by a single flare-red accent, where the brand speaks through dramatic photographic scale and badge-style illustration rather than through decoration. Agrandir carries hierarchy; DM Sans handles utility; DM Mono handles wayfinding tags.
+Hot pink accent on blue civic bands and warm taupe stock. Brush-mark “YU” watermarks and bilingual chrome. Agrandir for display; DM Sans for body; Noto Sans TC for Traditional Chinese.
 
-## Tokens — Colors
-
-| Name | Value | Token | Role |
-|------|-------|-------|------|
-| Signal Red | `#fe3a3a` | `--color-signal-red` | Primary CTA, logo, emphasis |
-| Carbon Ink | `#000000` | `--color-carbon-ink` | Text, borders, structure |
-| Summit White | `#ffffff` | `--color-summit-white` | Page canvas, card surface |
-| Ridge Gray | `#767676` | `--color-ridge-gray` | Input borders only |
-
-### Extended surfaces (layout fidelity to live Le Camp)
+## Tokens — Colours
 
 | Name | Value | Token | Role |
 |------|-------|-------|------|
-| Glacier Mist | `#f5f5f5` | `--surface-glacier-mist` | Supporting section band |
-| Trail Cream | `#f5f0e8` / `#F7F1E8` | `--surface-trail-cream` | Feature cards |
-| Sky | `#A3CBFD` | `--color-sky` | Program cards / journal band |
-| Blue | `#60A3F4` | `--color-blue` | Program accents |
-| Burgundy | `#561515` | `--color-burgundy` | Event card footers |
-| Base Camp Dark | `#0a1628` | `--surface-base-camp-dark` | Hero / footer photo field |
+| Pink 500 | `#ec078d` | `--color-pink-500` / `--color-accent` | Primary CTA, active nav, emphasis |
+| Blue 600 | `#344c96` | `--color-blue-600` / `--color-brand` | Band backgrounds, platform section |
+| Ink 900 | `#222222` | `--color-ink-900` | Body text |
+| Paper | `#ffffff` | `--color-paper` | Canvas, cards |
+| Taupe 100/200 | `#f3edee` / `#dfd4d5` | `--color-taupe-*` | Hero greige / stock bands |
+
+Full pink/blue/taupe scales live in `src/styles/globals.css` (`@theme`).
 
 ## Tokens — Typography
 
-| Role | Family | Token | Notes |
-|------|--------|-------|-------|
-| Display | Agrandir (self-hosted `public/fonts/Agrandir-Variable.woff2`) | `--font-agrandir` | Weights 350 / 600; display 90px / lh 1.0 |
-| Body | DM Sans | `--font-dm-sans` | 12–18px |
-| Mono | DM Mono | `--font-dm-mono` | 10px uppercase, tracking 0.04em |
+| Role | Family | Notes |
+|------|--------|-------|
+| Display | Agrandir (self-hosted) | Headlines |
+| Body | DM Sans | UI and English body |
+| Chinese | Noto Sans TC (system fallbacks) | 繁體 nav and body |
+| Mono | DM Mono | Rare labels |
 
-Fallback if Agrandir missing: Bricolage Grotesque 800.
+Do **not** ship Inter / Roboto / Arial as the primary stack.
 
-## Spacing & shape
+## Shape
 
-- Base unit 4px · page max 1200px · section gap 60px · card padding 40px
-- Radii: nav 10px · cards 20px · buttons 35px (pill)
+- Flyer aesthetic: hard edges on bands; radius reserved for inputs and small controls (`--radius-lg` 8px, `--radius-pill`)
+- Content max 1200px
+- Pink diagonal slogan ribbon between hero and lower sections
 
 ## Imagery
 
-Hero: full-bleed dusk mountain photograph. Program patches float as shield stickers. Body photography uses large radii (~20–32px). Assets cropped from `docs/plans/references/lecampquebec/` into `public/images/lecamp/`.
+- Candidate shoot assets in `public/images/candidate/yu-photo-*.png`
+- Brush mark: `yu-brush-bw.svg` (colourise with CSS filter / mask as needed)
+- Name lockup: `yu-first-name.svg`
 
 ## Do / Don't
 
-- Use `#fe3a3a` only for CTAs, logo, and emphasis text
-- No drop shadows on cards; elevation only on red CTA and hero stickers
-- No colours outside the token table for chrome; sky/cream/burgundy only for Le Camp module fills matching the screenshots
-- Agrandir is display-only; body stays DM Sans
+- Use pink for CTAs and active states; blue for large civic bands
+- No Le Camp signal-red as primary accent
+- No drop-shadow chrome on every card
+- Canadian English; no em-dashes in copy

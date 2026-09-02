@@ -1,0 +1,262 @@
+---
+import {
+  HEALTH_PLANKS,
+  plankBody,
+  type HealthPlank,
+} from '../../utils/content';
+import { HEALTH_DIMENSIONS } from '../../utils/healthDots';
+import { localizePath, type Locale } from '../../utils/i18n';
+import { getContent } from '../../utils/content';
+
+interface Props {
+  locale?: Locale;
+  /** When true, section has no own blue background (parent provides it). */
+  flush?: boolean;
+}
+const { locale = 'en', flush = false } = Astro.props;
+const t = getContent(locale);
+const defaultOpen = HEALTH_PLANKS.length - 1;
+
+function titleParts(plank: HealthPlank): { letter: string; rest: string } {
+  const label = plank.labelEn;
+  return { letter: label.charAt(0), rest: label.slice(1) };
+}
+---
+
+<section class:list={['health-cascade', 'section-pad', { 'health-cascade--flush': flush }]} id="health">
+  <div class="container-1200 health-cascade__grid">
+    <div
+      class="health-cascade__stack"
+      data-health-accordion
+      role="region"
+      aria-label={t.home.platformTitle}
+    >
+      {
+        HEALTH_PLANKS.map((plank, i) => {
+          const dim = HEALTH_DIMENSIONS[i];
+          const open = i === defaultOpen;
+          const parts = titleParts(plank);
+          const panelId = `health-panel-${i}`;
+          const btnId = `health-btn-${i}`;
+          return (
+            <article
+              class:list={['health-card', { 'is-open': open }]}
+              style={`--i: ${i}`}
+              data-health-card
+            >
+              <h3 class="health-card__title">
+                <button
+                  type="button"
+                  class="health-card__btn"
+                  id={btnId}
+                  aria-expanded={open ? 'true' : 'false'}
+                  aria-controls={panelId}
+                  data-health-toggle
+                >
+                  <span class="health-card__letter">{parts.letter}</span>
+                  <span class="health-card__rest">{parts.rest}</span>
+                  <span class="health-card__zh">{plank.labelZh}</span>
+                </button>
+              </h3>
+              <div
+                class="health-card__panel"
+                id={panelId}
+                role="region"
+                aria-labelledby={btnId}
+                hidden={!open}
+              >
+                <p class="health-card__body">{plankBody(plank, locale)}</p>
+                {dim && (
+                  <svg
+                    class="health-card__dots"
+                    viewBox={dim.viewBox}
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    {dim.dots.map((d) => (
+                      <circle cx={d.x} cy={d.y} r={d.r} fill="var(--color-pink-500)" />
+                    ))}
+                  </svg>
+                )}
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+    <div class="health-cascade__copy">
+      <h2>{t.home.platformTitle}</h2>
+      <p class="health-cascade__sub">{t.home.platformSub}</p>
+      <p class="health-cascade__body">{t.home.platformTrack}</p>
+      <p class="health-cascade__body">{t.home.platformInvite}</p>
+      <div class="health-cascade__actions">
+        <a class="btn btn--white-pink" href={localizePath('/platform/progress', locale)}>
+          {t.common.trackProgress} →
+        </a>
+        <a class="btn btn--pink" href={localizePath('/platform/talk', locale)}>
+          {t.common.talkToYu} →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (function () {
+    var root = document.querySelector('[data-health-accordion]');
+    if (!root) return;
+    root.querySelectorAll('[data-health-toggle]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var card = btn.closest('[data-health-card]');
+        if (!card) return;
+        root.querySelectorAll('[data-health-card]').forEach(function (c) {
+          var isTarget = c === card;
+          c.classList.toggle('is-open', isTarget);
+          var b = c.querySelector('[data-health-toggle]');
+          var panel = c.querySelector('.health-card__panel');
+          if (b) b.setAttribute('aria-expanded', isTarget ? 'true' : 'false');
+          if (panel) panel.hidden = !isTarget;
+        });
+      });
+    });
+  })();
+</script>
+
+<style>
+  .health-cascade {
+    background: var(--color-blue-600);
+    color: var(--color-paper);
+    overflow: hidden;
+  }
+  .health-cascade--flush {
+    background: transparent;
+  }
+  .health-cascade__grid {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .health-cascade__stack {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    max-width: 28rem;
+  }
+  .health-card {
+    background: var(--color-paper);
+    color: var(--color-ink-900);
+    border-top: 3px solid var(--color-pink-500);
+    position: relative;
+  }
+  .health-card__title {
+    margin: 0;
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  .health-card__btn {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0 0.05rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+  }
+  .health-card__letter {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.65rem;
+    color: var(--color-blue-600);
+    line-height: 1;
+  }
+  .health-card__rest {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    color: var(--color-ink-900);
+  }
+  .health-card__zh {
+    margin-left: auto;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--color-ink-800);
+    padding-left: 0.5rem;
+  }
+  .health-card__panel {
+    position: relative;
+    padding: 0 4.25rem 1.15rem 1rem;
+    min-height: 5.5rem;
+  }
+  .health-card__panel[hidden] {
+    display: none;
+  }
+  .health-card.is-open .health-card__panel {
+    display: block;
+  }
+  .health-card.is-open {
+    min-height: 11rem;
+  }
+  .health-card__body {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    color: var(--color-ink-600);
+    max-width: 14rem;
+    padding-bottom: 0.25rem;
+  }
+  .health-card__dots {
+    position: absolute;
+    right: 0.4rem;
+    bottom: 0.4rem;
+    width: 3.4rem;
+    height: auto;
+    pointer-events: none;
+  }
+  .health-cascade__copy h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 4vw, 2.75rem);
+    margin: 0 0 0.5rem;
+  }
+  .health-cascade__sub {
+    margin: 0 0 1rem;
+    font-size: 1.05rem;
+    opacity: 0.95;
+  }
+  .health-cascade__body {
+    margin: 0 0 0.85rem;
+    font-size: 0.98rem;
+    line-height: 1.5;
+    opacity: 0.95;
+    max-width: 36rem;
+  }
+  .health-cascade__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.35rem;
+  }
+  .btn--white-pink {
+    background: var(--color-paper);
+    color: var(--color-pink-500);
+    border-color: var(--color-paper);
+  }
+  @media (min-width: 900px) {
+    .health-cascade__grid {
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 3rem;
+    }
+    .health-cascade__stack {
+      transform: rotate(-2deg);
+    }
+    .health-card {
+      margin-left: calc(var(--i) * 0.55rem);
+    }
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+import PageShell from '../components/campaign/PageShell.astro';
+import PageHero from '../components/campaign/PageHero.astro';
+import FormSubmitScript from '../components/campaign/FormSubmitScript.astro';
+import { getContent, OFFICE } from '../utils/content';
+import { formsEndpoint } from '../utils/forms';
+
+const locale = 'en' as const;
+const t = getContent(locale);
+const endpoint = formsEndpoint() ?? '';
+---
+
+<PageShell locale={locale} path="/interview" active="about" title={`${t.interview.title}: Vote 4 Yu`}>
+  <FormSubmitScript />
+  <PageHero badge={t.interview.badge} title={t.interview.title} intro={t.interview.body} />
+  <section class="section-pad">
+    <div class="container-1200" style="max-width:36rem">
+      <p style="margin-top:0">
+        {t.common.emailLabel}: <a href={`mailto:${OFFICE.email}`}>{OFFICE.email}</a>
+      </p>
+      <form
+        data-form="interview"
+        data-locale={locale}
+        data-endpoint={endpoint}
+        data-sending={t.common.sending}
+        data-sent={t.common.sent}
+        data-error={t.common.sendError}
+        data-unavailable={t.common.formsUnavailable}
+      >
+        <div class="field" style="margin-bottom:0.75rem">
+          <label for="int-name">{t.interview.name}*</label>
+          <input id="int-name" name="name" required autocomplete="name" />
+        </div>
+        <div class="field" style="margin-bottom:0.75rem">
+          <label for="int-outlet">{t.interview.outlet}</label>
+          <input id="int-outlet" name="outlet" />
+        </div>
+        <div class="field" style="margin-bottom:0.75rem">
+          <label for="int-email">{t.interview.email}*</label>
+          <input id="int-email" name="email" type="email" required autocomplete="email" />
+        </div>
+        <div class="field" style="margin-bottom:0.75rem">
+          <label for="int-topic">{t.interview.topic}*</label>
+          <textarea id="int-topic" name="topic" rows="4" required></textarea>
+        </div>
+        <input class="honeypot" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button class="btn btn--pink" type="submit">{t.interview.send}</button>
+        <p data-status hidden style="margin-top:0.75rem;font-weight:600"></p>
+      </form>
+    </div>
+  </section>
+</PageShell>

@@ -1,62 +1,57 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Nav from '../../components/lecamp/Nav.astro';
-import Footer from '../../components/lecamp/Footer.astro';
+import PageShell from '../../components/campaign/PageShell.astro';
+import { localizePath } from '../../utils/i18n';
 
+const locale = 'en' as const;
 const posts = (await getCollection('blog', ({ data }) => data.locale === 'en' && !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
 function hrefFor(id: string) {
   const slug = id.split('/').pop()?.replace(/\.mdx?$/, '') ?? id;
-  return `/blog/${slug}`;
+  return localizePath(`/blog/${slug}`, locale);
 }
 ---
 
-<BaseLayout title="Blog and Media | VOTE4YU">
-  <Nav />
-  <main class="container-1200 blog-index">
-    <p class="label-mono">BLOG AND MEDIA</p>
-    <h1 class="blog-index__title">Blog and Media</h1>
-    <ul class="blog-index__list">
-      {
-        posts.map((post) => (
-          <li>
-            <a class="blog-index__card" href={hrefFor(post.id)}>
-              {post.data.heroImage && (
-                <img src={post.data.heroImage.src} alt={post.data.heroImage.alt} />
-              )}
-              <div>
-                <h2>{post.data.title}</h2>
-                <p>{post.data.description}</p>
-                <time datetime={post.data.pubDate.toISOString()}>
-                  {post.data.pubDate.toLocaleDateString('en-CA', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </time>
-              </div>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </main>
-  <Footer />
-</BaseLayout>
+<PageShell locale={locale} path="/blog" active="events" title="Updates: Vote 4 Yu">
+  <section class="section-pad">
+    <div class="container-1200 blog-index">
+      <span class="badge">Updates</span>
+      <h1>Campaign updates</h1>
+      <ul class="blog-index__list">
+        {
+          posts.map((post) => (
+            <li>
+              <a class="blog-index__card" href={hrefFor(post.id)}>
+                {post.data.heroImage && (
+                  <img src={post.data.heroImage.src} alt={post.data.heroImage.alt} />
+                )}
+                <div>
+                  <h2>{post.data.title}</h2>
+                  <p>{post.data.description}</p>
+                  <time datetime={post.data.pubDate.toISOString()}>
+                    {post.data.pubDate.toLocaleDateString('en-CA', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </time>
+                </div>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</PageShell>
 
 <style>
-  .blog-index {
-    padding-block: 96px;
-  }
-  .blog-index__title {
-    font-family: var(--font-agrandir);
-    font-size: clamp(40px, 6vw, 72px);
-    font-weight: 600;
-    line-height: 1;
-    margin: 0.5rem 0 2.5rem;
+  .blog-index h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin: 0.75rem 0 2rem;
   }
   .blog-index__list {
     list-style: none;
@@ -71,32 +66,30 @@ function hrefFor(id: string) {
     grid-template-columns: minmax(0, 220px) 1fr;
     gap: 1.5rem;
     text-decoration: none;
-    color: #000;
+    color: var(--color-ink-900);
     align-items: start;
+    border-top: 3px solid var(--color-pink-500);
+    padding-top: 1rem;
   }
   .blog-index__card img {
     width: 100%;
     aspect-ratio: 4 / 3;
     object-fit: cover;
-    border-radius: 12px;
   }
   .blog-index__card h2 {
-    font-family: var(--font-agrandir);
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 600;
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 3vw, 1.75rem);
     margin: 0 0 0.5rem;
   }
   .blog-index__card p {
     margin: 0 0 0.75rem;
     max-width: 48ch;
     line-height: 1.45;
-    font-family: var(--font-dm-sans);
+    color: var(--color-ink-600);
   }
   .blog-index__card time {
-    font-family: var(--font-dm-mono);
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    color: var(--color-ridge-gray);
+    font-size: 0.8rem;
+    color: var(--color-ink-500);
   }
   @media (max-width: 700px) {
     .blog-index__card {

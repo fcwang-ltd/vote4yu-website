@@ -1,0 +1,74 @@
+---
+/**
+ * Shared inline form submit helper: include once per page that has data-form forms.
+ * Expects forms with data-form, data-endpoint, data-sending, data-sent, data-error, data-unavailable.
+ */
+---
+
+<script is:inline>
+  (function () {
+    if (window.__v4yFormsWired) return;
+    window.__v4yFormsWired = true;
+    document.addEventListener(
+      'submit',
+      function (e) {
+        var form = e.target;
+        if (!(form instanceof HTMLFormElement)) return;
+        if (!form.getAttribute('data-form')) return;
+        e.preventDefault();
+        var endpoint = form.getAttribute('data-endpoint') || '';
+        var status = form.querySelector('[data-status]');
+        var btn = form.querySelector('button[type="submit"]');
+        var fd = new FormData(form);
+        if (fd.get('website')) {
+          if (status) {
+            status.hidden = false;
+            status.textContent = form.getAttribute('data-sent') || '';
+          }
+          return;
+        }
+        if (!endpoint) {
+          if (status) {
+            status.hidden = false;
+            status.textContent = form.getAttribute('data-unavailable') || '';
+          }
+          return;
+        }
+        if (btn) btn.disabled = true;
+        if (status) {
+          status.hidden = false;
+          status.textContent = form.getAttribute('data-sending') || '';
+        }
+        var payload = {
+          kind: form.getAttribute('data-form'),
+          locale: form.getAttribute('data-locale'),
+          submittedAt: new Date().toISOString(),
+        };
+        fd.forEach(function (value, key) {
+          if (key !== 'website') payload[key] = String(value);
+        });
+        fetch(endpoint, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
+        })
+          .then(function (res) {
+            if (btn) btn.disabled = false;
+            if (!status) return;
+            if (res.ok) {
+              status.textContent = form.getAttribute('data-sent') || '';
+              form.reset();
+            } else {
+              status.textContent = form.getAttribute('data-error') || '';
+            }
+          })
+          .catch(function () {
+            if (btn) btn.disabled = false;
+            if (status) status.textContent = form.getAttribute('data-error') || '';
+          });
+      },
+      true,
+    );
+  })();
+</script>

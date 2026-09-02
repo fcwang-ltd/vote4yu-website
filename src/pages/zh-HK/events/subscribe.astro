@@ -1,0 +1,46 @@
+---
+import PageShell from '../../../components/campaign/PageShell.astro';
+import PageHero from '../../../components/campaign/PageHero.astro';
+import FormSubmitScript from '../../../components/campaign/FormSubmitScript.astro';
+import { getContent, OFFICE } from '../../../utils/content';
+import { formsEndpoint } from '../../../utils/forms';
+
+const locale = 'zh-HK' as const;
+const t = getContent(locale);
+const endpoint = formsEndpoint() ?? '';
+---
+
+<PageShell
+  locale={locale}
+  path="/events/subscribe"
+  active="events"
+  title={`${t.subscribe.title}: Vote 4 Yu`}
+>
+  <FormSubmitScript />
+  <PageHero badge={t.subscribe.badge} title={t.subscribe.title} intro={t.subscribe.body} />
+  <section class="section-pad">
+    <div class="container-1200" style="max-width:36rem">
+      <p>{t.subscribe.icsNote}</p>
+      <p>
+        {t.common.emailLabel}: <a href={`mailto:${OFFICE.email}`}>{OFFICE.email}</a>
+      </p>
+      <form
+        data-form="subscribe"
+        data-locale={locale}
+        data-endpoint={endpoint}
+        data-sending={t.common.sending}
+        data-sent={t.common.sent}
+        data-error={t.common.sendError}
+        data-unavailable={t.common.formsUnavailable}
+      >
+        <div class="field" style="margin-bottom:0.75rem">
+          <label for="sub-email">{t.subscribe.email}*</label>
+          <input id="sub-email" name="email" type="email" required autocomplete="email" />
+        </div>
+        <input class="honeypot" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button class="btn btn--pink" type="submit">{t.subscribe.submit}</button>
+        <p data-status hidden style="margin-top:0.75rem;font-weight:600"></p>
+      </form>
+    </div>
+  </section>
+</PageShell>

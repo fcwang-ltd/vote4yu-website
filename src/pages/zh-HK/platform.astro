@@ -1,0 +1,69 @@
+---
+import PageShell from '../../components/campaign/PageShell.astro';
+import PageHero from '../../components/campaign/PageHero.astro';
+import { getContent, HEALTH_PLANKS, plankBody, plankLabel } from '../../utils/content';
+import { localizePath } from '../../utils/i18n';
+
+const locale = 'zh-HK' as const;
+const t = getContent(locale);
+---
+
+<PageShell locale={locale} path="/platform" active="platform" title={`${t.platform.title}: Vote 4 Yu`}>
+  <PageHero badge={t.platform.badge} title={t.platform.title} intro={t.platform.body}>
+    <Fragment slot="actions">
+      <a class="btn btn--pink" href={localizePath('/platform/talk', locale)}>{t.common.talkToYu} →</a>
+      <a class="btn btn--outline-pink" href={localizePath('/platform/progress', locale)}
+        >{t.common.trackProgress} →</a
+      >
+    </Fragment>
+  </PageHero>
+  <section class="section-pad">
+    <div class="container-1200 plank-list">
+      {
+        HEALTH_PLANKS.map((plank) => (
+          <article class="plank">
+            <h2>
+              <span class="plank__letter">{plank.letter}.</span>
+              {plankLabel(plank, locale)}
+              <span class="plank__zh">{plank.labelZh}</span>
+            </h2>
+            <p>{plankBody(plank, locale)}</p>
+            <a href={localizePath('/platform/progress', locale)}>{t.platform.seeProgress} →</a>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</PageShell>
+
+<style>
+  .plank-list {
+    display: grid;
+    gap: 1.25rem;
+    max-width: 48rem;
+  }
+  .plank {
+    padding: 1.25rem 0;
+    border-top: 3px solid var(--color-pink-500);
+  }
+  .plank__letter {
+    color: var(--color-pink-500);
+    margin-right: 0.35rem;
+  }
+  .plank__zh {
+    display: block;
+    font-size: 1rem;
+    color: var(--color-ink-600);
+    font-weight: 600;
+    margin-top: 0.2rem;
+  }
+  .plank h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.5rem;
+  }
+  .plank a {
+    color: var(--color-pink-500);
+    font-weight: 700;
+    text-decoration: none;
+  }
+</style>

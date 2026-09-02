@@ -1,0 +1,341 @@
+---
+import { getContent, OFFICE } from '../../utils/content';
+import { localizePath, type Locale } from '../../utils/i18n';
+import VoteTicker from './VoteTicker.astro';
+
+interface Props {
+  locale?: Locale;
+}
+const { locale = 'en' } = Astro.props;
+const t = getContent(locale);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="site-footer__connect section-pad">
+    <img
+      class="site-footer__watermark"
+      src="/images/candidate/yu-brush-bw.svg"
+      alt=""
+      aria-hidden="true"
+    />
+    <div class="container-1200 site-footer__connect-main">
+      <div class="site-footer__connect-copy">
+        <h2 class="site-footer__title">{t.common.connectTitle}</h2>
+        <p class="site-footer__lead">{t.common.connectBody}</p>
+        <p class="site-footer__email">
+          <a href={`mailto:${OFFICE.email}`}>{OFFICE.email}</a>
+        </p>
+        <p class="site-footer__office">
+          <strong>{t.common.officeLabel}</strong><br />
+          {OFFICE.line1}<br />
+          {OFFICE.line2}
+        </p>
+        <div class="site-footer__cta">
+          <a class="btn btn--pink" href={localizePath('/donate', locale)}>{t.nav.donate} →</a>
+          <a class="btn btn--outline-white" href={localizePath('/get-involved', locale)}
+            >{t.nav.involvedEn} →</a
+          >
+        </div>
+      </div>
+
+      <aside class="connect-card">
+        <img
+          class="connect-card__qr"
+          src="/images/candidate/social-icons/wechat-qr.svg"
+          alt={t.common.connectQrAlt}
+          width="180"
+          height="180"
+        />
+        <div class="connect-card__meta">
+          <span class="connect-card__badge">{t.common.vote4yu}</span>
+          <p class="connect-card__scan">{t.common.connectScan}</p>
+          <p class="connect-card__handle">{t.common.connectHandle}</p>
+          <div class="connect-card__socials" aria-label="Social">
+            <a class="connect-card__social" href={t.common.socialWechat} aria-label={t.common.wechat}>
+              <img src="/images/candidate/social-icons/wechat.svg" alt="" width="28" height="28" />
+            </a>
+            <a
+              class="connect-card__social"
+              href={t.common.socialRednote}
+              rel="noopener noreferrer"
+              target="_blank"
+              aria-label="小紅書"
+            >
+              <img
+                src="/images/candidate/social-icons/rednote-logo.svg"
+                alt=""
+                width="28"
+                height="28"
+              />
+            </a>
+            <a
+              class="connect-card__social"
+              href={t.common.socialFacebook}
+              rel="noopener noreferrer"
+              target="_blank"
+              aria-label="Facebook"
+            >
+              <img
+                src="/images/candidate/social-icons/facebook.svg"
+                alt=""
+                width="28"
+                height="28"
+              />
+            </a>
+            <a
+              class="connect-card__social"
+              href={t.common.socialInstagram}
+              rel="noopener noreferrer"
+              target="_blank"
+              aria-label="Instagram"
+            >
+              <img
+                src="/images/candidate/social-icons/instagram.svg"
+                alt=""
+                width="28"
+                height="28"
+              />
+            </a>
+            <a
+              class="connect-card__social"
+              href={t.common.socialX}
+              rel="noopener noreferrer"
+              target="_blank"
+              aria-label="X"
+            >
+              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"
+                ><path
+                  fill="currentColor"
+                  d="M4 4h4.1l4.2 5.8L16.8 4H20l-6.1 7.2L20.2 20h-4.1l-4.5-6.2L7.2 20H4l6.4-7.5L4 4z"
+                ></path></svg
+              >
+            </a>
+            <a
+              class="connect-card__social"
+              href={t.common.socialReddit}
+              rel="noopener noreferrer"
+              target="_blank"
+              aria-label="Reddit"
+            >
+              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"
+                ><path
+                  fill="currentColor"
+                  d="M14.2 3.2a1.2 1.2 0 0 1 1.4.9l.5 2.1a3.4 3.4 0 0 1 3.5 3.3c0 .3 0 .5-.1.8A2.4 2.4 0 0 1 21 12.6c0 3.4-3.6 6.1-8 6.1s-8-2.7-8-6.1a2.4 2.4 0 0 1 1.5-2.2 3.4 3.4 0 0 1 3.4-4.1c.7 0 1.4.2 2 .6l2.3-1.6a1.2 1.2 0 0 1 1.5-.1zm-1.1 2.2-2.1 1.5.4 1.4a3.3 3.3 0 0 1 2.3-.9c.4 0 .9.1 1.2.3l-.5-2.1-.3-.2h-1zm-2.6 5.4a1.3 1.3 0 1 0 1.3 1.3 1.3 1.3 0 0 0-1.3-1.3zm5 0a1.3 1.3 0 1 0 1.3 1.3 1.3 1.3 0 0 0-1.3-1.3zm-5.5 3.3a.7.7 0 0 0-.1 1 3.7 3.7 0 0 0 5.2 0 .7.7 0 1 0-1-.9 2.3 2.3 0 0 1-3.2 0 .7.7 0 0 0-.9-.1z"
+                ></path></svg
+              >
+            </a>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="container-1200 site-footer__cols">
+      <div>
+        <h3>{t.footer.platform}</h3>
+        <a href={localizePath('/platform', locale)}>{t.footer.health}</a>
+        <a href={localizePath('/platform/progress', locale)}>{t.footer.progress}</a>
+        <a href={localizePath('/platform/talk', locale)}>{t.footer.talk}</a>
+      </div>
+      <div>
+        <h3>{t.footer.campaign}</h3>
+        <a href={localizePath('/about', locale)}>{t.footer.about}</a>
+        <a href={localizePath('/events', locale)}>{t.footer.events}</a>
+        <a href={localizePath('/get-involved', locale)}>{t.footer.involved}</a>
+        <a href={localizePath('/donate', locale)}>{t.footer.donate}</a>
+        <a href={localizePath('/blog', locale)}>{t.footer.blog}</a>
+      </div>
+      <div>
+        <h3>{t.footer.contact}</h3>
+        <a href={`mailto:${OFFICE.email}`}>{OFFICE.email}</a>
+        <a href={`mailto:${OFFICE.donateEmail}`}>{t.common.donateLabel}</a>
+      </div>
+    </div>
+  </div>
+  <div class="site-footer__ticker">
+    <VoteTicker direction="rtl" />
+  </div>
+  <div class="site-footer__legal">
+    <div class="container-1200 site-footer__legal-inner">
+      <p>&copy; {year} Vote 4 Yu · {t.common.legal}</p>
+      <p>
+        <a href={localizePath('/privacy', locale)}>{t.common.privacy}</a>
+        ·
+        <a href={localizePath('/terms', locale)}>{t.common.terms}</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer__connect {
+    background: var(--color-blue-600);
+    color: var(--color-paper);
+    position: relative;
+    overflow: hidden;
+  }
+  .site-footer__watermark {
+    position: absolute;
+    right: -4%;
+    bottom: -18%;
+    width: min(48vw, 420px);
+    opacity: 0.08;
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+  .site-footer__connect-main {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .site-footer__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    margin: 0 0 0.75rem;
+  }
+  .site-footer__lead {
+    margin: 0 0 1.1rem;
+    max-width: 28rem;
+    line-height: 1.5;
+    opacity: 0.95;
+  }
+  .site-footer__email a,
+  .site-footer__connect a {
+    color: var(--color-paper);
+  }
+  .site-footer__office {
+    margin-top: 0.75rem;
+    line-height: 1.5;
+  }
+  .site-footer__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+  .connect-card {
+    background: var(--color-paper);
+    color: var(--color-ink-900);
+    display: flex;
+    gap: 1.35rem;
+    align-items: center;
+    padding: 1.35rem 1.5rem;
+    max-width: 30rem;
+  }
+  .connect-card__qr {
+    width: 9.5rem;
+    height: 9.5rem;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+  .connect-card__meta {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+  .connect-card__badge {
+    display: inline-block;
+    align-self: flex-start;
+    background: var(--color-pink-500);
+    color: var(--color-paper);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    padding: 0.4rem 0.75rem;
+  }
+  .connect-card__scan {
+    margin: 0.25rem 0 0;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.15rem;
+    line-height: 1.2;
+    color: var(--color-ink-900);
+  }
+  .connect-card__handle {
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.98rem;
+    color: var(--color-ink-600);
+  }
+  .connect-card__socials {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem;
+    margin-top: 0.55rem;
+  }
+  .connect-card__social {
+    color: var(--color-ink-800) !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    opacity: 0.92;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+  .connect-card__social img {
+    width: 1.75rem;
+    height: 1.75rem;
+    object-fit: contain;
+    display: block;
+  }
+  .connect-card__social:hover {
+    opacity: 1;
+    color: var(--color-pink-500) !important;
+    transform: translateY(-1px);
+  }
+  .site-footer__cols {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  }
+  .site-footer__cols h3 {
+    margin: 0 0 0.5rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  .site-footer__cols a {
+    display: block;
+    margin-bottom: 0.35rem;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .site-footer__ticker {
+    background: var(--color-blue-600);
+  }
+  .site-footer__ticker :global(.vote-ticker__vote) {
+    color: var(--color-paper);
+  }
+  .site-footer__legal {
+    background: var(--color-blue-800);
+    color: var(--color-blue-200);
+    padding: 1rem 0;
+    font-size: 0.85rem;
+  }
+  .site-footer__legal-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    justify-content: space-between;
+  }
+  .site-footer__legal a {
+    color: var(--color-pink-200);
+  }
+  @media (min-width: 900px) {
+    .site-footer__connect-main {
+      grid-template-columns: 1.1fr auto;
+      align-items: center;
+      gap: 2.5rem;
+    }
+  }
+</style>

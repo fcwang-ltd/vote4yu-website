@@ -1,0 +1,135 @@
+---
+import { getContent } from '../../utils/content';
+import { formsEndpoint } from '../../utils/forms';
+import { localizePath, type Locale } from '../../utils/i18n';
+
+interface Props {
+  locale?: Locale;
+  variant?: 'hero' | 'panel';
+}
+const { locale = 'en', variant = 'hero' } = Astro.props;
+const t = getContent(locale);
+const endpoint = formsEndpoint() ?? '';
+---
+
+<form
+  class:list={['commit-form', `commit-form--${variant}`]}
+  data-form="commit"
+  data-locale={locale}
+  data-endpoint={endpoint}
+  data-sending={t.common.sending}
+  data-sent={t.common.sent}
+  data-error={t.common.sendError}
+  data-unavailable={t.common.formsUnavailable}
+  novalidate
+>
+  <h2 class="commit-form__title">{t.home.commitTitle}</h2>
+  <p class="commit-form__sub">{t.home.commitSub}</p>
+
+  <div class="commit-form__grid">
+    <div class="field">
+      <label for={`commit-first-${variant}`}>{t.home.firstName}*</label>
+      <input id={`commit-first-${variant}`} name="firstName" required autocomplete="given-name" />
+    </div>
+    <div class="field">
+      <label for={`commit-last-${variant}`}>{t.home.lastName}*</label>
+      <input id={`commit-last-${variant}`} name="lastName" required autocomplete="family-name" />
+    </div>
+    <div class="field">
+      <label for={`commit-postal-${variant}`}>{t.home.postal}*</label>
+      <input id={`commit-postal-${variant}`} name="postal" required autocomplete="postal-code" />
+    </div>
+    <div class="field">
+      <label for={`commit-mobile-${variant}`}>{t.home.mobile}</label>
+      <input id={`commit-mobile-${variant}`} name="mobile" type="tel" autocomplete="tel" />
+    </div>
+    <div class="field commit-form__full">
+      <label for={`commit-email-${variant}`}>{t.home.email}*</label>
+      <input id={`commit-email-${variant}`} name="email" type="email" required autocomplete="email" />
+    </div>
+  </div>
+
+  <input class="honeypot" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+  <p class="commit-form__consent">
+    {t.home.consent}
+    {' '}
+    <a href={localizePath('/privacy', locale)}>{t.common.privacy}</a>
+    {' · '}
+    <a href={localizePath('/terms', locale)}>{t.common.terms}</a>
+  </p>
+
+  <button class="btn btn--pink commit-form__submit" type="submit">{t.home.submit}</button>
+  <p class="commit-form__status" data-status hidden></p>
+</form>
+
+<style>
+  .commit-form {
+    max-width: 26rem;
+    width: 100%;
+  }
+  .commit-form--panel {
+    background: var(--color-paper);
+    padding: 1.5rem;
+    border: 1px solid var(--color-taupe-200);
+    border-radius: var(--radius-lg);
+  }
+  .commit-form--hero {
+    background: transparent;
+    border: 0;
+    padding: 0;
+  }
+  .commit-form__title {
+    margin: 0 0 0.25rem;
+    color: var(--color-pink-500);
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    line-height: 1.15;
+  }
+  .commit-form__sub {
+    margin: 0 0 0.85rem;
+    color: var(--color-ink-800);
+    font-size: 0.92rem;
+    line-height: 1.35;
+  }
+  .commit-form__grid {
+    display: grid;
+    gap: 0.45rem;
+  }
+  .commit-form--hero :global(.field) {
+    gap: 0.2rem;
+  }
+  .commit-form--hero :global(.field label) {
+    line-height: 1.2;
+    font-size: 0.75rem;
+  }
+  .commit-form--hero :global(.field input) {
+    padding: 0.55rem 0.75rem;
+    line-height: 1.25;
+  }
+  .commit-form__consent {
+    margin: 0.65rem 0 0.75rem;
+    font-size: 0.68rem;
+    line-height: 1.35;
+    color: var(--color-ink-500);
+  }
+  .commit-form__consent a {
+    color: var(--color-blue-500);
+  }
+  .commit-form__submit {
+    width: 100%;
+  }
+  .commit-form__status {
+    margin: 0.75rem 0 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  @media (min-width: 520px) {
+    .commit-form__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .commit-form__full {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

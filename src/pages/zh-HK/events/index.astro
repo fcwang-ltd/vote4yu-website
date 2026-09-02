@@ -1,11 +1,92 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import Nav from '../../../components/lecamp/Nav.astro';
-import Footer from '../../../components/lecamp/Footer.astro';
+import PageShell from '../../../components/campaign/PageShell.astro';
+import PageHero from '../../../components/campaign/PageHero.astro';
+import { getContent } from '../../../utils/content';
+import { localizePath } from '../../../utils/i18n';
+
+const locale = 'zh-HK' as const;
+const t = getContent(locale);
 ---
 
-<BaseLayout locale="zh-HK" title="Événements | LE CAMP [DRAFT]">
-  <Nav />
-  <main class="container-1200" style="padding-block:96px;"><h1 style="font-family:var(--font-agrandir);font-weight:600;">Événements [DRAFT]</h1></main>
-  <Footer />
-</BaseLayout>
+<PageShell locale={locale} path="/events" active="events" title={`${t.events.title}: Vote 4 Yu`}>
+  <PageHero badge={t.events.badge} title={t.events.title} intro={t.events.body}>
+    <Fragment slot="actions">
+      <a class="btn btn--pink" href={localizePath('/events/subscribe', locale)}>{t.events.subCalendar}</a>
+      <a class="btn btn--outline-pink" href={localizePath('/interview', locale)}>{t.about.interviewCta}</a>
+    </Fragment>
+  </PageHero>
+  <section class="section-pad">
+    <div class="container-1200">
+      <h2>{t.events.tabEvents}</h2>
+      <div class="event-list">
+        {
+          t.events.events.map((ev) => (
+            <article class="event-card">
+              <span class="event-card__tag">{ev.tag}</span>
+              <h3>{ev.title}</h3>
+              <p>
+                {ev.date} · {ev.time}
+              </p>
+              <p>{ev.where}</p>
+            </article>
+          ))
+        }
+      </div>
+      <div class="host-card">
+        <p>{t.events.hostCard}</p>
+        <a class="btn btn--outline-pink" href={localizePath('/get-involved/business', locale)}
+          >{t.events.partnerCta} →</a
+        >
+      </div>
+      <h2 style="margin-top:2.5rem">{t.events.tabJourney}</h2>
+      <div class="event-list">
+        {
+          t.progress.items.map((item) => (
+            <article class="event-card">
+              <time>{item.date}</time>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+              <a href={localizePath('/about/journey', locale)}>{t.home.readFull} →</a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</PageShell>
+
+<style>
+  .event-list {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .event-card {
+    border: 1px solid var(--color-taupe-200);
+    padding: 1.15rem;
+  }
+  .event-card__tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-pink-500);
+  }
+  .event-card h3 {
+    margin: 0.35rem 0;
+  }
+  .event-card a {
+    color: var(--color-pink-500);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .host-card {
+    margin-top: 2rem;
+    background: var(--color-blue-50);
+    padding: 1.25rem;
+  }
+  @media (min-width: 720px) {
+    .event-list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

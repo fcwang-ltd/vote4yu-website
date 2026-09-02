@@ -1,0 +1,54 @@
+---
+import PageShell from '../../components/campaign/PageShell.astro';
+import PageHero from '../../components/campaign/PageHero.astro';
+import FormSubmitScript from '../../components/campaign/FormSubmitScript.astro';
+import { getContent } from '../../utils/content';
+import { formsEndpoint } from '../../utils/forms';
+
+const locale = 'en' as const;
+const t = getContent(locale);
+const endpoint = formsEndpoint() ?? '';
+---
+
+<PageShell
+  locale={locale}
+  path="/get-involved/volunteer"
+  active="involved"
+  title={`${t.volunteer.title}: Vote 4 Yu`}
+>
+  <FormSubmitScript />
+  <PageHero badge={t.volunteer.badge} title={t.volunteer.title} intro={t.volunteer.body} />
+  <section class="section-pad">
+    <div class="container-1200" style="max-width:36rem">
+      <form
+        data-form="volunteer"
+        data-locale={locale}
+        data-endpoint={endpoint}
+        data-sending={t.common.sending}
+        data-sent={t.common.sent}
+        data-error={t.common.sendError}
+        data-unavailable={t.common.formsUnavailable}
+      >
+        <div class="field" style="margin-bottom:0.75rem">
+          <label for="vol-name">{t.volunteer.name}*</label>
+          <input id="vol-name" name="name" required autocomplete="name" />
+        </div>
+        <div class="field" style="margin-bottom:0.75rem">
+          <label for="vol-email">{t.volunteer.email}*</label>
+          <input id="vol-email" name="email" type="email" required autocomplete="email" />
+        </div>
+        <div class="field" style="margin-bottom:0.75rem">
+          <label for="vol-phone">{t.volunteer.phone}</label>
+          <input id="vol-phone" name="phone" type="tel" autocomplete="tel" />
+        </div>
+        <div class="field" style="margin-bottom:0.75rem">
+          <label for="vol-interests">{t.volunteer.interests}*</label>
+          <textarea id="vol-interests" name="interests" rows="4" required></textarea>
+        </div>
+        <input class="honeypot" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button class="btn btn--pink" type="submit">{t.volunteer.send}</button>
+        <p data-status hidden style="margin-top:0.75rem;font-weight:600"></p>
+      </form>
+    </div>
+  </section>
+</PageShell>

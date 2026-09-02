@@ -1,0 +1,66 @@
+---
+import { type Locale } from '../../utils/i18n';
+
+interface Props {
+  badge: string;
+  title: string;
+  intro?: string;
+  locale?: Locale;
+}
+const { badge, title, intro } = Astro.props;
+---
+
+<section class="page-hero">
+  <div class="container-1200 page-hero__inner">
+    <img class="page-hero__brush" src="/images/candidate/yu-brush-bw.svg" alt="" aria-hidden="true" />
+    <span class="badge">{badge}</span>
+    <h1 set:html={title} />
+    {intro && <p class="page-hero__intro">{intro}</p>}
+    <div class="page-hero__actions">
+      <slot name="actions" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    background: var(--color-taupe-100);
+    position: relative;
+    overflow: hidden;
+    padding: 3rem 0 2.5rem;
+  }
+  .page-hero__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 44rem;
+  }
+  .page-hero__brush {
+    position: absolute;
+    right: -2%;
+    top: -10%;
+    width: min(42vw, 320px);
+    opacity: 0.12;
+    pointer-events: none;
+    background: transparent;
+    mix-blend-mode: multiply;
+  }
+  .page-hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin: 0.75rem 0 0.75rem;
+    color: var(--color-ink-800);
+    line-height: 1.1;
+  }
+  .page-hero__intro {
+    margin: 0;
+    font-size: 1.05rem;
+    color: var(--color-ink-600);
+    max-width: 38rem;
+  }
+  .page-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+</style>

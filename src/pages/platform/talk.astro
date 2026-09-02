@@ -1,0 +1,56 @@
+---
+import PageShell from '../../components/campaign/PageShell.astro';
+import PageHero from '../../components/campaign/PageHero.astro';
+import FormSubmitScript from '../../components/campaign/FormSubmitScript.astro';
+import { getContent, HEALTH_PLANKS, plankLabel } from '../../utils/content';
+import { formsEndpoint } from '../../utils/forms';
+
+const locale = 'en' as const;
+const t = getContent(locale);
+const endpoint = formsEndpoint() ?? '';
+---
+
+<PageShell locale={locale} path="/platform/talk" active="platform" title={`${t.talk.title}: Vote 4 Yu`}>
+  <FormSubmitScript />
+  <PageHero badge={t.talk.badge} title={t.talk.title} intro={t.talk.body1} />
+  <section class="section-pad">
+    <div class="container-1200" style="max-width:36rem">
+      <form
+        data-form="talk"
+        data-locale={locale}
+        data-endpoint={endpoint}
+        data-sending={t.common.sending}
+        data-sent={t.common.sent}
+        data-error={t.common.sendError}
+        data-unavailable={t.common.formsUnavailable}
+      >
+        <div class="field" style="margin-bottom:0.75rem">
+          <label for="talk-name">{t.talk.name}</label>
+          <input id="talk-name" name="name" autocomplete="name" />
+        </div>
+        <div class="field" style="margin-bottom:0.75rem">
+          <label for="talk-address">{t.talk.address}</label>
+          <input id="talk-address" name="address" autocomplete="street-address" />
+        </div>
+        <div class="field" style="margin-bottom:0.75rem">
+          <label for="talk-category">{t.talk.category}*</label>
+          <select id="talk-category" name="category" required>
+            <option value="">{t.talk.categoryPh}</option>
+            {
+              HEALTH_PLANKS.map((p) => (
+                <option value={p.labelEn}>{plankLabel(p, locale)}</option>
+              ))
+            }
+          </select>
+        </div>
+        <div class="field" style="margin-bottom:0.75rem">
+          <label for="talk-comments">{t.talk.comments}*</label>
+          <textarea id="talk-comments" name="comments" rows="5" required></textarea>
+        </div>
+        <input class="honeypot" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button class="btn btn--pink" type="submit">{t.talk.send}</button>
+        <p data-status hidden style="margin-top:0.75rem;font-weight:600"></p>
+      </form>
+    </div>
+  </section>
+</PageShell>

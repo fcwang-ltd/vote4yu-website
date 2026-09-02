@@ -1,0 +1,54 @@
+---
+import PageShell from '../../components/campaign/PageShell.astro';
+import PageHero from '../../components/campaign/PageHero.astro';
+import { getContent } from '../../utils/content';
+
+const locale = 'en' as const;
+const t = getContent(locale);
+---
+
+<PageShell
+  locale={locale}
+  path="/platform/progress"
+  active="platform"
+  title={`${t.progress.title}: Vote 4 Yu`}
+>
+  <PageHero badge={t.progress.badge} title={t.progress.title} intro={t.progress.intro} />
+  <section class="section-pad">
+    <div class="container-1200 timeline">
+      {
+        t.progress.items.map((item) => (
+          <article class="timeline__item">
+            <time>{item.date}</time>
+            <h2>{item.title}</h2>
+            <p>{item.body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</PageShell>
+
+<style>
+  .timeline {
+    max-width: 40rem;
+    display: grid;
+    gap: 1.5rem;
+  }
+  .timeline__item {
+    border-left: 3px solid var(--color-pink-500);
+    padding-left: 1rem;
+  }
+  .timeline__item time {
+    font-size: 0.85rem;
+    color: var(--color-ink-500);
+  }
+  .timeline__item h2 {
+    margin: 0.25rem 0;
+    font-size: 1.25rem;
+  }
+  .timeline__item p {
+    margin: 0;
+    color: var(--color-ink-600);
+  }
+</style>

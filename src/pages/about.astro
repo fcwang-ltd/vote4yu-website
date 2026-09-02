@@ -1,5 +1,65 @@
 ---
-import SilentRedirect from '../layouts/SilentRedirect.astro';
+import PageShell from '../components/campaign/PageShell.astro';
+import PageHero from '../components/campaign/PageHero.astro';
+import { getContent } from '../utils/content';
+import { localizePath } from '../utils/i18n';
+
+const locale = 'en' as const;
+const t = getContent(locale);
 ---
 
-<SilentRedirect to="/blog/about-dave" />
+<PageShell locale={locale} path="/about" active="about" title={`${t.about.heroTitle}: Vote 4 Yu`}>
+  <PageHero badge={t.about.badge} title={t.about.heroTitle} intro={t.about.heroIntro}>
+    <Fragment slot="actions">
+      <a class="btn btn--pink" href={localizePath('/interview', locale)}>{t.about.interviewCta}</a>
+      <a class="btn btn--outline-pink" href={localizePath('/about/journey', locale)}
+        >{t.about.followJourneyCta}</a
+      >
+    </Fragment>
+  </PageHero>
+  <section class="section-pad about-story">
+    <div class="container-1200 about-story__grid">
+      <div>
+        <h2>{t.about.storyTitle}</h2>
+        {t.about.storyParas.map((p) => <p>{p}</p>)}
+        <a class="btn btn--pink" href={localizePath('/platform', locale)}>{t.about.storyCta} →</a>
+      </div>
+      <img
+        src="/images/candidate/yu-photo-white-2.png"
+        alt="Haohui Yu 余浩輝"
+        width="520"
+        height="650"
+      />
+    </div>
+  </section>
+</PageShell>
+
+<style>
+  .about-story__grid {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+  .about-story h2 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    margin: 0 0 1rem;
+  }
+  .about-story p {
+    margin: 0 0 1rem;
+    line-height: 1.55;
+    color: var(--color-ink-600);
+  }
+  .about-story img {
+    width: 100%;
+    height: auto;
+  }
+  .about-story .btn {
+    margin-top: 0.5rem;
+  }
+  @media (min-width: 860px) {
+    .about-story__grid {
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+  }
+</style>

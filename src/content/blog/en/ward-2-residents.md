@@ -45,4 +45,4 @@ These neighbours do not all want the same thing. They do share a desire for a co
 
 ## What comes next
 
-Dave Yu's HEALTH platform responds to this problem space with Housing, Education, Accessibility, Living standards, Technology, and Hospitality. [Read the HEALTH platform](/blog/building-a-healthier-markham), or [meet Dave](/blog/about-dave).
+Haohui Yu's HEALTH platform responds to this problem space with Housing, Education, Advocacy, Living standards, Technology, and Hospitality. [Read the HEALTH platform](/platform), or [meet Haohui](/about).

@@ -1,0 +1,41 @@
+---
+import PageShell from '../components/campaign/PageShell.astro';
+import PageHero from '../components/campaign/PageHero.astro';
+import { getContent } from '../utils/content';
+
+const locale = 'en' as const;
+const t = getContent(locale);
+---
+
+<PageShell locale={locale} path="/privacy" title={`${t.privacy.title}: Vote 4 Yu`}>
+  <PageHero badge={t.common.privacy} title={t.privacy.title} intro={t.privacy.updated} />
+  <section class="section-pad">
+    <div class="container-1200 legal">
+      {
+        t.privacy.sections.map((section) => (
+          <div>
+            <h2>{section.h}</h2>
+            {section.p.map((para) => (
+              <p>{para}</p>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</PageShell>
+
+<style>
+  .legal {
+    max-width: 42rem;
+  }
+  .legal h2 {
+    margin: 1.75rem 0 0.5rem;
+    font-size: 1.25rem;
+  }
+  .legal p {
+    margin: 0 0 0.75rem;
+    color: var(--color-ink-600);
+    line-height: 1.55;
+  }
+</style>

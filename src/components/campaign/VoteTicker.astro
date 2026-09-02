@@ -1,0 +1,109 @@
+---
+interface Props {
+  /** `ltr` scrolls toward the right; `rtl` scrolls right-to-left. */
+  direction?: 'ltr' | 'rtl';
+}
+const { direction = 'rtl' } = Astro.props;
+const units = Array.from({ length: 20 }, () => null);
+---
+
+<div class:list={['vote-ticker', `vote-ticker--${direction}`]} aria-hidden="true">
+  <div class="vote-ticker__viewport">
+    <div class="vote-ticker__track">
+      <div class="vote-ticker__half">
+        {
+          units.map(() => (
+            <span class="vote-ticker__item">
+              <span class="vote-ticker__vote">VOTE 4</span>
+              <span class="vote-ticker__yu">YU</span>
+            </span>
+          ))
+        }
+      </div>
+      <div class="vote-ticker__half">
+        {
+          units.map(() => (
+            <span class="vote-ticker__item">
+              <span class="vote-ticker__vote">VOTE 4</span>
+              <span class="vote-ticker__yu">YU</span>
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .vote-ticker {
+    --ticker-h: 2.25rem;
+    background: transparent;
+    border: 0;
+    overflow: hidden;
+    line-height: 1;
+    min-height: var(--ticker-h);
+  }
+  .vote-ticker__viewport {
+    overflow: hidden;
+    width: 100%;
+  }
+  .vote-ticker__track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+  }
+  .vote-ticker__half {
+    display: flex;
+    gap: 1.75rem;
+    padding: 0.55rem 1.75rem 0.55rem 0;
+    flex-shrink: 0;
+  }
+  .vote-ticker--rtl .vote-ticker__track {
+    animation: vote-ticker-rtl 45s linear infinite;
+  }
+  .vote-ticker--ltr .vote-ticker__track {
+    animation: vote-ticker-ltr 45s linear infinite;
+  }
+  .vote-ticker__item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .vote-ticker__vote {
+    color: var(--color-blue-600);
+  }
+  .vote-ticker__yu {
+    color: var(--color-pink-500);
+  }
+  .vote-ticker--on-dark .vote-ticker__vote,
+  .vote-ticker--on-dark .vote-ticker__yu {
+    color: var(--color-paper);
+  }
+  @keyframes vote-ticker-rtl {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+  @keyframes vote-ticker-ltr {
+    from {
+      transform: translate3d(-50%, 0, 0);
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .vote-ticker__track {
+      animation: none !important;
+    }
+  }
+</style>

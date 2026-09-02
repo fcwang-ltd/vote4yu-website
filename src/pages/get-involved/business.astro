@@ -1,0 +1,54 @@
+---
+import PageShell from '../../components/campaign/PageShell.astro';
+import PageHero from '../../components/campaign/PageHero.astro';
+import FormSubmitScript from '../../components/campaign/FormSubmitScript.astro';
+import { getContent } from '../../utils/content';
+import { formsEndpoint } from '../../utils/forms';
+
+const locale = 'en' as const;
+const t = getContent(locale);
+const endpoint = formsEndpoint() ?? '';
+---
+
+<PageShell
+  locale={locale}
+  path="/get-involved/business"
+  active="involved"
+  title={`${t.business.title}: Vote 4 Yu`}
+>
+  <FormSubmitScript />
+  <PageHero badge={t.business.badge} title={t.business.title} intro={t.business.body} />
+  <section class="section-pad">
+    <div class="container-1200" style="max-width:36rem">
+      <form
+        data-form="business"
+        data-locale={locale}
+        data-endpoint={endpoint}
+        data-sending={t.common.sending}
+        data-sent={t.common.sent}
+        data-error={t.common.sendError}
+        data-unavailable={t.common.formsUnavailable}
+      >
+        <div class="field" style="margin-bottom:0.75rem">
+          <label for="biz-name">{t.business.name}*</label>
+          <input id="biz-name" name="name" required autocomplete="name" />
+        </div>
+        <div class="field" style="margin-bottom:0.75rem">
+          <label for="biz-business">{t.business.business}*</label>
+          <input id="biz-business" name="business" required />
+        </div>
+        <div class="field" style="margin-bottom:0.75rem">
+          <label for="biz-email">{t.business.email}*</label>
+          <input id="biz-email" name="email" type="email" required autocomplete="email" />
+        </div>
+        <div class="field" style="margin-bottom:0.75rem">
+          <label for="biz-message">{t.business.message}*</label>
+          <textarea id="biz-message" name="message" rows="4" required></textarea>
+        </div>
+        <input class="honeypot" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button class="btn btn--pink" type="submit">{t.business.send}</button>
+        <p data-status hidden style="margin-top:0.75rem;font-weight:600"></p>
+      </form>
+    </div>
+  </section>
+</PageShell>

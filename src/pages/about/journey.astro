@@ -1,0 +1,76 @@
+---
+import PageShell from '../../components/campaign/PageShell.astro';
+import PageHero from '../../components/campaign/PageHero.astro';
+import { getContent } from '../../utils/content';
+import { localizePath } from '../../utils/i18n';
+
+const locale = 'en' as const;
+const t = getContent(locale);
+---
+
+<PageShell
+  locale={locale}
+  path="/about/journey"
+  active="about"
+  title={`${t.journey.title}: Vote 4 Yu`}
+>
+  <PageHero badge={t.journey.badge} title={t.journey.title} intro={t.journey.intro}>
+    <Fragment slot="actions">
+      <a class="btn btn--outline-pink" href={localizePath('/blog', locale)}>{t.footer.blog} →</a>
+      <a class="btn btn--pink" href={localizePath('/events', locale)}>{t.footer.events} →</a>
+    </Fragment>
+  </PageHero>
+  <section class="section-pad">
+    <div class="container-1200 journey-grid">
+      {
+        t.progress.items.map((item) => (
+          <article class="journey-card">
+            <time>{item.date}</time>
+            <h2>{item.title}</h2>
+            <p>{item.body}</p>
+          </article>
+        ))
+      }
+      {
+        t.events.events.map((ev) => (
+          <article class="journey-card">
+            <time>
+              {ev.date} · {ev.time}
+            </time>
+            <h2>{ev.title}</h2>
+            <p>{ev.where}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</PageShell>
+
+<style>
+  .journey-grid {
+    display: grid;
+    gap: 1rem;
+  }
+  .journey-card {
+    background: var(--color-taupe-50);
+    padding: 1.25rem;
+    border-top: 3px solid var(--color-blue-600);
+  }
+  .journey-card time {
+    font-size: 0.8rem;
+    color: var(--color-ink-500);
+  }
+  .journey-card h2 {
+    margin: 0.35rem 0;
+    font-size: 1.2rem;
+  }
+  .journey-card p {
+    margin: 0;
+    color: var(--color-ink-600);
+  }
+  @media (min-width: 720px) {
+    .journey-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
