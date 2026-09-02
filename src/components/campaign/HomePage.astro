@@ -178,16 +178,15 @@ const heroPhotos = [
 </script>
 
 <style>
-  /* One shared lift value: pink band height over the hero. */
+  /* ribbon-lift: negative margin only (hero pad is fixed so lift moves the band). */
   .hero,
   .hero-join {
-    --ribbon-lift: 380px;
+    --ribbon-lift: 300px;
     --slant: calc(100vw * tan(15deg));
   }
 
   .hero {
     --ticker-h: 2.25rem;
-    /* Full taupe (no transparent hole) so nothing white shows above the ribbon. */
     background: var(--color-taupe-100);
     position: relative;
     overflow: visible;
@@ -209,13 +208,13 @@ const heroPhotos = [
   .hero__inner {
     display: grid;
     gap: 1.5rem;
-    padding-block: 1.5rem calc(var(--ribbon-lift) + 0.5rem);
+    padding-block: 1.5rem 2.5rem;
     align-items: start;
     position: relative;
   }
   .hero__form {
     position: relative;
-    z-index: 3;
+    z-index: 5;
     order: 2;
     padding-bottom: 0.5rem;
   }
@@ -251,7 +250,7 @@ const heroPhotos = [
   }
   .hero__photos {
     position: relative;
-    z-index: 3;
+    z-index: 5;
     width: min(82%, 480px);
     margin-left: auto;
     aspect-ratio: 640 / 800;
@@ -273,29 +272,24 @@ const heroPhotos = [
   }
 
   /*
-    Join over hero taupe (z1); photo/form at z3 above the ribbon.
-    Upward clip-path keeps the right-side ribbon peak visible without a
-    tall blue padding band; bottom edge stays square for Journey.
+    Pink + blue share one skew so blue's top edge matches the ribbon bottom.
+    Join shell is transparent: a solid blue fill here paints a wedge ABOVE
+    the ribbon on the left (unskewed box). Blue lives only on .hero-to-blue.
   */
   .hero-join {
     position: relative;
     z-index: 1;
     margin-top: calc(-1 * var(--ribbon-lift));
-    background: var(--color-blue-600);
-    padding-top: 0;
-    clip-path: polygon(
-      0 calc(var(--slant) * -1),
-      100% calc(var(--slant) * -1),
-      100% 100%,
-      0 100%
-    );
+    background: transparent;
+    padding: 0;
+    overflow: visible;
   }
 
   .slant-stack {
     transform: skewY(-15deg);
     transform-origin: center top;
     margin-top: 0;
-    margin-bottom: calc(var(--slant) * -0.5);
+    margin-bottom: calc(var(--slant) * -0.35);
   }
 
   .slogan-ribbon {
@@ -331,11 +325,12 @@ const heroPhotos = [
     position: relative;
     z-index: 2;
     background: var(--color-blue-600);
-    padding-top: 1.25rem;
-    padding-bottom: 0.5rem;
+    padding-top: 0;
+    padding-bottom: 2.5rem;
   }
   .hero-to-blue__inner {
     transform: skewY(15deg);
+    padding-top: 1.75rem;
   }
 
   .band--blue {
@@ -421,13 +416,14 @@ const heroPhotos = [
       grid-template-columns: minmax(280px, 0.85fr) 1.3fr;
       align-items: start;
       min-height: calc(100vh - 6.5rem);
-      padding-block: 1.25rem calc(var(--ribbon-lift) + 1.25rem);
+      /* Fixed bottom pad: photo extends into ribbon zone as lift increases. */
+      padding-block: 1.25rem 4rem;
       gap: 1rem 1.5rem;
     }
     .hero__form {
       order: 1;
       padding-top: clamp(2rem, 8vh, 5rem);
-      padding-bottom: calc(var(--ribbon-lift) * 0.35);
+      padding-bottom: 7rem;
     }
     .hero__visual {
       order: 2;
@@ -452,8 +448,11 @@ const heroPhotos = [
       min-height: 3.75rem;
       padding: 1.1rem 1.5rem;
     }
+    .hero-to-blue__inner {
+      padding-top: 2rem;
+    }
     .hero-to-blue {
-      padding-top: 1.75rem;
+      padding-bottom: 3rem;
     }
     .vote-grid {
       grid-template-columns: repeat(3, 1fr);

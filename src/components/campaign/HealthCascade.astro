@@ -63,21 +63,22 @@ function titleParts(plank: HealthPlank): { letter: string; rest: string } {
                 id={panelId}
                 role="region"
                 aria-labelledby={btnId}
-                hidden={!open}
               >
-                <p class="health-card__body">{plankBody(plank, locale)}</p>
-                {dim && (
-                  <svg
-                    class="health-card__dots"
-                    viewBox={dim.viewBox}
-                    aria-hidden="true"
-                    focusable="false"
-                  >
-                    {dim.dots.map((d) => (
-                      <circle cx={d.x} cy={d.y} r={d.r} fill="var(--color-pink-500)" />
-                    ))}
-                  </svg>
-                )}
+                <div class="health-card__panel-inner">
+                  <p class="health-card__body">{plankBody(plank, locale)}</p>
+                  {dim && (
+                    <svg
+                      class="health-card__dots"
+                      viewBox={dim.viewBox}
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      {dim.dots.map((d) => (
+                        <circle cx={d.x} cy={d.y} r={d.r} fill="var(--color-pink-500)" />
+                      ))}
+                    </svg>
+                  )}
+                </div>
               </div>
             </article>
           );
@@ -109,13 +110,12 @@ function titleParts(plank: HealthPlank): { letter: string; rest: string } {
       btn.addEventListener('click', function () {
         var card = btn.closest('[data-health-card]');
         if (!card) return;
+        var closingSelf = card.classList.contains('is-open');
         root.querySelectorAll('[data-health-card]').forEach(function (c) {
-          var isTarget = c === card;
+          var isTarget = !closingSelf && c === card;
           c.classList.toggle('is-open', isTarget);
           var b = c.querySelector('[data-health-toggle]');
-          var panel = c.querySelector('.health-card__panel');
           if (b) b.setAttribute('aria-expanded', isTarget ? 'true' : 'false');
-          if (panel) panel.hidden = !isTarget;
         });
       });
     });
@@ -190,18 +190,26 @@ function titleParts(plank: HealthPlank): { letter: string; rest: string } {
     padding-left: 0.5rem;
   }
   .health-card__panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s ease;
+  }
+  .health-card.is-open .health-card__panel {
+    grid-template-rows: 1fr;
+  }
+  .health-card__panel-inner {
+    overflow: hidden;
     position: relative;
+    min-height: 0;
+    padding: 0 4.25rem 0 1rem;
+    transition: padding 0.4s ease;
+  }
+  .health-card.is-open .health-card__panel-inner {
     padding: 0 4.25rem 1.15rem 1rem;
     min-height: 5.5rem;
   }
-  .health-card__panel[hidden] {
-    display: none;
-  }
-  .health-card.is-open .health-card__panel {
-    display: block;
-  }
   .health-card.is-open {
-    min-height: 11rem;
+    min-height: 0;
   }
   .health-card__body {
     margin: 0;
@@ -218,6 +226,11 @@ function titleParts(plank: HealthPlank): { letter: string; rest: string } {
     width: 3.4rem;
     height: auto;
     pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease 0.05s;
+  }
+  .health-card.is-open .health-card__dots {
+    opacity: 1;
   }
   .health-cascade__copy h2 {
     font-family: var(--font-display);
@@ -246,6 +259,13 @@ function titleParts(plank: HealthPlank): { letter: string; rest: string } {
     background: var(--color-paper);
     color: var(--color-pink-500);
     border-color: var(--color-paper);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .health-card__panel,
+    .health-card__panel-inner,
+    .health-card__dots {
+      transition: none;
+    }
   }
   @media (min-width: 900px) {
     .health-cascade__grid {
