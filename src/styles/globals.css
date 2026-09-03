@@ -1,25 +1,39 @@
 @import "tailwindcss";
 
-/* Vote4Yu pink/blue campaign tokens (ported from design-build).
-   Type: Agrandir display + DM Sans body; Noto Sans TC for 繁體. */
+/* Vote4Yu pink/blue campaign tokens.
+   Type: Poppins display + Inter body; Noto Sans TC for 繁體. */
 
 @font-face {
-  font-family: "Agrandir";
-  src: url("/fonts/Agrandir-Variable.woff2") format("woff2");
-  font-weight: 200 900;
+  font-family: "Poppins";
+  src: url("/fonts/Poppins-SemiBold.woff2") format("woff2");
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "DM Sans";
-  src: url("/fonts/DMSans-Regular.woff2") format("woff2");
+  font-family: "Poppins";
+  src: url("/fonts/Poppins-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/Poppins-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
-  font-family: "DM Sans";
-  src: url("/fonts/DMSans-Bold.woff2") format("woff2");
+  font-family: "Inter";
+  src: url("/fonts/Inter-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -67,13 +81,13 @@
   --color-ink: #222222;
   --color-muted: #6d6868;
 
-  --font-agrandir: "Agrandir", "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
-  --font-dm-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-poppins: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-inter: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-dm-mono: "DM Mono", ui-monospace, monospace;
-  --font-zh: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", var(--font-dm-sans);
+  --font-zh: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", var(--font-inter);
 
-  --font-display: var(--font-agrandir);
-  --font-body: var(--font-dm-sans);
+  --font-display: var(--font-poppins);
+  --font-body: var(--font-inter);
   --font-mono: var(--font-dm-mono);
 
   --text-caption: 12px;
@@ -104,7 +118,7 @@
 }
 
 html {
-  font-family: var(--font-dm-sans);
+  font-family: var(--font-body);
   color: var(--color-ink-900);
   background: var(--color-paper);
   -webkit-font-smoothing: antialiased;

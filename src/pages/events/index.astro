@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import PageShell from '../../components/campaign/PageShell.astro';
 import PageHero from '../../components/campaign/PageHero.astro';
 import { getContent } from '../../utils/content';
@@ -6,47 +7,95 @@ import { localizePath } from '../../utils/i18n';
 
 const locale = 'en' as const;
 const t = getContent(locale);
+
+const CALENDAR_SRC =
+  '7e8691e344a0e75fd19337c621fb690cfdf9e1769f673c971f4b4394bc0d2a33%40group.calendar.google.com';
+const CALENDAR_PUBLIC =
+  'https://calendar.google.com/calendar/u/0?cid=N2U4NjkxZTM0NGEwZTc1ZmQxOTMzN2M2MjFmYjY5MGNmZGY5ZTE3NjlmNjczYzk3MWY0YjQzOTRiYzBkMmEzM0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t';
+const CALENDAR_EMBED = `https://calendar.google.com/calendar/embed?src=${CALENDAR_SRC}&ctz=America%2FToronto`;
+
+const posts = (await getCollection('blog', ({ data }) => data.locale === 'en' && data.draft !== true))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 6);
+
+function hrefFor(id: string) {
+  const slug = id.split('/').pop()?.replace(/\.mdx?$/, '') ?? id;
+  return localizePath(`/blog/${slug}`, locale);
+}
 ---
 
 <PageShell locale={locale} path="/events" active="events" title={`${t.events.title}: Vote 4 Yu`}>
   <PageHero badge={t.events.badge} title={t.events.title} intro={t.events.body}>
     <Fragment slot="actions">
-      <a class="btn btn--pink" href={localizePath('/events/subscribe', locale)}>{t.events.subCalendar}</a>
-      <a class="btn btn--outline-pink" href={localizePath('/interview', locale)}>{t.about.interviewCta}</a>
+      <a class="btn btn--pink" href={CALENDAR_PUBLIC} rel="noopener noreferrer" target="_blank"
+        >{t.events.openCalendar}</a
+      >
+      <a class="btn btn--outline-pink" href={localizePath('/events/subscribe', locale)}
+        >{t.events.subCalendar}</a
+      >
     </Fragment>
   </PageHero>
-  <section class="section-pad">
+
+  <section class="section-pad events-cal">
     <div class="container-1200">
       <h2>{t.events.tabEvents}</h2>
-      <div class="event-list">
+      <div class="events-cal__frame">
+        <iframe
+          title={t.events.tabEvents}
+          src={CALENDAR_EMBED}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      <p class="events-cal__link">
+        <a href={CALENDAR_PUBLIC} rel="noopener noreferrer" target="_blank">{t.events.openCalendar}</a>
+      </p>
+      <div class="host-card">
+        <p>{t.events.hostCard}</p>
+        <a class="btn btn--outline-pink" href="mailto:amanda@vote4yu.ca">{t.events.partnerCta}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad events-news">
+    <div class="container-1200">
+      <div class="events-news__head">
+        <h2>{t.events.tabNews}</h2>
+        <a href={localizePath('/blog', locale)}>{t.footer.blog}</a>
+      </div>
+      <div class="events-news__list">
         {
-          t.events.events.map((ev) => (
-            <article class="event-card">
-              <span class="event-card__tag">{ev.tag}</span>
-              <h3>{ev.title}</h3>
-              <p>
-                {ev.date} · {ev.time}
-              </p>
-              <p>{ev.where}</p>
+          posts.map((post) => (
+            <article class="news-row">
+              <time datetime={post.data.pubDate.toISOString()}>
+                {post.data.pubDate.toISOString().slice(0, 10)}
+              </time>
+              <h3>
+                <a href={hrefFor(post.id)}>{post.data.title}</a>
+              </h3>
+              {post.data.description && <p>{post.data.description}</p>}
             </article>
           ))
         }
       </div>
-      <div class="host-card">
-        <p>{t.events.hostCard}</p>
-        <a class="btn btn--outline-pink" href={localizePath('/get-involved/business', locale)}
-          >{t.events.partnerCta} →</a
-        >
-      </div>
-      <h2 style="margin-top:2.5rem">{t.events.tabJourney}</h2>
-      <div class="event-list">
+    </div>
+  </section>
+
+  <section class="section-pad events-journey">
+    <div class="container-1200">
+      <h2>{t.events.tabJourney}</h2>
+      <div class="journey-long">
         {
           t.progress.items.map((item) => (
-            <article class="event-card">
-              <time>{item.date}</time>
-              <h3>{item.title}</h3>
-              <p>{item.body}</p>
-              <a href={localizePath('/about/journey', locale)}>{t.home.readFull} →</a>
+            <article class="journey-card">
+              <div class="journey-card__thumb" aria-hidden="true"></div>
+              <div class="journey-card__body">
+                <h3>{item.title}</h3>
+                <time>{item.date}</time>
+                <p>{item.body}</p>
+                <a class="journey-card__link" href={localizePath('/about/journey', locale)}>
+                  {t.home.readFull}
+                </a>
+              </div>
             </article>
           ))
         }
@@ -56,37 +105,120 @@ const t = getContent(locale);
 </PageShell>
 
 <style>
-  .event-list {
-    display: grid;
-    gap: 1rem;
-    margin-top: 1rem;
+  .events-cal h2,
+  .events-news h2,
+  .events-journey h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin: 0 0 1rem;
   }
-  .event-card {
+  .events-cal__frame {
+    position: relative;
+    width: 100%;
+    min-height: 28rem;
     border: 1px solid var(--color-taupe-200);
-    padding: 1.15rem;
+    background: var(--color-paper);
   }
-  .event-card__tag {
-    display: inline-block;
-    font-size: 0.75rem;
-    font-weight: 700;
+  .events-cal__frame iframe {
+    display: block;
+    width: 100%;
+    height: 32rem;
+    border: 0;
+  }
+  .events-cal__link {
+    margin: 0.75rem 0 0;
+  }
+  .events-cal__link a {
     color: var(--color-pink-500);
+    font-weight: 700;
   }
-  .event-card h3 {
-    margin: 0.35rem 0;
+  .host-card {
+    margin-top: 1.75rem;
+    padding: 1.25rem;
+    background: var(--color-taupe-50);
+    border-top: 3px solid var(--color-pink-500);
   }
-  .event-card a {
+  .host-card p {
+    margin: 0 0 0.85rem;
+  }
+  .events-news {
+    background: var(--color-taupe-50);
+  }
+  .events-news__head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+    align-items: baseline;
+    margin-bottom: 1rem;
+  }
+  .events-news__head a {
     color: var(--color-pink-500);
     font-weight: 700;
     text-decoration: none;
   }
-  .host-card {
-    margin-top: 2rem;
-    background: var(--color-blue-50);
-    padding: 1.25rem;
+  .news-row {
+    background: var(--color-paper);
+    padding: 1.1rem 1.25rem;
+    border-top: 3px solid var(--color-pink-500);
+    margin-bottom: 0.85rem;
   }
-  @media (min-width: 720px) {
-    .event-list {
-      grid-template-columns: repeat(3, 1fr);
+  .news-row time {
+    font-size: 0.8rem;
+    color: var(--color-ink-500);
+  }
+  .news-row h3 {
+    margin: 0.25rem 0;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+  }
+  .news-row h3 a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .news-row p {
+    margin: 0;
+    color: var(--color-ink-600);
+  }
+  .journey-long {
+    display: grid;
+    gap: 1rem;
+  }
+  .journey-card {
+    display: grid;
+    grid-template-columns: minmax(5.5rem, 7.5rem) 1fr;
+    gap: 1rem 1.25rem;
+    background: var(--color-paper);
+    border-top: 3px solid var(--color-pink-500);
+    padding: 1rem 1.15rem 1.15rem;
+  }
+  .journey-card__thumb {
+    background: var(--color-taupe-100);
+    border: 1px solid var(--color-taupe-200);
+    aspect-ratio: 1;
+  }
+  .journey-card h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+  }
+  .journey-card time {
+    font-size: 0.85rem;
+    color: var(--color-ink-500);
+  }
+  .journey-card p {
+    margin: 0.35rem 0 0.5rem;
+    color: var(--color-ink-600);
+  }
+  .journey-card__link {
+    color: var(--color-blue-600);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+  @media (min-width: 900px) {
+    .journey-card {
+      grid-template-columns: 9rem 1fr;
     }
   }
 </style>

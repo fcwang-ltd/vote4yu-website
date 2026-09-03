@@ -4,7 +4,7 @@
 
 **Theme:** light
 
-Hot pink accent on blue civic bands and warm taupe stock. Brush-mark “YU” watermarks and bilingual chrome. Agrandir for display; DM Sans for body; Noto Sans TC for Traditional Chinese.
+Hot pink accent on blue civic bands and warm taupe stock. Brush-mark “YU” watermarks and bilingual chrome. Poppins for display; Inter for body; Noto Sans TC for Traditional Chinese.
 
 ## Tokens — Colours
 
@@ -22,12 +22,12 @@ Full pink/blue/taupe scales live in `src/styles/globals.css` (`@theme`).
 
 | Role | Family | Notes |
 |------|--------|-------|
-| Display | Agrandir (self-hosted) | Headlines |
-| Body | DM Sans | UI and English body |
+| Display | Poppins (self-hosted) | Headlines, logo-weight UI, titles |
+| Body | Inter (self-hosted) | UI and English body |
 | Chinese | Noto Sans TC (system fallbacks) | 繁體 nav and body |
 | Mono | DM Mono | Rare labels |
 
-Do **not** ship Inter / Roboto / Arial as the primary stack.
+Do **not** ship Roboto / Arial as the primary stack.
 
 ## Shape
 

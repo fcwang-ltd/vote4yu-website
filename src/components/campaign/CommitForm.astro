@@ -2,6 +2,7 @@
 import { getContent } from '../../utils/content';
 import { formsEndpoint } from '../../utils/forms';
 import { localizePath, type Locale } from '../../utils/i18n';
+import CtaArrow from '../ui/CtaArrow.astro';
 
 interface Props {
   locale?: Locale;
@@ -59,7 +60,9 @@ const endpoint = formsEndpoint() ?? '';
     <a href={localizePath('/terms', locale)}>{t.common.terms}</a>
   </p>
 
-  <button class="btn btn--pink commit-form__submit" type="submit">{t.home.submit}</button>
+  <button class="btn btn--pink commit-form__submit" type="submit"
+    >{t.home.submit} <CtaArrow /></button
+  >
   <p class="commit-form__status" data-status hidden></p>
 </form>
 

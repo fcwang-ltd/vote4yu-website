@@ -1,6 +1,7 @@
 ---
 import PageShell from '../components/campaign/PageShell.astro';
 import PageHero from '../components/campaign/PageHero.astro';
+import CtaArrow from '../components/ui/CtaArrow.astro';
 import { getContent } from '../utils/content';
 import { localizePath } from '../utils/i18n';
 
@@ -8,24 +9,34 @@ const locale = 'en' as const;
 const t = getContent(locale);
 
 const cards = [
-  { title: t.involved.donateTitle, body: t.involved.donateBody, cta: t.involved.donateCta, href: '/donate' },
+  {
+    title: t.involved.donateTitle,
+    body: t.involved.donateBody,
+    cta: t.involved.donateCta,
+    href: '/donate',
+    critical: true,
+  },
   {
     title: t.involved.partnerTitle,
     body: t.involved.partnerBody,
     cta: t.involved.partnerCta,
-    href: '/get-involved/business',
+    href: 'mailto:amanda@vote4yu.ca',
+    external: true,
+    critical: false,
   },
   {
     title: t.involved.volTitle,
     body: t.involved.volBody,
     cta: t.involved.volCta,
     href: '/get-involved/volunteer',
+    critical: false,
   },
   {
     title: t.involved.mediaTitle,
     body: t.involved.mediaBody,
     cta: t.involved.mediaCta,
     href: '/interview',
+    critical: false,
   },
 ];
 ---
@@ -44,8 +55,12 @@ const cards = [
           <article class="involve-card">
             <h2>{card.title}</h2>
             <p>{card.body}</p>
-            <a class="btn btn--pink" href={localizePath(card.href, locale)}>
-              {card.cta} →
+            <a
+              class:list={['btn', card.critical ? 'btn--pink' : 'btn--outline-pink']}
+              href={card.external ? card.href : localizePath(card.href, locale)}
+            >
+              {card.cta}
+              {card.critical && <CtaArrow />}
             </a>
           </article>
         ))

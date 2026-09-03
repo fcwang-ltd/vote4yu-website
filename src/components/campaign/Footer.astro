@@ -2,6 +2,7 @@
 import { getContent, OFFICE } from '../../utils/content';
 import { localizePath, type Locale } from '../../utils/i18n';
 import VoteTicker from './VoteTicker.astro';
+import CtaArrow from '../ui/CtaArrow.astro';
 
 interface Props {
   locale?: Locale;
@@ -32,9 +33,11 @@ const year = new Date().getFullYear();
           {OFFICE.line2}
         </p>
         <div class="site-footer__cta">
-          <a class="btn btn--pink" href={localizePath('/donate', locale)}>{t.nav.donate} →</a>
+          <a class="btn btn--pink" href={localizePath('/donate', locale)}
+            >{t.nav.donate} <CtaArrow /></a
+          >
           <a class="btn btn--outline-white" href={localizePath('/get-involved', locale)}
-            >{t.nav.involvedEn} →</a
+            >{t.nav.involvedEn}</a
           >
         </div>
       </div>

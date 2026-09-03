@@ -7,6 +7,7 @@ import {
 import { HEALTH_DIMENSIONS } from '../../utils/healthDots';
 import { localizePath, type Locale } from '../../utils/i18n';
 import { getContent } from '../../utils/content';
+import CtaArrow from '../ui/CtaArrow.astro';
 
 interface Props {
   locale?: Locale;
@@ -92,10 +93,11 @@ function titleParts(plank: HealthPlank): { letter: string; rest: string } {
       <p class="health-cascade__body">{t.home.platformInvite}</p>
       <div class="health-cascade__actions">
         <a class="btn btn--white-pink" href={localizePath('/platform/progress', locale)}>
-          {t.common.trackProgress} →
+          {t.common.trackProgress}
         </a>
         <a class="btn btn--pink" href={localizePath('/platform/talk', locale)}>
-          {t.common.talkToYu} →
+          {t.common.talkToYu}
+          <CtaArrow />
         </a>
       </div>
     </div>
@@ -106,17 +108,43 @@ function titleParts(plank: HealthPlank): { letter: string; rest: string } {
   (function () {
     var root = document.querySelector('[data-health-accordion]');
     if (!root) return;
+    var busy = false;
+    var OPEN_FIRST_MS = 240;
+
+    function setOpen(card, open) {
+      card.classList.toggle('is-open', open);
+      var b = card.querySelector('[data-health-toggle]');
+      if (b) b.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
     root.querySelectorAll('[data-health-toggle]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var card = btn.closest('[data-health-card]');
-        if (!card) return;
+        if (!card || busy) return;
         var closingSelf = card.classList.contains('is-open');
-        root.querySelectorAll('[data-health-card]').forEach(function (c) {
-          var isTarget = !closingSelf && c === card;
-          c.classList.toggle('is-open', isTarget);
-          var b = c.querySelector('[data-health-toggle]');
-          if (b) b.setAttribute('aria-expanded', isTarget ? 'true' : 'false');
-        });
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (closingSelf) {
+          setOpen(card, false);
+          return;
+        }
+
+        if (reduce) {
+          root.querySelectorAll('[data-health-card]').forEach(function (c) {
+            setOpen(c, c === card);
+          });
+          return;
+        }
+
+        /* Open the clicked card first, then close the previous one. */
+        busy = true;
+        setOpen(card, true);
+        window.setTimeout(function () {
+          root.querySelectorAll('[data-health-card]').forEach(function (c) {
+            if (c !== card) setOpen(c, false);
+          });
+          busy = false;
+        }, OPEN_FIRST_MS);
       });
     });
   })();
@@ -134,7 +162,10 @@ function titleParts(plank: HealthPlank): { letter: string; rest: string } {
   .health-cascade__grid {
     display: grid;
     gap: 2.5rem;
-    align-items: center;
+    align-items: start;
+  }
+  .health-cascade__copy {
+    align-self: start;
   }
   .health-cascade__stack {
     position: relative;

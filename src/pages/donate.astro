@@ -1,13 +1,20 @@
 ---
 import PageShell from '../components/campaign/PageShell.astro';
 import FormSubmitScript from '../components/campaign/FormSubmitScript.astro';
+import CtaArrow from '../components/ui/CtaArrow.astro';
 import { getContent, OFFICE } from '../utils/content';
 import { formsEndpoint } from '../utils/forms';
+import {
+  DONATE_PRESETS,
+  DONATE_RECOMMENDED,
+  rebateFor,
+  rebateLabel,
+} from '../utils/rebate';
 
 const locale = 'en' as const;
 const t = getContent(locale);
 const endpoint = formsEndpoint() ?? '';
-const amounts = [25, 50, 100, 250, 500, 1000];
+const amounts = [...DONATE_PRESETS];
 ---
 
 <PageShell locale={locale} path="/donate" active="involved" title={`${t.donate.title}: Vote 4 Yu`}>
@@ -31,20 +38,32 @@ const amounts = [25, 50, 100, 250, 500, 1000];
         <p class="donate__label">{t.donate.amountLabel}</p>
         <div class="donate__amounts">
           {
-            amounts.map((n) => (
-              <button type="button" class="donate__amt" data-amount={String(n)}>
-                ${n}
-              </button>
-            ))
+            amounts.map((n) => {
+              const info = rebateFor(n);
+              const recommended = n === DONATE_RECOMMENDED;
+              return (
+                <button
+                  type="button"
+                  class:list={['donate__amt', { 'is-recommended': recommended }]}
+                  data-amount={String(n)}
+                >
+                  <span class="donate__amt-value">${n}</span>
+                  <span class="donate__amt-rebate">{rebateLabel(info, locale)}</span>
+                  {recommended && <span class="donate__amt-badge">{t.donate.recommended}</span>}
+                </button>
+              );
+            })
           }
         </div>
         <div class="field" style="margin-top:1rem">
           <label for="custom-amt">{t.donate.custom}</label>
           <input id="custom-amt" type="number" min="1" step="1" data-custom-amount />
+          <p class="donate__custom-rebate" data-custom-rebate hidden></p>
         </div>
-        <button type="button" class="btn btn--pink" data-next="2" style="margin-top:1rem"
-          >{t.donate.next}</button
-        >
+        <button type="button" class="btn btn--pink" data-next="2" style="margin-top:1rem">
+          {t.donate.next}
+          <CtaArrow />
+        </button>
       </div>
 
       <div class="donate__step" data-step="2" hidden>
@@ -78,7 +97,10 @@ const amounts = [25, 50, 100, 250, 500, 1000];
           <input class="honeypot" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
           <div style="display:flex;gap:0.75rem;margin-top:1rem;flex-wrap:wrap">
             <button type="button" class="btn btn--outline-pink" data-back="1">{t.donate.back}</button>
-            <button type="button" class="btn btn--pink" data-to-pay>{t.donate.next}</button>
+            <button type="button" class="btn btn--pink" data-to-pay>
+              {t.donate.next}
+              <CtaArrow />
+            </button>
           </div>
           <p data-status hidden style="margin-top:0.75rem;font-weight:600"></p>
         </form>
@@ -113,14 +135,29 @@ const amounts = [25, 50, 100, 250, 500, 1000];
     var amount = '';
     var root = document.querySelector('.donate');
     if (!root) return;
+    var rebateNone = 'No City rebate under $50';
+    var rebateMin = 50;
+    var rebateCap = 150;
+    var rebateRate = 0.75;
+
+    function rebateText(n) {
+      n = Math.max(0, Math.floor(Number(n) || 0));
+      if (n < rebateMin) return rebateNone;
+      var raw = Math.floor(n * rebateRate);
+      var rebate = Math.min(rebateCap, raw);
+      if (raw > rebateCap) return 'Up to $' + rebate + ' rebate (capped)';
+      return '$' + rebate + ' rebate';
+    }
+
     function showStep(n) {
       root.querySelectorAll('[data-step]').forEach(function (el) {
         el.hidden = el.getAttribute('data-step') !== String(n);
       });
       root.querySelectorAll('[data-step-indicator]').forEach(function (el) {
-        el.classList.toggle('is-active', Number(el.getAttribute('data-step-indicator')) <= n);
+        el.classList.toggle('is-active', el.getAttribute('data-step-indicator') === String(n));
       });
     }
+
     root.querySelectorAll('[data-amount]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         amount = btn.getAttribute('data-amount') || '';
@@ -129,8 +166,11 @@ const amounts = [25, 50, 100, 250, 500, 1000];
         });
         var custom = root.querySelector('[data-custom-amount]');
         if (custom) custom.value = '';
+        var cr = root.querySelector('[data-custom-rebate]');
+        if (cr) cr.hidden = true;
       });
     });
+
     var custom = root.querySelector('[data-custom-amount]');
     if (custom) {
       custom.addEventListener('input', function () {
@@ -138,17 +178,29 @@ const amounts = [25, 50, 100, 250, 500, 1000];
         root.querySelectorAll('[data-amount]').forEach(function (b) {
           b.classList.remove('is-selected');
         });
+        var cr = root.querySelector('[data-custom-rebate]');
+        if (cr) {
+          if (custom.value) {
+            cr.textContent = rebateText(custom.value);
+            cr.hidden = false;
+          } else {
+            cr.hidden = true;
+          }
+        }
       });
     }
+
     root.querySelectorAll('[data-next]').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        if (!amount) amount = 'custom';
-        showStep(Number(btn.getAttribute('data-next')));
+        if (!amount) return;
+        var field = root.querySelector('[data-amount-field]');
+        if (field) field.value = amount;
+        showStep(btn.getAttribute('data-next'));
       });
     });
     root.querySelectorAll('[data-back]').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        showStep(Number(btn.getAttribute('data-back')));
+        showStep(btn.getAttribute('data-back'));
       });
     });
     var toPay = root.querySelector('[data-to-pay]');
@@ -156,12 +208,11 @@ const amounts = [25, 50, 100, 250, 500, 1000];
       toPay.addEventListener('click', function () {
         var field = root.querySelector('[data-amount-field]');
         if (field) field.value = amount;
-        var display = root.querySelector('[data-amount-display]');
-        if (display) display.textContent = 'Amount: $' + amount;
-        var form = document.getElementById('donate-intent');
-        var log = form && form.querySelector('input[name="logIntent"]');
-        if (form && log && log.checked) {
-          form.requestSubmit();
+        var disp = root.querySelector('[data-amount-display]');
+        if (disp) disp.textContent = '$' + amount + ' · ' + rebateText(amount);
+        var form = root.querySelector('#donate-intent');
+        if (form && form.getAttribute('data-endpoint')) {
+          form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event('submit', { cancelable: true }));
         }
         showStep(3);
       });
@@ -172,38 +223,41 @@ const amounts = [25, 50, 100, 250, 500, 1000];
 <style>
   .donate {
     display: grid;
-    min-height: calc(100vh - 4rem);
+    gap: 0;
+    min-height: calc(100vh - 8rem);
   }
   .donate__media {
     display: none;
-    background: var(--color-blue-800);
   }
   .donate__media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: top;
   }
   .donate__panel {
     padding: 2rem 1.5rem 3rem;
     max-width: 32rem;
   }
-  .donate__panel h1 {
-    font-family: var(--font-display);
-    font-size: 2rem;
-    margin: 0.75rem 0 0.25rem;
+  .badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     color: var(--color-pink-500);
   }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    margin: 0.35rem 0 0.5rem;
+  }
   .donate__sub {
-    margin: 0 0 1.5rem;
-    color: var(--color-ink-500);
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 0.04em;
+    margin: 0 0 1.25rem;
+    color: var(--color-ink-600);
   }
   .donate__steps {
     display: flex;
-    gap: 0.75rem;
+    gap: 1rem;
     list-style: none;
     padding: 0;
     margin: 0 0 1.5rem;
@@ -214,34 +268,74 @@ const amounts = [25, 50, 100, 250, 500, 1000];
   .donate__steps .is-active {
     color: var(--color-pink-500);
   }
+  .donate__label {
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+  }
   .donate__amounts {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.65rem;
   }
   .donate__amt {
-    padding: 0.75rem;
-    border: 1px solid var(--color-taupe-200);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+    padding: 0.85rem 0.75rem;
+    border: 2px solid var(--color-taupe-200);
     background: var(--color-paper);
-    font-weight: 700;
     cursor: pointer;
+    font: inherit;
+    text-align: left;
+  }
+  .donate__amt.is-recommended {
+    border-color: var(--color-pink-400);
   }
   .donate__amt.is-selected {
     border-color: var(--color-pink-500);
-    color: var(--color-pink-500);
+    background: var(--color-pink-100);
   }
-  .donate__email {
-    font-size: 1.25rem;
+  .donate__amt-value {
+    font-family: var(--font-display);
     font-weight: 800;
-  }
-  .donate__email a {
+    font-size: 1.25rem;
     color: var(--color-pink-500);
+  }
+  .donate__amt-rebate {
+    font-size: 0.75rem;
+    color: var(--color-ink-600);
+  }
+  .donate__amt-badge {
+    position: absolute;
+    top: 0.35rem;
+    right: 0.4rem;
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-pink-700);
+  }
+  .donate__custom-rebate {
+    margin: 0.35rem 0 0;
+    font-size: 0.85rem;
+    color: var(--color-ink-600);
   }
   .donate__check {
     display: flex;
     gap: 0.5rem;
     align-items: flex-start;
     font-size: 0.9rem;
+  }
+  .donate__email a {
+    font-weight: 800;
+    color: var(--color-pink-500);
+    font-size: 1.1rem;
+  }
+  .honeypot {
+    position: absolute;
+    left: -9999px;
   }
   @media (min-width: 900px) {
     .donate {
@@ -251,7 +345,10 @@ const amounts = [25, 50, 100, 250, 500, 1000];
       display: block;
     }
     .donate__panel {
-      padding: 3rem;
+      padding: 3rem 3rem 4rem;
+    }
+    .donate__amounts {
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 </style>

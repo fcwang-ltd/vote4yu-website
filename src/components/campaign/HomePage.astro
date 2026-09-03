@@ -2,8 +2,15 @@
 import CommitForm from './CommitForm.astro';
 import FormSubmitScript from './FormSubmitScript.astro';
 import HealthCascade from './HealthCascade.astro';
+import CtaArrow from '../ui/CtaArrow.astro';
 import { getContent } from '../../utils/content';
 import { localizePath, type Locale } from '../../utils/i18n';
+import {
+  DONATE_PRESETS,
+  DONATE_RECOMMENDED,
+  rebateFor,
+  rebateLabel,
+} from '../../utils/rebate';
 
 interface Props {
   locale?: Locale;
@@ -11,28 +18,40 @@ interface Props {
 const { locale = 'en' } = Astro.props;
 const t = getContent(locale);
 
+/** Flip to true in .env when Apps Script forms are live. */
+const formsEnabled = import.meta.env.PUBLIC_FORMS_ENABLED === 'true';
+
 const heroPhotos = [
   {
-    src: '/images/candidate/hero-images/yu-photo-white-1-transparent.png',
+    src: '/images/candidate/hero-images/YU_photo_white1_transparent.png',
     fallback: '/images/candidate/yu-photo-white-1.png',
     alt: 'Haohui Yu 余浩輝',
   },
   {
-    src: '/images/candidate/hero-images/yu-photo-white-2-transparent.png',
+    src: '/images/candidate/hero-images/YU_photo_white2_transparent.png',
     fallback: '/images/candidate/yu-photo-white-2.png',
     alt: 'Haohui Yu 余浩輝',
   },
   {
-    src: '/images/candidate/hero-images/yu-photo-white-3-transparent.png',
+    src: '/images/candidate/hero-images/YU_photo_white3_transparent.png',
     fallback: '/images/candidate/yu-photo-white-3.png',
     alt: 'Haohui Yu 余浩輝',
   },
 ];
+
+const donatePresets = DONATE_PRESETS.map((n) => {
+  const info = rebateFor(n);
+  return {
+    amount: n,
+    rebateText: rebateLabel(info, locale),
+    recommended: n === DONATE_RECOMMENDED,
+  };
+});
 ---
 
-<FormSubmitScript />
+{formsEnabled && <FormSubmitScript />}
 
-<section class="hero">
+<section class:list={['hero', { 'hero--solo': !formsEnabled }]}>
   <img
     class="hero__watermark"
     src="/images/candidate/yu-brush-bw.svg"
@@ -40,9 +59,14 @@ const heroPhotos = [
     aria-hidden="true"
   />
   <div class="hero__inner container-1200">
-    <div class="hero__form">
-      <CommitForm locale={locale} variant="hero" />
-    </div>
+    {
+      /* Keep CommitForm import + gate so the form returns with PUBLIC_FORMS_ENABLED=true. */
+      formsEnabled && (
+        <div class="hero__form">
+          <CommitForm locale={locale} variant="hero" />
+        </div>
+      )
+    }
 
     <div class="hero__visual">
       <img
@@ -93,35 +117,6 @@ const heroPhotos = [
     <div class="hero-to-blue">
       <div class="hero-to-blue__inner">
         <HealthCascade locale={locale} flush />
-
-        <section class="band band--blue section-pad" id="how-to-vote">
-          <div class="container-1200">
-            <h2 class="band__title">{t.home.howToVoteTitle}</h2>
-            <div class="vote-grid">
-              {
-                t.home.voteSteps.map((step) => (
-                  <article class="vote-card">
-                    <h3>{step.title}</h3>
-                    <p>{step.body}</p>
-                    <a
-                      class="btn btn--outline-white"
-                      href={step.href}
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      {step.cta} →
-                    </a>
-                  </article>
-                ))
-              }
-            </div>
-            <p class="band__note">
-              <a href="https://www.markham.ca" rel="noopener noreferrer" target="_blank"
-                >{t.home.voteOfficial}</a
-              >
-            </p>
-          </div>
-        </section>
       </div>
     </div>
   </div>
@@ -131,20 +126,81 @@ const heroPhotos = [
   <div class="container-1200">
     <div class="journey-short__head">
       <h2>{t.home.journeyTitle}</h2>
-      <a href={localizePath('/about/journey', locale)}>{t.home.seeAllNews} →</a>
+      <a href={localizePath('/about/journey', locale)}>{t.home.seeAllNews}</a>
     </div>
-    <div class="journey-short__grid">
+    <div class="journey-long">
       {
         t.progress.items.slice(0, 3).map((item) => (
-          <article class="news-card">
-            <time>{item.date}</time>
-            <h3>{item.title}</h3>
-            <p>{item.body}</p>
-            <a href={localizePath('/about/journey', locale)}>{t.home.readFull} →</a>
+          <article class="journey-card">
+            <div class="journey-card__thumb" aria-hidden="true"></div>
+            <div class="journey-card__body">
+              <h3>{item.title}</h3>
+              <time>{item.date}</time>
+              <p>{item.body}</p>
+              <a class="journey-card__link" href={localizePath('/about/journey', locale)}>
+                {t.home.readFull}
+              </a>
+            </div>
           </article>
         ))
       }
     </div>
+  </div>
+</section>
+
+<section class="band band--vote section-pad" id="how-to-vote" data-ticker-dark>
+  <div class="container-1200">
+    <h2 class="band__title">{t.home.howToVoteTitle}</h2>
+    <div class="vote-grid">
+      {
+        t.home.voteSteps.map((step) => (
+          <article class="vote-card">
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+            <a
+              class="btn btn--outline-white"
+              href={step.href}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {step.cta}
+            </a>
+          </article>
+        ))
+      }
+    </div>
+    <p class="band__note">
+      <a href="https://www.markham.ca" rel="noopener noreferrer" target="_blank"
+        >{t.home.voteOfficial}</a
+      >
+    </p>
+  </div>
+</section>
+
+<section class="home-donate section-pad">
+  <div class="container-1200">
+    <h2>{t.home.donateTitle}</h2>
+    <p class="home-donate__sub">{t.home.donateSub}</p>
+    <div class="home-donate__amounts">
+      {
+        donatePresets.map((p) => (
+          <a
+            class:list={['home-donate__chip', { 'is-recommended': p.recommended }]}
+            href={localizePath('/donate', locale)}
+          >
+            <span class="home-donate__amt">${p.amount}</span>
+            <span class="home-donate__rebate">{p.rebateText}</span>
+            {p.recommended && (
+              <span class="home-donate__badge">{t.home.donateRecommended}</span>
+            )}
+          </a>
+        ))
+      }
+    </div>
+    <a class="btn btn--pink home-donate__cta" href={localizePath('/donate', locale)}>
+      {t.home.donateCta}
+      <CtaArrow />
+    </a>
   </div>
 </section>
 
@@ -178,7 +234,6 @@ const heroPhotos = [
 </script>
 
 <style>
-  /* ribbon-lift: negative margin only (hero pad is fixed so lift moves the band). */
   .hero,
   .hero-join {
     --ribbon-lift: 300px;
@@ -221,6 +276,9 @@ const heroPhotos = [
   .hero__visual {
     position: relative;
     min-height: 20rem;
+    order: 1;
+  }
+  .hero--solo .hero__visual {
     order: 1;
   }
   .hero__brush {
@@ -271,11 +329,6 @@ const heroPhotos = [
     opacity: 1;
   }
 
-  /*
-    Pink + blue share one skew so blue's top edge matches the ribbon bottom.
-    Join shell is transparent: a solid blue fill here paints a wedge ABOVE
-    the ribbon on the left (unskewed box). Blue lives only on .hero-to-blue.
-  */
   .hero-join {
     position: relative;
     z-index: 1;
@@ -310,7 +363,7 @@ const heroPhotos = [
   }
   .slogan-ribbon p {
     margin: 0;
-    font-family: var(--font-agrandir);
+    font-family: var(--font-display);
     font-weight: 700;
     font-size: clamp(1.35rem, 2.8vw, 1.75rem);
     letter-spacing: 0.01em;
@@ -333,8 +386,8 @@ const heroPhotos = [
     padding-top: 1.75rem;
   }
 
-  .band--blue {
-    background: transparent;
+  .band--vote {
+    background: var(--color-blue-600);
     color: var(--color-paper);
   }
   .band__title {
@@ -352,6 +405,7 @@ const heroPhotos = [
   }
   .vote-card h3 {
     margin: 0 0 0.5rem;
+    font-family: var(--font-display);
     font-size: 1.2rem;
   }
   .vote-card p {
@@ -364,6 +418,7 @@ const heroPhotos = [
   .band__note a {
     color: var(--color-pink-200);
   }
+
   .journey-short {
     background: var(--color-taupe-50);
     position: relative;
@@ -387,27 +442,114 @@ const heroPhotos = [
     font-weight: 700;
     text-decoration: none;
   }
-  .journey-short__grid {
+  .journey-long {
     display: grid;
     gap: 1rem;
   }
-  .news-card {
+  .journey-card {
+    display: grid;
+    grid-template-columns: minmax(5.5rem, 7.5rem) 1fr;
+    gap: 1rem 1.25rem;
+    align-items: stretch;
     background: var(--color-paper);
-    padding: 1.25rem;
     border-top: 3px solid var(--color-pink-500);
+    padding: 1rem 1.15rem 1.15rem;
   }
-  .news-card time {
-    font-size: 0.8rem;
+  .journey-card__thumb {
+    background: var(--color-taupe-100);
+    border: 1px solid var(--color-taupe-200);
+    min-height: 5.5rem;
+    aspect-ratio: 1;
+  }
+  .journey-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+  .journey-card h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+  .journey-card time {
+    font-size: 0.85rem;
     color: var(--color-ink-500);
   }
-  .news-card h3 {
-    margin: 0.35rem 0;
+  .journey-card p {
+    margin: 0.35rem 0 0.5rem;
+    color: var(--color-ink-600);
+    font-size: 0.95rem;
+    line-height: 1.45;
   }
-  .news-card a {
-    color: var(--color-pink-500);
+  .journey-card__link {
+    margin-top: auto;
+    color: var(--color-blue-600);
     font-weight: 700;
-    text-decoration: none;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    width: fit-content;
   }
+
+  .home-donate {
+    background: var(--color-paper);
+  }
+  .home-donate h2 {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+  }
+  .home-donate__sub {
+    margin: 0 0 1.25rem;
+    max-width: 40rem;
+    color: var(--color-ink-600);
+  }
+  .home-donate__amounts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .home-donate__chip {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.85rem 1rem;
+    border: 2px solid var(--color-taupe-200);
+    text-decoration: none;
+    color: var(--color-ink-900);
+    background: var(--color-taupe-50);
+  }
+  .home-donate__chip.is-recommended {
+    border-color: var(--color-pink-500);
+    background: var(--color-pink-100);
+  }
+  .home-donate__amt {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.35rem;
+    color: var(--color-pink-500);
+  }
+  .home-donate__rebate {
+    font-size: 0.8rem;
+    color: var(--color-ink-600);
+  }
+  .home-donate__badge {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.5rem;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-pink-700);
+  }
+  .home-donate__cta {
+    gap: 0.5rem;
+  }
+
   @media (min-width: 900px) {
     .hero {
       padding-bottom: 0.5rem;
@@ -416,9 +558,15 @@ const heroPhotos = [
       grid-template-columns: minmax(280px, 0.85fr) 1.3fr;
       align-items: start;
       min-height: calc(100vh - 6.5rem);
-      /* Fixed bottom pad: photo extends into ribbon zone as lift increases. */
       padding-block: 1.25rem 4rem;
       gap: 1rem 1.5rem;
+    }
+    .hero--solo .hero__inner {
+      grid-template-columns: 1fr;
+      justify-items: end;
+    }
+    .hero--solo .hero__visual {
+      width: min(100%, 640px);
     }
     .hero__form {
       order: 1;
@@ -457,8 +605,13 @@ const heroPhotos = [
     .vote-grid {
       grid-template-columns: repeat(3, 1fr);
     }
-    .journey-short__grid {
-      grid-template-columns: repeat(3, 1fr);
+    .journey-card {
+      grid-template-columns: 9rem 1fr;
+      padding: 1.15rem 1.35rem 1.25rem;
+      gap: 1.25rem 1.5rem;
+    }
+    .home-donate__amounts {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
   @media (prefers-reduced-motion: reduce) {

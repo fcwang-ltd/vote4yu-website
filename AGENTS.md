@@ -13,7 +13,7 @@ This is a **SENSITIVE live municipal campaign**. Public-facing copy becomes publ
 | Concern | Choice |
 |---------|--------|
 | Framework | Astro 5 (static output) |
-| Styling | Tailwind CSS v4 via `@tailwindcss/vite`; tokens in `src/styles/globals.css` (`@theme`) |
+| Styling | Tailwind CSS v4 via `@tailwindcss/vite`; tokens in `src/styles/globals.css` (`@theme`). Display: Poppins; body: Inter; 繁體: Noto Sans TC |
 | i18n | Astro built-in i18n; `en` at root, `zh-HK` `/zh-HK/` (繁體). UI toggle is **EN \| 繁體**. `zh-CN` routes redirect to `zh-HK` until Mandarin lock |
 | Content | `src/utils/content.ts` + Astro content collections (`src/content/blog/`) |
 | Package manager | **pnpm** (npm is broken on the authoring machine) |
