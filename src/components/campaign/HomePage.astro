@@ -342,7 +342,8 @@ const donatePresets = DONATE_PRESETS.map((n) => {
     transform: skewY(-15deg);
     transform-origin: center top;
     margin-top: 0;
-    margin-bottom: calc(var(--slant) * -0.35);
+    /* Tuck Journey under the visual slant overhang (layout box is taller than the visual). */
+    margin-bottom: calc(var(--slant) * -0.22);
   }
 
   .slogan-ribbon {
@@ -379,11 +380,13 @@ const donatePresets = DONATE_PRESETS.map((n) => {
     z-index: 2;
     background: var(--color-blue-600);
     padding-top: 0;
-    padding-bottom: 2.5rem;
+    /* Modest pad so cards clear the slant without a tall empty blue band. */
+    padding-bottom: 3.25rem;
   }
   .hero-to-blue__inner {
     transform: skewY(15deg);
     padding-top: 1.75rem;
+    padding-bottom: 0.75rem;
   }
 
   .band--vote {
@@ -598,9 +601,10 @@ const donatePresets = DONATE_PRESETS.map((n) => {
     }
     .hero-to-blue__inner {
       padding-top: 2rem;
+      padding-bottom: 1rem;
     }
     .hero-to-blue {
-      padding-bottom: 3rem;
+      padding-bottom: 4rem;
     }
     .vote-grid {
       grid-template-columns: repeat(3, 1fr);
