@@ -501,7 +501,7 @@ const zhHK: typeof en = {
     legal: '由余浩輝競選團隊官方代理人授權',
     privacy: '私隱政策',
     terms: '條款及細則',
-    draftBanner: '中文內容為草稿，待粵語母語審校後定稿。',
+    draftBanner: '',
     officeLabel: '競選辦公室',
     emailLabel: '電郵',
     donateLabel: '電子轉賬捐款',
