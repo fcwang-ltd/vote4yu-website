@@ -2,6 +2,7 @@
 import CommitForm from './CommitForm.astro';
 import FormSubmitScript from './FormSubmitScript.astro';
 import HealthCascade from './HealthCascade.astro';
+import JourneyFeed from './JourneyFeed.astro';
 import CtaArrow from '../ui/CtaArrow.astro';
 import { getContent } from '../../utils/content';
 import { localizePath, type Locale } from '../../utils/i18n';
@@ -122,31 +123,7 @@ const donatePresets = DONATE_PRESETS.map((n) => {
   </div>
 </div>
 
-<section class="journey-short section-pad">
-  <div class="container-1200">
-    <div class="journey-short__head">
-      <h2>{t.home.journeyTitle}</h2>
-      <a href={localizePath('/about/journey', locale)}>{t.home.seeAllNews}</a>
-    </div>
-    <div class="journey-long">
-      {
-        t.progress.items.slice(0, 3).map((item) => (
-          <article class="journey-card">
-            <div class="journey-card__thumb" aria-hidden="true"></div>
-            <div class="journey-card__body">
-              <h3>{item.title}</h3>
-              <time>{item.date}</time>
-              <p>{item.body}</p>
-              <a class="journey-card__link" href={localizePath('/about/journey', locale)}>
-                {t.home.readFull}
-              </a>
-            </div>
-          </article>
-        ))
-      }
-    </div>
-  </div>
-</section>
+<JourneyFeed locale={locale} title={t.home.journeyTitle} />
 
 <section class="band band--vote section-pad" id="how-to-vote" data-ticker-dark>
   <div class="container-1200">
@@ -422,78 +399,6 @@ const donatePresets = DONATE_PRESETS.map((n) => {
     color: var(--color-pink-200);
   }
 
-  .journey-short {
-    background: var(--color-taupe-50);
-    position: relative;
-    z-index: 1;
-  }
-  .journey-short__head {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 1rem;
-    align-items: baseline;
-    margin-bottom: 1.5rem;
-  }
-  .journey-short__head h2 {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: clamp(1.6rem, 3vw, 2.2rem);
-  }
-  .journey-short__head a {
-    color: var(--color-pink-500);
-    font-weight: 700;
-    text-decoration: none;
-  }
-  .journey-long {
-    display: grid;
-    gap: 1rem;
-  }
-  .journey-card {
-    display: grid;
-    grid-template-columns: minmax(5.5rem, 7.5rem) 1fr;
-    gap: 1rem 1.25rem;
-    align-items: stretch;
-    background: var(--color-paper);
-    border-top: 3px solid var(--color-pink-500);
-    padding: 1rem 1.15rem 1.15rem;
-  }
-  .journey-card__thumb {
-    background: var(--color-taupe-100);
-    border: 1px solid var(--color-taupe-200);
-    min-height: 5.5rem;
-    aspect-ratio: 1;
-  }
-  .journey-card__body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    min-width: 0;
-  }
-  .journey-card h3 {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: 1.15rem;
-    font-weight: 700;
-  }
-  .journey-card time {
-    font-size: 0.85rem;
-    color: var(--color-ink-500);
-  }
-  .journey-card p {
-    margin: 0.35rem 0 0.5rem;
-    color: var(--color-ink-600);
-    font-size: 0.95rem;
-    line-height: 1.45;
-  }
-  .journey-card__link {
-    margin-top: auto;
-    color: var(--color-blue-600);
-    font-weight: 700;
-    text-decoration: underline;
-    text-underline-offset: 0.15em;
-    width: fit-content;
-  }
 
   .home-donate {
     background: var(--color-paper);
@@ -608,11 +513,6 @@ const donatePresets = DONATE_PRESETS.map((n) => {
     }
     .vote-grid {
       grid-template-columns: repeat(3, 1fr);
-    }
-    .journey-card {
-      grid-template-columns: 9rem 1fr;
-      padding: 1.15rem 1.35rem 1.25rem;
-      gap: 1.25rem 1.5rem;
     }
     .home-donate__amounts {
       grid-template-columns: repeat(3, minmax(0, 1fr));
