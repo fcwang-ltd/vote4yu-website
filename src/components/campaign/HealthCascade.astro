@@ -1,9 +1,5 @@
 ---
-import {
-  HEALTH_PLANKS,
-  plankBody,
-  type HealthPlank,
-} from '../../utils/content';
+import { HEALTH_PLANKS, plankBody } from '../../utils/content';
 import { HEALTH_DIMENSIONS } from '../../utils/healthDots';
 import { localizePath, type Locale } from '../../utils/i18n';
 import { getContent } from '../../utils/content';
@@ -16,12 +12,6 @@ interface Props {
 }
 const { locale = 'en', flush = false } = Astro.props;
 const t = getContent(locale);
-const defaultOpen = HEALTH_PLANKS.length - 1;
-
-function titleParts(plank: HealthPlank): { letter: string; rest: string } {
-  const label = plank.labelEn;
-  return { letter: label.charAt(0), rest: label.slice(1) };
-}
 ---
 
 <section class:list={['health-cascade', 'section-pad', { 'health-cascade--flush': flush }]} id="health">
@@ -35,28 +25,22 @@ function titleParts(plank: HealthPlank): { letter: string; rest: string } {
       {
         HEALTH_PLANKS.map((plank, i) => {
           const dim = HEALTH_DIMENSIONS[i];
-          const open = i === defaultOpen;
-          const parts = titleParts(plank);
           const panelId = `health-panel-${i}`;
           const btnId = `health-btn-${i}`;
           return (
-            <article
-              class:list={['health-card', { 'is-open': open }]}
-              style={`--i: ${i}`}
-              data-health-card
-            >
+            <article class="health-card" data-health-card>
               <h3 class="health-card__title">
                 <button
                   type="button"
                   class="health-card__btn"
                   id={btnId}
-                  aria-expanded={open ? 'true' : 'false'}
+                  aria-expanded="false"
                   aria-controls={panelId}
                   data-health-toggle
                 >
-                  <span class="health-card__letter">{parts.letter}</span>
-                  <span class="health-card__rest">{parts.rest}</span>
+                  <span class="health-card__letter">{plank.letter}<span class="health-card__dot">.</span></span>
                   <span class="health-card__zh">{plank.labelZh}</span>
+                  <span class="health-card__rest">{plank.labelEn}</span>
                 </button>
               </h3>
               <div
@@ -192,7 +176,8 @@ function titleParts(plank: HealthPlank): { letter: string; rest: string } {
     flex-wrap: wrap;
     gap: 0 0.05rem;
     width: 100%;
-    padding: 0.75rem 1rem;
+    /* Keeps the row at its original height now the baseline offset is gone. */
+    padding: 1.25rem 1rem;
     border: 0;
     background: transparent;
     cursor: pointer;
@@ -206,6 +191,10 @@ function titleParts(plank: HealthPlank): { letter: string; rest: string } {
     font-size: 1.65rem;
     color: var(--color-blue-600);
     line-height: 1;
+    margin-right: 0.4rem;
+  }
+  .health-card__dot {
+    color: var(--color-pink-500);
   }
   .health-card__rest {
     font-family: var(--font-display);
@@ -215,11 +204,10 @@ function titleParts(plank: HealthPlank): { letter: string; rest: string } {
     color: var(--color-ink-900);
   }
   .health-card__zh {
-    margin-left: auto;
     font-weight: 700;
-    font-size: 0.95rem;
-    color: var(--color-ink-800);
-    padding-left: 0.5rem;
+    font-size: 1.05rem;
+    color: var(--color-ink-900);
+    margin-right: 0.4rem;
   }
   .health-card__panel {
     display: grid;
@@ -303,12 +291,6 @@ function titleParts(plank: HealthPlank): { letter: string; rest: string } {
     .health-cascade__grid {
       grid-template-columns: 1.15fr 0.85fr;
       gap: 3rem;
-    }
-    .health-cascade__stack {
-      transform: rotate(-2deg);
-    }
-    .health-card {
-      margin-left: calc(var(--i) * 0.55rem);
     }
   }
 </style>
