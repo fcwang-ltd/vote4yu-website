@@ -1,0 +1,253 @@
+---
+import { getCollection } from 'astro:content';
+import { getContent } from '../../utils/content';
+import { localizePath, type Locale } from '../../utils/i18n';
+
+interface Props {
+  locale?: Locale;
+  /** Section heading. Defaults to the "Yu's journey" label. */
+  title?: string;
+  /** Full feed with page controls (events page) vs. a short teaser (everywhere else). */
+  paginated?: boolean;
+  /** Items shown per page when paginated, or in total when not. */
+  perPage?: number;
+}
+const { locale = 'en', title, paginated = false, perPage = paginated ? 5 : 3 } = Astro.props;
+const t = getContent(locale);
+const heading = title ?? t.events.tabJourney;
+
+/* Posts are authored in English only and surfaced on both locales, matching
+   how the events and blog pages already query the collection. */
+const posts = await getCollection(
+  'blog',
+  ({ data }) => data.locale === 'en' && data.draft !== true
+);
+
+function postHref(id: string) {
+  const slug = id.split('/').pop()?.replace(/\.mdx?$/, '') ?? id;
+  return localizePath(`/blog/${slug}`, locale);
+}
+
+type FeedItem = {
+  date: Date;
+  label: string;
+  title: string;
+  body: string;
+  href: string;
+};
+
+/* Articles and campaign milestones share one chronological feed. */
+const feed: FeedItem[] = [
+  ...posts.map((post) => ({
+    date: post.data.pubDate,
+    label: post.data.pubDate.toISOString().slice(0, 10),
+    title: post.data.title,
+    body: post.data.description,
+    href: postHref(post.id),
+  })),
+  ...t.progress.items.map((item) => ({
+    date: new Date(item.date),
+    label: item.date,
+    title: item.title,
+    body: item.body,
+    href: localizePath('/about/journey', locale),
+  })),
+].sort((a, b) => b.date.valueOf() - a.date.valueOf());
+
+const items = paginated ? feed : feed.slice(0, perPage);
+const pageCount = paginated ? Math.max(1, Math.ceil(feed.length / perPage)) : 1;
+const pages = Array.from({ length: pageCount }, (_, n) => n + 1);
+const eventsHref = `${localizePath('/events', locale)}#journey`;
+---
+
+<section class="journey-feed section-pad" id="journey" data-journey-feed>
+  <div class="container-1200">
+    <div class="journey-feed__head">
+      <h2>{heading}</h2>
+      {
+        !paginated && (
+          <a class="journey-feed__all" href={eventsHref}>
+            {t.home.seeAllNews}
+          </a>
+        )
+      }
+    </div>
+
+    <div class="journey-long">
+      {
+        items.map((item, i) => (
+          <article
+            class="journey-card"
+            data-journey-item
+            data-page={paginated ? Math.floor(i / perPage) + 1 : 1}
+            hidden={paginated && i >= perPage}
+          >
+            <div class="journey-card__thumb" aria-hidden="true" />
+            <div class="journey-card__body">
+              <h3>{item.title}</h3>
+              <time datetime={item.label}>{item.label}</time>
+              <p>{item.body}</p>
+              <a class="journey-card__link" href={item.href}>
+                {t.home.readFull}
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    {
+      paginated && pageCount > 1 && (
+        <nav class="journey-pager" aria-label={heading} data-journey-pager>
+          {pages.map((n) => (
+            <button
+              type="button"
+              class:list={['journey-pager__btn', { 'is-current': n === 1 }]}
+              data-journey-page={n}
+              aria-current={n === 1 ? 'true' : 'false'}
+            >
+              {n}
+            </button>
+          ))}
+        </nav>
+      )
+    }
+  </div>
+</section>
+
+<script is:inline>
+  (function () {
+    /* Scoped per instance so more than one feed can share a page. */
+    document.querySelectorAll('[data-journey-feed]').forEach(function (root) {
+      var pager = root.querySelector('[data-journey-pager]');
+      if (!pager) return;
+      var items = root.querySelectorAll('[data-journey-item]');
+      var buttons = pager.querySelectorAll('[data-journey-page]');
+
+      function show(page) {
+        items.forEach(function (item) {
+          item.hidden = item.getAttribute('data-page') !== String(page);
+        });
+        buttons.forEach(function (btn) {
+          var current = btn.getAttribute('data-journey-page') === String(page);
+          btn.classList.toggle('is-current', current);
+          btn.setAttribute('aria-current', current ? 'true' : 'false');
+        });
+      }
+
+      buttons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          show(btn.getAttribute('data-journey-page'));
+          var first = root.querySelector('[data-journey-item]:not([hidden])');
+          if (first) first.scrollIntoView({ block: 'nearest' });
+        });
+      });
+    });
+  })();
+</script>
+
+<style>
+  .journey-feed {
+    background: var(--color-taupe-50);
+    position: relative;
+    z-index: 1;
+    /* Clears the sticky nav when the anchor is jumped to. */
+    scroll-margin-top: 5rem;
+  }
+  .journey-feed__head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: baseline;
+    margin-bottom: 1.5rem;
+  }
+  .journey-feed__head h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+  }
+  .journey-feed__all {
+    color: var(--color-pink-500);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .journey-long {
+    display: grid;
+    gap: 1rem;
+  }
+  .journey-card {
+    display: grid;
+    grid-template-columns: minmax(5.5rem, 7.5rem) 1fr;
+    gap: 1rem 1.25rem;
+    align-items: stretch;
+    background: var(--color-paper);
+    border-top: 3px solid var(--color-pink-500);
+    padding: 1rem 1.15rem 1.15rem;
+  }
+  .journey-card__thumb {
+    background: var(--color-taupe-100);
+    border: 1px solid var(--color-taupe-200);
+    min-height: 5.5rem;
+    aspect-ratio: 1;
+  }
+  .journey-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+  .journey-card h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+  .journey-card time {
+    font-size: 0.85rem;
+    color: var(--color-ink-500);
+  }
+  .journey-card p {
+    margin: 0.35rem 0 0.5rem;
+    color: var(--color-ink-600);
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+  .journey-card__link {
+    margin-top: auto;
+    color: var(--color-blue-600);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    width: fit-content;
+  }
+  .journey-pager {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    margin-top: 1.5rem;
+  }
+  .journey-pager__btn {
+    min-width: 2.5rem;
+    padding: 0.5rem 0.7rem;
+    font: inherit;
+    font-weight: 700;
+    color: var(--color-blue-600);
+    background: var(--color-paper);
+    border: 1px solid var(--color-taupe-200);
+    cursor: pointer;
+  }
+  .journey-pager__btn.is-current {
+    background: var(--color-pink-500);
+    border-color: var(--color-pink-500);
+    color: var(--color-paper);
+  }
+  @media (min-width: 900px) {
+    .journey-card {
+      grid-template-columns: 9rem 1fr;
+      padding: 1.15rem 1.35rem 1.25rem;
+      gap: 1.25rem 1.5rem;
+    }
+  }
+</style>
