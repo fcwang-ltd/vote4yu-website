@@ -18,6 +18,8 @@ const { locale = 'en', title, description, path, active = '' } = Astro.props;
 <BaseLayout locale={locale} title={title} description={description} path={path}>
   <div class="site-chrome">
     <Nav locale={locale} active={active} />
+  </div>
+  <div class="site-ticker">
     <VoteTicker direction="ltr" />
   </div>
   <main>
@@ -29,19 +31,23 @@ const { locale = 'en', title, description, path, active = '' } = Astro.props;
 <script is:inline>
   (function () {
     var chrome = document.querySelector('.site-chrome');
-    if (!chrome) return;
-    var ticker = chrome.querySelector('.vote-ticker');
+    var band = document.querySelector('.site-ticker');
+    if (!chrome || !band) return;
+    var ticker = band.querySelector('.vote-ticker');
     if (!ticker) return;
 
     function updateTickerContrast() {
-      var band = ticker.getBoundingClientRect();
+      var rect = ticker.getBoundingClientRect();
       var x = Math.round(window.innerWidth / 2);
-      var y = Math.round((band.top + band.bottom) / 2);
-      /* Sample what's under the transparent ticker (not the chrome itself). */
-      var prev = chrome.style.pointerEvents;
+      var y = Math.round((rect.top + rect.bottom) / 2);
+      /* Sample what's under the transparent ticker (not the chrome or the band itself). */
+      var prevChrome = chrome.style.pointerEvents;
+      var prevBand = band.style.pointerEvents;
       chrome.style.pointerEvents = 'none';
+      band.style.pointerEvents = 'none';
       var el = document.elementFromPoint(x, y);
-      chrome.style.pointerEvents = prev;
+      chrome.style.pointerEvents = prevChrome;
+      band.style.pointerEvents = prevBand;
       var onDark = !!(el && el.closest('[data-ticker-dark]'));
       ticker.classList.toggle('vote-ticker--on-dark', onDark);
     }
@@ -68,7 +74,12 @@ const { locale = 'en', title, description, path, active = '' } = Astro.props;
     top: 0;
     z-index: 40;
   }
-  .site-chrome .vote-ticker {
+  /* Scrolls away with the page; only the nav above it stays pinned. */
+  .site-ticker {
+    position: relative;
+    z-index: 30;
+  }
+  .site-ticker .vote-ticker {
     background: transparent;
   }
 </style>
