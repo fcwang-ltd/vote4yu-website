@@ -127,15 +127,30 @@ const donatePresets = DONATE_PRESETS.map((n) => {
 
 <section class="band band--vote section-pad" id="how-to-vote" data-ticker-dark>
   <div class="container-1200">
-    <h2 class="band__title">{t.home.howToVoteTitle}</h2>
+    <h2 class="band__title">
+      <span class="band__title-zh">{t.home.howToVoteZh}</span>
+      <span class="band__title-en">{t.home.howToVoteEn}</span>
+    </h2>
+    <a
+      class="btn btn--pink vote-register"
+      href={t.home.voteSteps[0].href}
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      {t.home.registerToday}
+    </a>
     <div class="vote-grid">
       {
-        t.home.voteSteps.map((step) => (
+        t.home.voteSteps.map((step, i) => (
           <article class="vote-card">
-            <h3>{step.title}</h3>
+            <span class="vote-card__num">{i + 1}<span class="vote-card__dot">.</span></span>
+            <h3>
+              <span class="vote-card__zh">{step.titleZh}</span>
+              <span class="vote-card__en">{step.titleEn}</span>
+            </h3>
             <p>{step.body}</p>
             <a
-              class="btn btn--outline-white"
+              class="vote-card__link"
               href={step.href}
               rel="noopener noreferrer"
               target="_blank"
@@ -373,30 +388,74 @@ const donatePresets = DONATE_PRESETS.map((n) => {
   .band__title {
     font-family: var(--font-display);
     font-size: clamp(1.8rem, 4vw, 2.5rem);
-    margin: 0 0 1.5rem;
+    margin: 0 0 1.25rem;
+  }
+  .band__title-zh {
+    margin-right: 0.5rem;
+  }
+  .vote-register {
+    margin-bottom: 2rem;
   }
   .vote-grid {
     display: grid;
     gap: 1.25rem;
   }
   .vote-card {
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-paper);
+    color: var(--color-ink-900);
+    border: 0;
+    border-top: 3px solid var(--color-pink-500);
+    padding: 1.5rem 1.5rem 1.75rem;
+  }
+  .vote-card__num {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 800;
+    font-size: 1.75rem;
+    line-height: 1;
+    color: var(--color-blue-600);
+    margin-bottom: 0.9rem;
+  }
+  .vote-card__dot {
+    color: var(--color-pink-500);
   }
   .vote-card h3 {
-    margin: 0 0 0.5rem;
+    margin: 0 0 0.6rem;
     font-family: var(--font-display);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-ink-900);
+  }
+  .vote-card__zh {
+    margin-right: 0.35rem;
   }
   .vote-card p {
-    margin: 0 0 1rem;
-    opacity: 0.95;
+    margin: 0 0 1.5rem;
+    color: var(--color-ink-600);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  .vote-card__link {
+    margin-top: auto;
+    align-self: flex-start;
+    color: var(--color-blue-600);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
   .band__note {
     margin-top: 1.5rem;
+    text-align: right;
   }
   .band__note a {
-    color: var(--color-pink-200);
+    color: var(--color-paper);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--color-pink-500);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.3em;
   }
 
 
