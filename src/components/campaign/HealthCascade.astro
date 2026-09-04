@@ -28,7 +28,7 @@ const t = getContent(locale);
           const panelId = `health-panel-${i}`;
           const btnId = `health-btn-${i}`;
           return (
-            <article class="health-card" data-health-card>
+            <article class="health-card" style={`--i: ${i}`} data-health-card>
               <h3 class="health-card__title">
                 <button
                   type="button"
@@ -291,6 +291,15 @@ const t = getContent(locale);
     .health-cascade__grid {
       grid-template-columns: 1.15fr 0.85fr;
       gap: 3rem;
+    }
+  }
+  /* Each card steps 30px right of the one above it; the first stays put.
+     Offset with `left` rather than `margin-left` so widths stay equal.
+     Held back until 1152px: below ~1055px the 150px total offset would run
+     the last card under the copy column, and it stays cramped above that. */
+  @media (min-width: 1152px) {
+    .health-card {
+      left: calc(var(--i) * 30px);
     }
   }
 </style>
