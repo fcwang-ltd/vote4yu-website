@@ -1,0 +1,85 @@
+---
+/*
+ * The rendered body of a blog post.
+ *
+ * Shared by the public route (/blog/[slug]) and the unlisted preview route, so
+ * a preview is a faithful preview — if this markup lived in two places the two
+ * would drift and the preview would stop showing what readers will see.
+ */
+import { render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { localizePath, type Locale } from '../../utils/i18n';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  locale?: Locale;
+}
+const { post, locale = 'en' } = Astro.props;
+const { Content } = await render(post);
+---
+
+<article class="post section-pad">
+  <div class="container-1200">
+    <span class="badge">Updates</span>
+    <h1 class="post__title">{post.data.title}</h1>
+    <p class="post__meta">
+      <time datetime={post.data.pubDate.toISOString()}>
+        {
+          post.data.pubDate.toLocaleDateString('en-CA', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })
+        }
+      </time>
+    </p>
+    {
+      post.data.heroImage && (
+        <img class="post__hero" src={post.data.heroImage.src} alt={post.data.heroImage.alt} />
+      )
+    }
+    <div class="post__body">
+      <Content />
+    </div>
+    <p class="post__back">
+      <a href={localizePath('/blog', locale)}>← Updates</a>
+    </p>
+  </div>
+</article>
+
+<style>
+  .post__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.05;
+    margin: 0.75rem 0;
+    max-width: 20ch;
+  }
+  .post__meta {
+    color: var(--color-ink-500);
+    font-size: 0.9rem;
+  }
+  .post__hero {
+    width: 100%;
+    max-width: 720px;
+    margin: 1.5rem 0;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+  .post__body {
+    max-width: 42rem;
+    line-height: 1.6;
+    color: var(--color-ink-800);
+  }
+  .post__body :global(a) {
+    color: var(--color-pink-500);
+  }
+  .post__back {
+    margin-top: 2rem;
+  }
+  .post__back a {
+    color: var(--color-pink-500);
+    font-weight: 700;
+    text-decoration: none;
+  }
+</style>

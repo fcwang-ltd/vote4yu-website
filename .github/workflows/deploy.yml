@@ -33,6 +33,15 @@ jobs:
           else
             echo "protected page content: not configured, page will ship empty"
           fi
+      # Bundles src/canvass into private/canvass.html, injecting the sync
+      # endpoint and token from secrets. Must run BEFORE the Astro build, which
+      # encrypts that file. Missing secrets are a warning, not a failure.
+      - name: Build canvassing bundle
+        env:
+          CANVASS_SCRIPT_URL: ${{ secrets.CANVASS_SCRIPT_URL }}
+          CANVASS_TOKEN: ${{ secrets.CANVASS_TOKEN }}
+        run: node scripts/build-canvass.mjs
+
       - name: Build Astro site
         uses: withastro/action@v3
         env:

@@ -1,610 +1,224 @@
 ---
 /*
- * CANVASSING TOOL — PROTOTYPE.
+ * CANVASSING TOOL — password-gated, unlisted.
  *
- * Demo only. No backend: logs are held in localStorage and the sync queue is
- * simulated so the offline behaviour can be shown. Address data is a static
- * snapshot in /canvass/sample.json, standing in for the per-area files the
- * real build step would generate.
+ * The app is bundled by scripts/build-canvass.mjs into private/canvass.html
+ * (gitignored) and encrypted here at build time, exactly like the sibling
+ * protected page. Only ciphertext is deployed.
  *
- * Unlisted and noindex, same as the rest of this path.
+ * Why the app is NOT in public/:
+ *   Astro copies public/ to the site root verbatim, so anything there is
+ *   fetchable by direct URL and no page-level gate can protect it. Keeping the
+ *   source in src/canvass/ means it is never emitted as a static asset.
+ *
+ * Why an iframe rather than innerHTML:
+ *   The sibling page mounts its plaintext with `innerHTML`, which is correct
+ *   for static prose but DOES NOT EXECUTE <script> tags. This app is entirely
+ *   script-driven, so innerHTML yields a blank shell. `iframe.srcdoc` runs the
+ *   scripts, and — being same-origin — keeps localStorage working, which the
+ *   offline sync queue depends on.
+ *
+ * Addresses are never bundled: the app queries York Region Open Data at
+ * runtime. Only area boundaries and door counts ship in the payload.
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Wordmark from '../../components/ui/Wordmark.astro';
+import { lockContent } from '../../utils/lockedContent';
 
 const locale = 'en' as const;
+const PATH = '/private-62e6aed4888d372bb76bcb97/canvass';
+
+const locked = await lockContent('private/canvass.html');
 ---
 
 <BaseLayout
   locale={locale}
-  path="/private-62e6aed4888d372bb76bcb97/canvass"
-  title="Canvassing prototype"
-  description="Prototype."
+  path={PATH}
+  title="Canvassing"
+  description="Password protected."
   noindex
 >
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""
-  />
-
-  <div class="app" data-app>
-    <!-- ── sticky header ── -->
-    <header class="bar">
-      <button class="bar__back" type="button" data-back hidden aria-label="Back">‹</button>
-      <div class="bar__title">
-        <strong data-crumb>Canvassing</strong>
-        <span data-sub>Prototype — no live data</span>
+  <main class="gate" data-gate-root>
+    <div class="gate__inner" data-gate>
+      <div class="gate__brand">
+        <Wordmark locale={locale} />
       </div>
-      <div class="bar__net">
-        <button class="net" type="button" data-net aria-pressed="false">
-          <span class="net__dot"></span><span data-net-label>Online</span>
+
+      <form class="gate__form" data-unlock-form>
+        <label class="gate__label" for="gate-pass">Volunteer password</label>
+        <input
+          class="gate__input"
+          id="gate-pass"
+          type="password"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          required
+        />
+        <button class="btn btn--pink gate__btn" type="submit" data-unlock-submit>
+          Unlock
         </button>
-        <span class="queue" data-queue hidden>0 queued</span>
-      </div>
-    </header>
 
-    <!-- ── progress (area view only) ── -->
-    <div class="prog" data-prog hidden>
-      <div class="prog__bar"><span data-prog-fill></span></div>
-      <div class="prog__nums">
-        <span><b data-done>0</b> knocked</span>
-        <span><b data-total>0</b> doors</span>
-        <span><b data-sup>0</b> supporters</span>
-      </div>
+        <p class="gate__msg" role="alert" hidden data-unlock-error>
+          That password did not work.
+        </p>
+        {
+          !locked && (
+            <p class="gate__msg gate__msg--quiet">
+              The canvassing tool has not been published yet.
+            </p>
+          )
+        }
+      </form>
     </div>
 
-    <!-- ── screen 1: neighbourhoods ── -->
-    <section class="screen" data-screen="hoods">
-      <h1 class="screen__h">Choose a neighbourhood</h1>
-      <div class="tiles" data-hoods></div>
-    </section>
+    <iframe class="gate__app" data-unlock-app hidden title="Canvassing tool"></iframe>
 
-    <!-- ── screen 2: areas ── -->
-    <section class="screen" data-screen="areas" hidden>
-      <h1 class="screen__h" data-areas-h>Choose an area</h1>
-      <div class="tiles" data-areas></div>
-    </section>
-
-    <!-- ── screen 3: area view ── -->
-    <section class="screen screen--flush" data-screen="area" hidden>
-      <div class="map" data-map></div>
-
-      <div class="tools">
-        <div class="filters" role="group" aria-label="Filter doors">
-          <button type="button" class="chip is-on" data-filter="all">All</button>
-          <button type="button" class="chip" data-filter="todo">Not done</button>
-          <button type="button" class="chip" data-filter="resid">Residential</button>
-          <button type="button" class="chip" data-filter="arterial">Arterial</button>
-        </div>
-        <div class="tools__acts">
-          <button type="button" class="mini" data-csv>Export CSV</button>
-          <button type="button" class="mini" data-print>Walk sheet</button>
-        </div>
-      </div>
-
-      <div class="rows" data-rows></div>
-      <p class="excluded" data-excluded></p>
-    </section>
-  </div>
-
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""
-    is:inline></script>
-
-  <script is:inline define:vars={{ DATA_URL: '/canvass/sample.json' }}>
-    (function () {
-      var VOLUNTEER = 'Demo Volunteer';
-      var SUPPORTS = [
-        { k: 'supporter',  label: 'Supporter'  },
-        { k: 'swing',      label: 'Swing'      },
-        { k: 'unvote',     label: 'Unvote'     },
-        { k: 'competitor', label: 'Competitor' },
-      ];
-      var CHECKS = [
-        { k: 'flyer',   label: 'Flyer'   },
-        { k: 'visited', label: 'Visited' },
-        { k: 'vip',     label: 'VIP'     },
-      ];
-
-      var $ = function (s, r) { return (r || document).querySelector(s); };
-      var app = $('[data-app]');
-      var data = null, hood = null, area = null, filter = 'all';
-      var online = true;
-
-      /* ---- local store: stands in for Supabase ---- */
-      var LS = 'canvass-proto-v1';
-      var state = {};
-      var queue = [];
-      try { state = JSON.parse(localStorage.getItem(LS) || '{}'); } catch (e) { state = {}; }
-      try { queue = JSON.parse(localStorage.getItem(LS + '-q') || '[]'); } catch (e) { queue = []; }
-
-      function persist() {
-        try {
-          localStorage.setItem(LS, JSON.stringify(state));
-          localStorage.setItem(LS + '-q', JSON.stringify(queue));
-        } catch (e) { /* private mode — the demo still works in memory */ }
-      }
-      function get(id) { return state[id] || {}; }
-
-      /* One event per field, exactly as the proposed schema writes them. */
-      function logField(id, field, value) {
-        var rec = state[id] || (state[id] = {});
-        rec[field] = value;
-        rec.by = VOLUNTEER;
-        rec.at = new Date().toISOString();
-        queue.push({
-          id: (crypto.randomUUID ? crypto.randomUUID() : String(Math.random())),
-          pnt_gis_id: id, area_key: area.key, field: field,
-          value: value === null ? null : String(value),
-          volunteer: VOLUNTEER, client_ts: rec.at,
-        });
-        persist();
-        drain();
-        paintProgress();
-
-        /* Refresh the who/when line in place — rows are not re-rendered per tap. */
-        var el = document.querySelector('.row[data-id="' + id + '"] .stamp');
-        if (el) el.textContent = rec.by + ' · ' + new Date(rec.at).toLocaleString();
-      }
-
-      /* Queue drains only when "online" — the toggle simulates losing signal. */
-      function drain() {
-        if (online && queue.length) {
-          setTimeout(function () {
-            if (!online) return;
-            queue = [];
-            persist();
-            paintQueue();
-          }, 700);
-        }
-        paintQueue();
-      }
-      function paintQueue() {
-        var el = $('[data-queue]');
-        el.hidden = queue.length === 0;
-        el.textContent = queue.length + ' queued';
-      }
-
-      /* ---------- screens ---------- */
-      function show(name) {
-        ['hoods', 'areas', 'area'].forEach(function (s) {
-          $('[data-screen="' + s + '"]').hidden = s !== name;
-        });
-        $('[data-back]').hidden = name === 'hoods';
-        $('[data-prog]').hidden = name !== 'area';
-        window.scrollTo(0, 0);
-      }
-
-      function paintHoods() {
-        $('[data-crumb]').textContent = 'Canvassing';
-        $('[data-sub]').textContent = data.neighbourhoods.length + ' neighbourhoods';
-        var wrap = $('[data-hoods]');
-        wrap.innerHTML = '';
-        data.neighbourhoods.forEach(function (h) {
-          var doors = h.areas.reduce(function (n, a) { return n + a.addresses.length; }, 0);
-          var b = document.createElement('button');
-          b.type = 'button';
-          b.className = 'tile';
-          b.innerHTML = '<span class="tile__name"></span><span class="tile__meta"></span>';
-          b.querySelector('.tile__name').textContent = h.name;
-          b.querySelector('.tile__meta').textContent =
-            h.areas.length + ' areas · ' + doors + ' doors';
-          b.onclick = function () { hood = h; paintAreas(); show('areas'); };
-          wrap.appendChild(b);
-        });
-        show('hoods');
-      }
-
-      function paintAreas() {
-        $('[data-crumb]').textContent = hood.name;
-        $('[data-sub]').textContent = hood.areas.length + ' areas';
-        $('[data-areas-h]').textContent = hood.name;
-        var wrap = $('[data-areas]');
-        wrap.innerHTML = '';
-        hood.areas.forEach(function (a) {
-          var done = a.addresses.filter(function (r) { return get(r.id).visited === 'true'; }).length;
-          var b = document.createElement('button');
-          b.type = 'button';
-          b.className = 'tile';
-          b.innerHTML = '<span class="tile__name"></span><span class="tile__meta"></span>';
-          b.querySelector('.tile__name').textContent = a.name;
-          b.querySelector('.tile__meta').textContent =
-            a.addresses.length + ' doors · ' + done + ' knocked';
-          b.onclick = function () { area = a; openArea(); };
-          wrap.appendChild(b);
-        });
-      }
-
-      /* ---------- area view ---------- */
-      var map = null, layerGroup = null;
-
-      function statusOf(id) {
-        var r = get(id);
-        if (r.support) return r.support;
-        if (r.visited === 'true') return 'visited';
-        if (r.flyer === 'true') return 'flyer';
-        return 'todo';
-      }
-      var COLORS = {
-        supporter: '#1a8f5e', swing: '#e0a80a', unvote: '#8a8f9c',
-        competitor: '#d92b2b', visited: '#344c96', flyer: '#8ea4e8', todo: '#c9cede',
-      };
-
-      function openArea() {
-        $('[data-crumb]').textContent = hood.name + ' · ' + area.name;
-        $('[data-sub]').textContent = area.addresses.length + ' doors';
-        show('area');
-        paintRows();
-        paintProgress();
-        paintExcluded();
-        setTimeout(drawMap, 60);
-      }
-
-      function drawMap() {
-        var el = $('[data-map]');
-        if (!map) {
-          map = L.map(el, { zoomControl: true });
-          L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19, attribution: '© OpenStreetMap contributors',
-          }).addTo(map);
-          layerGroup = L.layerGroup().addTo(map);
-        }
-        layerGroup.clearLayers();
-
-        var latlngs = area.ring.map(function (p) { return [p[1], p[0]]; }); // KML is lon,lat
-        var poly = L.polygon(latlngs, {
-          color: '#ec078d', weight: 3, fill: true, fillOpacity: 0.05,
-        }).addTo(layerGroup);
-
-        var walked = area.addresses.filter(function (r) { return !r.arterial; });
-        L.polyline(walked.map(function (r) { return [r.lat, r.lon]; }), {
-          color: '#344c96', weight: 2, opacity: 0.45, dashArray: '5,6',
-        }).addTo(layerGroup);
-
-        visible().forEach(function (r) {
-          L.circleMarker([r.lat, r.lon], {
-            radius: 6, weight: 2, color: '#fff',
-            fillColor: COLORS[statusOf(r.id)], fillOpacity: 1,
-          }).bindPopup('<b>' + r.addr + '</b><br>Stop ' + r.stop).addTo(layerGroup);
-        });
-
-        map.fitBounds(poly.getBounds(), { padding: [16, 16] });
-        map.invalidateSize();
-      }
-
-      function visible() {
-        return area.addresses.filter(function (r) {
-          if (filter === 'todo')     return statusOf(r.id) === 'todo';
-          if (filter === 'resid')    return !r.arterial;
-          if (filter === 'arterial') return r.arterial;
-          return true;
-        });
-      }
-
-      function paintExcluded() {
-        var n = area.excludedCount || 0;
-        $('[data-excluded]').textContent = n
-          ? n + ' addresses excluded from this walk list — not yet mailable (MAIL_STATUS “N”), typically new builds nobody has moved into.'
-          : '';
-      }
-
-      function paintProgress() {
-        var rows = area.addresses;
-        var done = rows.filter(function (r) { return statusOf(r.id) !== 'todo'; }).length;
-        var sup = rows.filter(function (r) { return get(r.id).support === 'supporter'; }).length;
-        $('[data-done]').textContent = done;
-        $('[data-total]').textContent = rows.length;
-        $('[data-sup]').textContent = sup;
-        $('[data-prog-fill]').style.width = rows.length ? (done / rows.length * 100) + '%' : '0%';
-      }
-
-      function paintRows() {
-        var wrap = $('[data-rows]');
-        wrap.innerHTML = '';
-        var rows = visible();
-        var lastStreet = null;
-
-        rows.forEach(function (r) {
-          if (r.street !== lastStreet) {
-            lastStreet = r.street;
-            var h = document.createElement('h2');
-            h.className = 'street';
-            h.textContent = r.street + (r.arterial ? ' — arterial' : '');
-            wrap.appendChild(h);
-          }
-
-          var rec = get(r.id);
-          var row = document.createElement('article');
-          row.className = 'row';
-          row.dataset.id = r.id;
-
-          var head = document.createElement('div');
-          head.className = 'row__head';
-          head.innerHTML =
-            '<span class="row__stop">' + r.stop + '</span>' +
-            '<span class="row__addr"></span>' +
-            '<span class="row__dot"></span>';
-          head.querySelector('.row__addr').textContent = r.addr;
-          head.querySelector('.row__dot').style.background = COLORS[statusOf(r.id)];
-          row.appendChild(head);
-
-          var checks = document.createElement('div');
-          checks.className = 'tapset';
-          CHECKS.forEach(function (c) {
-            var b = document.createElement('button');
-            b.type = 'button';
-            b.className = 'tap' + (rec[c.k] === 'true' ? ' is-on' : '');
-            b.textContent = c.label;
-            b.setAttribute('aria-pressed', rec[c.k] === 'true' ? 'true' : 'false');
-            b.onclick = function () {
-              var next = get(r.id)[c.k] === 'true' ? 'false' : 'true';
-              logField(r.id, c.k, next);
-              b.classList.toggle('is-on', next === 'true');
-              b.setAttribute('aria-pressed', next === 'true' ? 'true' : 'false');
-              head.querySelector('.row__dot').style.background = COLORS[statusOf(r.id)];
-            };
-            checks.appendChild(b);
-          });
-          row.appendChild(checks);
-
-          var sup = document.createElement('div');
-          sup.className = 'tapset tapset--sup';
-          SUPPORTS.forEach(function (s) {
-            var b = document.createElement('button');
-            b.type = 'button';
-            b.className = 'tap tap--' + s.k + (rec.support === s.k ? ' is-on' : '');
-            b.textContent = s.label;
-            b.setAttribute('aria-pressed', rec.support === s.k ? 'true' : 'false');
-            b.onclick = function () {
-              /* Tapping the active choice clears it back to unset. */
-              var next = get(r.id).support === s.k ? null : s.k;
-              logField(r.id, 'support', next);
-              sup.querySelectorAll('.tap').forEach(function (o) {
-                o.classList.remove('is-on');
-                o.setAttribute('aria-pressed', 'false');
-              });
-              if (next) { b.classList.add('is-on'); b.setAttribute('aria-pressed', 'true'); }
-              head.querySelector('.row__dot').style.background = COLORS[statusOf(r.id)];
-            };
-            sup.appendChild(b);
-          });
-          row.appendChild(sup);
-
-          var note = document.createElement('input');
-          note.className = 'note';
-          note.type = 'text';
-          note.placeholder = 'Note';
-          note.value = rec.note || '';
-          note.onchange = function () { logField(r.id, 'note', note.value); };
-          row.appendChild(note);
-
-          var stamp = document.createElement('p');
-          stamp.className = 'stamp';
-          stamp.textContent = rec.at ? rec.by + ' · ' + new Date(rec.at).toLocaleString() : '';
-          row.appendChild(stamp);
-
-          wrap.appendChild(row);
-        });
-
-        if (!rows.length) {
-          var p = document.createElement('p');
-          p.className = 'empty';
-          p.textContent = 'No doors match this filter.';
-          wrap.appendChild(p);
-        }
-      }
-
-      /* ---------- CSV ---------- */
-      function csv() {
-        var head = ['stop','address','street','arterial','flyer','visited','vip','support','note','volunteer','updated'];
-        var lines = [head.join(',')];
-        area.addresses.forEach(function (r) {
-          var rec = get(r.id);
-          var cells = [r.stop, r.addr, r.street, r.arterial ? 'yes' : 'no',
-            rec.flyer === 'true' ? 'yes' : '', rec.visited === 'true' ? 'yes' : '',
-            rec.vip === 'true' ? 'yes' : '', rec.support || '', rec.note || '',
-            rec.by || '', rec.at || ''];
-          lines.push(cells.map(function (c) {
-            c = String(c == null ? '' : c);
-            return /[",\n]/.test(c) ? '"' + c.replace(/"/g, '""') + '"' : c;
-          }).join(','));
-        });
-        var blob = new Blob([lines.join('\n')], { type: 'text/csv' });
-        var a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = (hood.name + '-' + area.name).replace(/\s+/g, '-').toLowerCase() + '.csv';
-        a.click();
-        URL.revokeObjectURL(a.href);
-      }
-
-      /* ---------- wiring ---------- */
-      $('[data-back]').onclick = function () {
-        if (!$('[data-screen="area"]').hidden) { paintAreas(); show('areas'); }
-        else { paintHoods(); }
-      };
-      $('[data-net]').onclick = function () {
-        online = !online;
-        this.setAttribute('aria-pressed', String(!online));
-        this.classList.toggle('is-off', !online);
-        $('[data-net-label]').textContent = online ? 'Online' : 'Offline';
-        drain();
-      };
-      document.querySelectorAll('[data-filter]').forEach(function (b) {
-        b.onclick = function () {
-          document.querySelectorAll('[data-filter]').forEach(function (o) { o.classList.remove('is-on'); });
-          b.classList.add('is-on');
-          filter = b.dataset.filter;
-          paintRows(); drawMap();
-        };
-      });
-      $('[data-csv]').onclick = csv;
-      $('[data-print]').onclick = function () { window.print(); };
-
-      fetch(DATA_URL).then(function (r) { return r.json(); }).then(function (d) {
-        data = d;
-        paintHoods();
-        paintQueue();
-      }).catch(function () {
-        $('[data-hoods]').textContent = 'Could not load the sample data.';
-      });
-    })();
-  </script>
+    {
+      locked && (
+        <script type="application/json" data-unlock-payload set:html={JSON.stringify(locked)} />
+      )
+    }
+  </main>
 </BaseLayout>
 
-<style is:global>
-  /* ── prototype shell ── */
-  .app {
-    --c-line: #dfe3ec;
-    --c-dim: #5c6478;
-    max-width: 44rem;
-    margin: 0 auto;
-    padding-bottom: 4rem;
-  }
-  .bar {
-    position: sticky;
-    top: 0;
-    z-index: 500;
+<script is:inline>
+  (function () {
+    var form = document.querySelector('[data-unlock-form]');
+    if (!form) return;
+
+    var payloadEl = document.querySelector('[data-unlock-payload]');
+    var input = document.getElementById('gate-pass');
+    var errorEl = document.querySelector('[data-unlock-error]');
+    var frame = document.querySelector('[data-unlock-app]');
+    var gate = document.querySelector('[data-gate]');
+    var root = document.querySelector('[data-gate-root]');
+    var submit = document.querySelector('[data-unlock-submit]');
+
+    function bytes(b64) {
+      var bin = atob(b64);
+      var out = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+      return out;
+    }
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      errorEl.hidden = true;
+
+      if (!payloadEl) {
+        errorEl.hidden = false;
+        return;
+      }
+
+      var payload = JSON.parse(payloadEl.textContent);
+      submit.disabled = true;
+      var label = submit.textContent;
+      /* PBKDF2 at 600k iterations takes a second or two on a phone. */
+      submit.textContent = 'Unlocking…';
+
+      try {
+        var baseKey = await crypto.subtle.importKey(
+          'raw',
+          new TextEncoder().encode(input.value),
+          'PBKDF2',
+          false,
+          ['deriveKey']
+        );
+        var key = await crypto.subtle.deriveKey(
+          {
+            name: 'PBKDF2',
+            salt: bytes(payload.salt),
+            iterations: payload.iterations,
+            hash: 'SHA-256',
+          },
+          baseKey,
+          { name: 'AES-GCM', length: 256 },
+          false,
+          ['decrypt']
+        );
+        var plain = await crypto.subtle.decrypt(
+          { name: 'AES-GCM', iv: bytes(payload.iv) },
+          key,
+          bytes(payload.ciphertext)
+        );
+
+        /* srcdoc, not innerHTML — innerHTML would not run the app's scripts. */
+        frame.srcdoc = new TextDecoder().decode(plain);
+        frame.hidden = false;
+        gate.hidden = true;
+        root.classList.add('is-unlocked');
+      } catch (err) {
+        /* AES-GCM fails authentication on a wrong password. */
+        errorEl.hidden = false;
+        input.value = '';
+        input.focus();
+      } finally {
+        submit.disabled = false;
+        submit.textContent = label;
+      }
+    });
+  })();
+</script>
+
+<style>
+  .gate {
+    min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.7rem 1rem;
-    background: var(--color-blue-600);
-    color: var(--color-paper);
+    justify-content: center;
+    padding: 2rem 1.25rem;
   }
-  .bar__back {
-    font-size: 1.6rem;
-    line-height: 1;
-    width: 2.2rem;
-    height: 2.2rem;
-    border: 0;
-    background: rgba(255, 255, 255, 0.15);
-    color: inherit;
-    cursor: pointer;
+  .gate.is-unlocked {
+    min-height: 100vh;
+    justify-content: flex-start;
+    padding: 0;
   }
-  .bar__title { flex: 1; min-width: 0; line-height: 1.25; }
-  .bar__title strong { display: block; font-family: var(--font-display); font-size: 1.02rem; }
-  .bar__title span { font-size: 0.78rem; opacity: 0.85; }
-  .bar__net { display: flex; flex-direction: column; align-items: flex-end; gap: 0.2rem; }
-  .net {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.3rem 0.6rem;
-    font: inherit;
-    font-size: 0.78rem;
+  .gate__inner {
+    width: 100%;
+    max-width: 20rem;
+  }
+  .gate__brand {
+    margin-bottom: 1.75rem;
+  }
+  .gate__form {
+    display: flex;
+    flex-direction: column;
+  }
+  .gate__label {
     font-weight: 700;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    background: transparent;
-    color: inherit;
-    cursor: pointer;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
   }
-  .net__dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #6ee7a8; }
-  .net.is-off .net__dot { background: #ffb020; }
-  .queue { font-size: 0.72rem; opacity: 0.9; }
-
-  .prog { padding: 0.7rem 1rem; background: var(--color-taupe-50); border-bottom: 1px solid var(--c-line); }
-  .prog__bar { height: 0.4rem; background: #dfe3ec; overflow: hidden; }
-  .prog__bar span { display: block; height: 100%; background: var(--color-pink-500); transition: width 0.2s; }
-  .prog__nums {
-    display: flex; gap: 1.25rem; margin-top: 0.4rem;
-    font-size: 0.8rem; color: var(--c-dim);
-  }
-  .prog__nums b { color: var(--color-ink-900); font-size: 0.95rem; }
-
-  .screen { padding: 1.25rem 1rem; }
-  .screen--flush { padding: 0; }
-  .screen__h { font-family: var(--font-display); font-size: 1.35rem; margin: 0 0 1rem; }
-
-  .tiles { display: grid; gap: 0.7rem; }
-  .tile {
-    display: flex; flex-direction: column; gap: 0.15rem;
-    padding: 1.1rem 1.2rem; min-height: 4.4rem;
-    text-align: left; font: inherit; cursor: pointer;
+  .gate__input {
+    padding: 0.65rem 0.75rem;
+    font: inherit;
+    border: 1px solid var(--color-taupe-200);
     background: var(--color-paper);
-    border: 1px solid var(--c-line);
-    border-left: 4px solid var(--color-pink-500);
   }
-  .tile__name { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; }
-  .tile__meta { font-size: 0.85rem; color: var(--c-dim); }
-
-  .map { height: 20rem; width: 100%; background: var(--color-taupe-100); }
-
-  .tools {
-    display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: space-between;
-    padding: 0.75rem 1rem; border-bottom: 1px solid var(--c-line);
-    position: sticky; top: 3.4rem; background: var(--color-paper); z-index: 400;
+  .gate__btn {
+    margin-top: 0.75rem;
+    justify-content: center;
   }
-  .filters, .tools__acts { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-  .chip, .mini {
-    padding: 0.45rem 0.7rem; font: inherit; font-size: 0.82rem; font-weight: 600;
-    background: var(--color-paper); border: 1px solid var(--c-line); cursor: pointer;
+  .gate__msg {
+    margin: 0.9rem 0 0;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-pink-500);
   }
-  .chip.is-on { background: var(--color-blue-600); border-color: var(--color-blue-600); color: var(--color-paper); }
-  .mini { color: var(--color-blue-600); }
-
-  .street {
-    font-family: var(--font-display); font-size: 0.8rem; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--c-dim);
-    margin: 1.5rem 0 0.5rem; padding: 0 1rem;
+  .gate__msg--quiet {
+    font-weight: 400;
+    color: var(--color-ink-500);
   }
-  .rows { padding-bottom: 1rem; }
-  .row { padding: 0.85rem 1rem; border-bottom: 1px solid var(--c-line); }
-  .row__head { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem; }
-  .row__stop {
-    flex: none; width: 1.9rem; height: 1.9rem; display: grid; place-items: center;
-    background: var(--color-taupe-100); font-size: 0.78rem; font-weight: 700;
-    font-variant-numeric: tabular-nums;
+  /* The unlocked app takes the whole viewport: it is a tool, not a document. */
+  .gate__app {
+    width: 100%;
+    height: 100vh;
+    border: 0;
+    display: block;
   }
-  .row__addr { flex: 1; font-weight: 700; font-size: 0.98rem; }
-  .row__dot { flex: none; width: 0.85rem; height: 0.85rem; border-radius: 50%; }
-
-  .tapset { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.5rem; }
-  .tap {
-    flex: 1 1 auto; min-height: 2.75rem; padding: 0.5rem 0.6rem;
-    font: inherit; font-size: 0.85rem; font-weight: 700;
-    background: var(--color-paper); color: var(--color-ink-900);
-    border: 1px solid var(--c-line); cursor: pointer;
-  }
-  .tap.is-on { background: var(--color-blue-600); border-color: var(--color-blue-600); color: var(--color-paper); }
-  .tap--supporter.is-on  { background: #1a8f5e; border-color: #1a8f5e; }
-  .tap--swing.is-on      { background: #b98600; border-color: #b98600; }
-  .tap--unvote.is-on     { background: #6b7280; border-color: #6b7280; }
-  .tap--competitor.is-on { background: #d92b2b; border-color: #d92b2b; }
-
-  .note {
-    width: 100%; min-height: 2.5rem; padding: 0.5rem 0.6rem;
-    font: inherit; font-size: 0.88rem;
-    border: 1px solid var(--c-line); background: var(--color-paper);
-  }
-  .stamp { margin: 0.35rem 0 0; font-size: 0.72rem; color: var(--c-dim); min-height: 1em; }
-  .empty, .excluded { padding: 1rem; color: var(--c-dim); font-size: 0.85rem; }
-
-  /* ── paper walk sheet ── */
-  @media print {
-    .bar, .tools, .map, .prog, .stamp, .note { display: none !important; }
-    .app { max-width: none; }
-    .row { break-inside: avoid; border-bottom: 1px solid #999; padding: 0.35rem 0; }
-    .row__dot { display: none; }
-    .street { margin: 1rem 0 0.25rem; padding: 0; }
-    /* Empty boxes to tick by hand, replacing the live controls. */
-    .tapset { gap: 0.75rem; }
-    .tap {
-      flex: none; border: 1px solid #333 !important;
-      background: #fff !important; color: #000 !important;
-      min-height: 0; padding: 0.1rem 0.4rem 0.1rem 1.4rem;
-      font-size: 0.75rem; position: relative;
-    }
-    .tap::before {
-      content: ''; position: absolute; left: 0.3rem; top: 50%;
-      transform: translateY(-50%);
-      width: 0.8rem; height: 0.8rem; border: 1px solid #333;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .prog__bar span { transition: none; }
+  .gate__app[hidden] {
+    display: none;
   }
 </style>

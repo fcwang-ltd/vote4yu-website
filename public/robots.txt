@@ -1,0 +1,7 @@
+# The unlisted volunteer tooling is kept out of search by the noindex meta tag
+# on those pages, and excluded from the sitemap in astro.config.mjs. This file
+# is a secondary measure only.
+User-agent: *
+Disallow: /private-62e6aed4888d372bb76bcb97/
+
+Sitemap: https://vote4yu.ca/sitemap-index.xml
