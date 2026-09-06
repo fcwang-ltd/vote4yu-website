@@ -3,7 +3,7 @@ title: "Building a HEALTHier Markham"
 description: "An introduction to the HEALTH platform for Markham Ward 2: Housing, Education, Advocacy, Living standards, Technology, and Hospitality."
 pubDate: 2026-08-11
 locale: en
-draft: false
+draft: true
 heroImage:
   src: /images/blog/PLACEHOLDER-AI-blog-healthy-cities.png
   alt: Flat illustration of a green city park with a path, bridge, and skyline

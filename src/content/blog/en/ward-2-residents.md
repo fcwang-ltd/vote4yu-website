@@ -3,7 +3,7 @@ title: "What Ward 2 residents face"
 description: "A public brief on the shared challenges facing Markham Ward 2 residents: health access, eldercare, housing, safety, and representation."
 pubDate: 2026-08-12
 locale: en
-draft: false
+draft: true
 heroImage:
   src: /images/atmosphere/PLACEHOLDER-AI-ward2-map.png
   alt: Illustrated flat-vector map of Markham Ward 2

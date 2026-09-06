@@ -3,7 +3,7 @@ title: "The family-doctor wait is a Ward 2 problem"
 description: "Too many Markham families are waiting to find a family doctor. Here is what a Ward 2 councillor can actually do about it."
 pubDate: 2026-08-12
 locale: en
-draft: false
+draft: true
 heroImage:
   src: /images/blog/PLACEHOLDER-AI-blog-health-access.png
   alt: A quiet Markham street in the morning

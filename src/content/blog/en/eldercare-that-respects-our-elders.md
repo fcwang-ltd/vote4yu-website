@@ -3,7 +3,7 @@ title: "Eldercare that respects our elders"
 description: "In Ward 2, caring for aging parents is a whole-family concern. Culturally adapted eldercare should be part of how our city plans."
 pubDate: 2026-08-13
 locale: en
-draft: false
+draft: true
 heroImage:
   src: /images/blog/PLACEHOLDER-AI-blog-eldercare.png
   alt: An older resident and family member walking together
