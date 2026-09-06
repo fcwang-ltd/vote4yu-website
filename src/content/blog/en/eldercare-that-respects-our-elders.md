@@ -4,6 +4,8 @@ description: "In Ward 2, caring for aging parents is a whole-family concern. Cul
 pubDate: 2026-08-13
 locale: en
 draft: true
+categories:
+  - Hospitality
 heroImage:
   src: /images/blog/PLACEHOLDER-AI-blog-eldercare.png
   alt: An older resident and family member walking together

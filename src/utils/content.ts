@@ -215,16 +215,19 @@ const en = {
     items: [
       {
         date: '2026-06-10',
+        postSlug: 'health-platform-launches',
         title: 'HEALTH platform launches',
         body: 'Six commitments published for Ward 2: Housing, Education, Advocacy, Living Standards, Technology, Hospitality.',
       },
       {
         date: '2026-07-15',
+        postSlug: 'nomination-filed',
         title: 'Nomination filed',
         body: 'Haohui Yu 余浩輝 is on the ballot for Markham Ward 2 Councillor.',
       },
       {
         date: '2026-08-18',
+        postSlug: 'campaign-office-opens',
         title: 'Campaign office opens',
         body: 'Drop by for a lawn sign, to meet the team, or to say hello.',
       },
@@ -607,16 +610,19 @@ const zhHK: typeof en = {
     items: [
       {
         date: '2026-06-10',
+        postSlug: 'health-platform-launches',
         title: 'HEALTH 政綱發佈',
         body: '對第二選區的六項承諾：住房、教育、發聲、生活質量、科技與好客共融。',
       },
       {
         date: '2026-07-15',
+        postSlug: 'nomination-filed',
         title: '正式報名參選',
         body: '余浩輝已正式成為萬錦市第二選區市議員候選人。',
       },
       {
         date: '2026-08-18',
+        postSlug: 'campaign-office-opens',
         title: '競選辦公室開幕',
         body: '歡迎前來領取標語牌、認識團隊或打個招呼。',
       },

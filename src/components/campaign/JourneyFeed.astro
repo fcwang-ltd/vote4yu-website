@@ -34,7 +34,18 @@ type FeedItem = {
   title: string;
   body: string;
   href: string;
+  image?: { src: string; alt: string };
 };
+
+function postSlug(id: string) {
+  return id.split('/').pop()?.replace(/\.mdx?$/, '') ?? id;
+}
+
+/* A milestone that has been written up as a full post is dropped here: the post
+   carries a page, a photo and a description, so it is strictly richer. The
+   milestone itself stays in progress.items for /about/journey and
+   /platform/progress, which still list every entry. */
+const publishedSlugs = new Set(posts.map((post) => postSlug(post.id)));
 
 /* Articles and campaign milestones share one chronological feed. */
 const feed: FeedItem[] = [
@@ -44,14 +55,17 @@ const feed: FeedItem[] = [
     title: post.data.title,
     body: post.data.description,
     href: postHref(post.id),
+    image: post.data.heroImage,
   })),
-  ...t.progress.items.map((item) => ({
-    date: new Date(item.date),
-    label: item.date,
-    title: item.title,
-    body: item.body,
-    href: localizePath('/about/journey', locale),
-  })),
+  ...t.progress.items
+    .filter((item) => !('postSlug' in item && publishedSlugs.has(item.postSlug as string)))
+    .map((item) => ({
+      date: new Date(item.date),
+      label: item.date,
+      title: item.title,
+      body: item.body,
+      href: localizePath('/about/journey', locale),
+    })),
 ].sort((a, b) => b.date.valueOf() - a.date.valueOf());
 
 const items = paginated ? feed : feed.slice(0, perPage);
@@ -82,7 +96,11 @@ const eventsHref = `${localizePath('/events', locale)}#journey`;
             data-page={paginated ? Math.floor(i / perPage) + 1 : 1}
             hidden={paginated && i >= perPage}
           >
-            <div class="journey-card__thumb" aria-hidden="true" />
+            <div class="journey-card__thumb" aria-hidden={item.image ? undefined : 'true'}>
+              {item.image && (
+                <img class="journey-card__img" src={item.image.src} alt={item.image.alt} />
+              )}
+            </div>
             <div class="journey-card__body">
               <h3>{item.title}</h3>
               <time datetime={item.label}>{item.label}</time>
@@ -176,9 +194,10 @@ const eventsHref = `${localizePath('/events', locale)}#journey`;
     display: grid;
     gap: 1rem;
   }
+  /* Mobile: the photo sits full width above the text. */
   .journey-card {
     display: grid;
-    grid-template-columns: minmax(5.5rem, 7.5rem) 1fr;
+    grid-template-columns: 1fr;
     gap: 1rem 1.25rem;
     align-items: stretch;
     background: var(--color-paper);
@@ -186,10 +205,23 @@ const eventsHref = `${localizePath('/events', locale)}#journey`;
     padding: 1rem 1.15rem 1.15rem;
   }
   .journey-card__thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    /* Never stretch. A stretched box with an aspect-ratio derives its width
+       from the row height, which overflows the grid track and lands on top of
+       the text beside it. */
+    align-self: start;
     background: var(--color-taupe-100);
     border: 1px solid var(--color-taupe-200);
-    min-height: 5.5rem;
-    aspect-ratio: 1;
+    overflow: hidden;
+  }
+  /* Fills the existing thumb box, so a card with a photo keeps the same
+     geometry as one without. */
+  .journey-card__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   .journey-card__body {
     display: flex;
@@ -243,11 +275,15 @@ const eventsHref = `${localizePath('/events', locale)}#journey`;
     border-color: var(--color-pink-500);
     color: var(--color-paper);
   }
+  /* Desktop: photo returns to a square alongside the text. */
   @media (min-width: 900px) {
     .journey-card {
       grid-template-columns: 9rem 1fr;
       padding: 1.15rem 1.35rem 1.25rem;
       gap: 1.25rem 1.5rem;
+    }
+    .journey-card__thumb {
+      aspect-ratio: 1;
     }
   }
 </style>
