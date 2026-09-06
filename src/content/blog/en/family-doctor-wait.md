@@ -4,6 +4,8 @@ description: "Too many Markham families are waiting to find a family doctor. Her
 pubDate: 2026-08-12
 locale: en
 draft: true
+categories:
+  - Advocacy
 heroImage:
   src: /images/blog/PLACEHOLDER-AI-blog-health-access.png
   alt: A quiet Markham street in the morning

@@ -8,6 +8,7 @@
  */
 import { render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
+import { HEALTH_PLANKS } from '../../utils/content';
 import { localizePath, type Locale } from '../../utils/i18n';
 
 interface Props {
@@ -16,13 +17,22 @@ interface Props {
 }
 const { post, locale = 'en' } = Astro.props;
 const { Content } = await render(post);
+
+/* Categories are stored as HEALTH_PLANKS.labelEn strings; resolve each to its
+   plank for the bilingual tag pill (matches the "為您發聲 Advocacy" pattern
+   already used for the HEALTH cards). */
+const tags = post.data.categories
+  .map((label) => HEALTH_PLANKS.find((p) => p.labelEn === label))
+  .filter((p): p is (typeof HEALTH_PLANKS)[number] => Boolean(p));
 ---
 
 <article class="post section-pad">
-  <div class="container-1200">
-    <span class="badge">Updates</span>
+  <div class="container-1200 post__col">
+    <a class="post__back" href={localizePath('/blog', locale)}>‹ Back</a>
+
     <h1 class="post__title">{post.data.title}</h1>
     <p class="post__meta">
+      Posted on{' '}
       <time datetime={post.data.pubDate.toISOString()}>
         {
           post.data.pubDate.toLocaleDateString('en-CA', {
@@ -33,53 +43,98 @@ const { Content } = await render(post);
         }
       </time>
     </p>
+
+    {
+      tags.length > 0 && (
+        <ul class="post__tags">
+          {tags.map((tag) => (
+            <li class="post__tag">
+              <span class="post__tag-zh">{tag.labelZh}</span>
+              <span class="post__tag-en">{tag.labelEn}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
     {
       post.data.heroImage && (
         <img class="post__hero" src={post.data.heroImage.src} alt={post.data.heroImage.alt} />
       )
     }
+
     <div class="post__body">
       <Content />
     </div>
-    <p class="post__back">
-      <a href={localizePath('/blog', locale)}>← Updates</a>
-    </p>
   </div>
 </article>
 
 <style>
+  .post__col {
+    max-width: 42rem;
+  }
+  .post__back {
+    display: inline-block;
+    color: var(--color-pink-500);
+    font-weight: 700;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+  }
+  .post__back:hover,
+  .post__back:focus-visible {
+    text-decoration: underline;
+  }
   .post__title {
     font-family: var(--font-display);
     font-size: clamp(2rem, 5vw, 3rem);
     line-height: 1.05;
-    margin: 0.75rem 0;
-    max-width: 20ch;
+    margin: 0 0 0.5rem;
   }
   .post__meta {
     color: var(--color-ink-500);
     font-size: 0.9rem;
+    margin: 0 0 1.25rem;
+  }
+  .post__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 0 0 1.75rem;
+    padding: 0;
+    list-style: none;
+  }
+  .post__tag {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-blue-100);
+  }
+  .post__tag-zh {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--color-blue-700);
+  }
+  .post__tag-en {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--color-blue-700);
   }
   .post__hero {
+    display: block;
     width: 100%;
-    max-width: 720px;
-    margin: 1.5rem 0;
+    margin: 0 0 1.75rem;
     aspect-ratio: 16 / 9;
     object-fit: cover;
+    background: var(--color-taupe-100);
   }
   .post__body {
-    max-width: 42rem;
     line-height: 1.6;
     color: var(--color-ink-800);
   }
   .post__body :global(a) {
     color: var(--color-pink-500);
-  }
-  .post__back {
-    margin-top: 2rem;
-  }
-  .post__back a {
-    color: var(--color-pink-500);
-    font-weight: 700;
-    text-decoration: none;
   }
 </style>

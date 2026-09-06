@@ -4,6 +4,9 @@ description: "A public brief on the shared challenges facing Markham Ward 2 resi
 pubDate: 2026-08-12
 locale: en
 draft: true
+categories:
+  - Advocacy
+  - Living Standards
 heroImage:
   src: /images/atmosphere/PLACEHOLDER-AI-ward2-map.png
   alt: Illustrated flat-vector map of Markham Ward 2

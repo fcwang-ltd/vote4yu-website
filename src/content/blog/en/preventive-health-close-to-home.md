@@ -4,6 +4,8 @@ description: "The healthiest communities catch problems early. Here is why preve
 pubDate: 2026-08-14
 locale: en
 draft: false
+categories:
+  - Living Standards
 heroImage:
   src: /images/blog/PLACEHOLDER-AI-blog-preventive.png
   alt: A community walking path in Markham
