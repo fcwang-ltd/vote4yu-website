@@ -12,7 +12,7 @@ const t = getContent(locale);
   <PageHero badge={t.about.badge} title={t.about.heroTitle} intro={t.about.heroIntro}>
     <Fragment slot="actions">
       <a class="btn btn--pink" href={localizePath('/interview', locale)}>{t.about.interviewCta}</a>
-      <a class="btn btn--outline-pink" href={localizePath('/about/journey', locale)}
+      <a class="btn btn--outline-pink" href={`${localizePath('/events', locale)}#journey`}
         >{t.about.followJourneyCta}</a
       >
     </Fragment>

@@ -1,0 +1,77 @@
+---
+/*
+ * UNLISTED ARTICLE PREVIEW.
+ *
+ * Renders every English post — drafts included — so the candidate can read an
+ * article exactly as it will appear before it is published. The public route
+ * at /blog/[slug] still excludes drafts, so nothing here is reachable from the
+ * site itself.
+ *
+ * noindex matters: once a post goes live at its own URL, an indexable copy here
+ * would be duplicate content.
+ */
+import { getCollection } from 'astro:content';
+import PageShell from '../../../components/campaign/PageShell.astro';
+import BlogArticle from '../../../components/campaign/BlogArticle.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => data.locale === 'en');
+  return posts.map((post) => {
+    const slug = post.id.split('/').pop()?.replace(/\.mdx?$/, '') ?? post.id;
+    return { params: { slug }, props: { post } };
+  });
+}
+
+const { post } = Astro.props;
+const locale = 'en' as const;
+const isDraft = post.data.draft === true;
+---
+
+<PageShell
+  locale={locale}
+  path={`/preview-6cf078293d98de3f9e916aa3/blog/${Astro.params.slug}`}
+  active="events"
+  title={`Preview: ${post.data.title}`}
+  description={post.data.description}
+  noindex
+>
+  <div class:list={['pv', { 'pv--live': !isDraft }]} role="status">
+    <div class="container-1200 pv__inner">
+      <strong>{isDraft ? 'Draft — not yet published' : 'Published — this is live on the site'}</strong>
+      <span>
+        {
+          isDraft
+            ? 'Only people with this link can see it. Nothing links here from the site.'
+            : 'Readers can already see this article at its normal address.'
+        }
+      </span>
+    </div>
+  </div>
+
+  <BlogArticle post={post} locale={locale} />
+</PageShell>
+
+<style>
+  .pv {
+    background: var(--color-pink-500);
+    color: var(--color-paper);
+    padding: 0.85rem 0;
+  }
+  .pv--live {
+    background: var(--color-blue-600);
+  }
+  .pv__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 0.9rem;
+  }
+  .pv strong {
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+  .pv span {
+    font-size: 0.9rem;
+    opacity: 0.92;
+  }
+</style>

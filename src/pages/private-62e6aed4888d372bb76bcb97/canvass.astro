@@ -1,0 +1,224 @@
+---
+/*
+ * CANVASSING TOOL — password-gated, unlisted.
+ *
+ * The app is bundled by scripts/build-canvass.mjs into private/canvass.html
+ * (gitignored) and encrypted here at build time, exactly like the sibling
+ * protected page. Only ciphertext is deployed.
+ *
+ * Why the app is NOT in public/:
+ *   Astro copies public/ to the site root verbatim, so anything there is
+ *   fetchable by direct URL and no page-level gate can protect it. Keeping the
+ *   source in src/canvass/ means it is never emitted as a static asset.
+ *
+ * Why an iframe rather than innerHTML:
+ *   The sibling page mounts its plaintext with `innerHTML`, which is correct
+ *   for static prose but DOES NOT EXECUTE <script> tags. This app is entirely
+ *   script-driven, so innerHTML yields a blank shell. `iframe.srcdoc` runs the
+ *   scripts, and — being same-origin — keeps localStorage working, which the
+ *   offline sync queue depends on.
+ *
+ * Addresses are never bundled: the app queries York Region Open Data at
+ * runtime. Only area boundaries and door counts ship in the payload.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Wordmark from '../../components/ui/Wordmark.astro';
+import { lockContent } from '../../utils/lockedContent';
+
+const locale = 'en' as const;
+const PATH = '/private-62e6aed4888d372bb76bcb97/canvass';
+
+const locked = await lockContent('private/canvass.html');
+---
+
+<BaseLayout
+  locale={locale}
+  path={PATH}
+  title="Canvassing"
+  description="Password protected."
+  noindex
+>
+  <main class="gate" data-gate-root>
+    <div class="gate__inner" data-gate>
+      <div class="gate__brand">
+        <Wordmark locale={locale} />
+      </div>
+
+      <form class="gate__form" data-unlock-form>
+        <label class="gate__label" for="gate-pass">Volunteer password</label>
+        <input
+          class="gate__input"
+          id="gate-pass"
+          type="password"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          required
+        />
+        <button class="btn btn--pink gate__btn" type="submit" data-unlock-submit>
+          Unlock
+        </button>
+
+        <p class="gate__msg" role="alert" hidden data-unlock-error>
+          That password did not work.
+        </p>
+        {
+          !locked && (
+            <p class="gate__msg gate__msg--quiet">
+              The canvassing tool has not been published yet.
+            </p>
+          )
+        }
+      </form>
+    </div>
+
+    <iframe class="gate__app" data-unlock-app hidden title="Canvassing tool"></iframe>
+
+    {
+      locked && (
+        <script type="application/json" data-unlock-payload set:html={JSON.stringify(locked)} />
+      )
+    }
+  </main>
+</BaseLayout>
+
+<script is:inline>
+  (function () {
+    var form = document.querySelector('[data-unlock-form]');
+    if (!form) return;
+
+    var payloadEl = document.querySelector('[data-unlock-payload]');
+    var input = document.getElementById('gate-pass');
+    var errorEl = document.querySelector('[data-unlock-error]');
+    var frame = document.querySelector('[data-unlock-app]');
+    var gate = document.querySelector('[data-gate]');
+    var root = document.querySelector('[data-gate-root]');
+    var submit = document.querySelector('[data-unlock-submit]');
+
+    function bytes(b64) {
+      var bin = atob(b64);
+      var out = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+      return out;
+    }
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      errorEl.hidden = true;
+
+      if (!payloadEl) {
+        errorEl.hidden = false;
+        return;
+      }
+
+      var payload = JSON.parse(payloadEl.textContent);
+      submit.disabled = true;
+      var label = submit.textContent;
+      /* PBKDF2 at 600k iterations takes a second or two on a phone. */
+      submit.textContent = 'Unlocking…';
+
+      try {
+        var baseKey = await crypto.subtle.importKey(
+          'raw',
+          new TextEncoder().encode(input.value),
+          'PBKDF2',
+          false,
+          ['deriveKey']
+        );
+        var key = await crypto.subtle.deriveKey(
+          {
+            name: 'PBKDF2',
+            salt: bytes(payload.salt),
+            iterations: payload.iterations,
+            hash: 'SHA-256',
+          },
+          baseKey,
+          { name: 'AES-GCM', length: 256 },
+          false,
+          ['decrypt']
+        );
+        var plain = await crypto.subtle.decrypt(
+          { name: 'AES-GCM', iv: bytes(payload.iv) },
+          key,
+          bytes(payload.ciphertext)
+        );
+
+        /* srcdoc, not innerHTML — innerHTML would not run the app's scripts. */
+        frame.srcdoc = new TextDecoder().decode(plain);
+        frame.hidden = false;
+        gate.hidden = true;
+        root.classList.add('is-unlocked');
+      } catch (err) {
+        /* AES-GCM fails authentication on a wrong password. */
+        errorEl.hidden = false;
+        input.value = '';
+        input.focus();
+      } finally {
+        submit.disabled = false;
+        submit.textContent = label;
+      }
+    });
+  })();
+</script>
+
+<style>
+  .gate {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.25rem;
+  }
+  .gate.is-unlocked {
+    min-height: 100vh;
+    justify-content: flex-start;
+    padding: 0;
+  }
+  .gate__inner {
+    width: 100%;
+    max-width: 20rem;
+  }
+  .gate__brand {
+    margin-bottom: 1.75rem;
+  }
+  .gate__form {
+    display: flex;
+    flex-direction: column;
+  }
+  .gate__label {
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+  }
+  .gate__input {
+    padding: 0.65rem 0.75rem;
+    font: inherit;
+    border: 1px solid var(--color-taupe-200);
+    background: var(--color-paper);
+  }
+  .gate__btn {
+    margin-top: 0.75rem;
+    justify-content: center;
+  }
+  .gate__msg {
+    margin: 0.9rem 0 0;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-pink-500);
+  }
+  .gate__msg--quiet {
+    font-weight: 400;
+    color: var(--color-ink-500);
+  }
+  /* The unlocked app takes the whole viewport: it is a tool, not a document. */
+  .gate__app {
+    width: 100%;
+    height: 100vh;
+    border: 0;
+    display: block;
+  }
+  .gate__app[hidden] {
+    display: none;
+  }
+</style>

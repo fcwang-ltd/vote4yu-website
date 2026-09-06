@@ -1,0 +1,126 @@
+---
+/*
+ * Index of every article with its publication status, so a review link can be
+ * copied rather than hand-assembled. Unlisted and noindex, like the previews
+ * it points at.
+ */
+import { getCollection } from 'astro:content';
+import PageShell from '../../components/campaign/PageShell.astro';
+
+const locale = 'en' as const;
+const BASE = '/preview-6cf078293d98de3f9e916aa3';
+
+const posts = (await getCollection('blog', ({ data }) => data.locale === 'en')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+function slugOf(id: string) {
+  return id.split('/').pop()?.replace(/\.mdx?$/, '') ?? id;
+}
+const drafts = posts.filter((p) => p.data.draft === true).length;
+---
+
+<PageShell
+  locale={locale}
+  path={BASE}
+  active="events"
+  title="Article previews"
+  description="Unlisted."
+  noindex
+>
+  <section class="section-pad">
+    <div class="container-1200 pvx">
+      <h1>Article previews</h1>
+      <p class="pvx__lede">
+        Every article, draft or live. Send the candidate a link from here — drafts
+        are invisible on the site until <code>draft: false</code> is merged.
+      </p>
+      <p class="pvx__count">
+        {posts.length} articles · {drafts} awaiting review
+      </p>
+
+      <ul class="pvx__list">
+        {
+          posts.map((post) => (
+            <li class="pvx__item">
+              <a class="pvx__link" href={`${BASE}/blog/${slugOf(post.id)}`}>
+                {post.data.title}
+              </a>
+              <span class:list={['tag', post.data.draft === true ? 'tag--draft' : 'tag--live']}>
+                {post.data.draft === true ? 'Draft' : 'Published'}
+              </span>
+              <time datetime={post.data.pubDate.toISOString()}>
+                {post.data.pubDate.toISOString().slice(0, 10)}
+              </time>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</PageShell>
+
+<style>
+  .pvx h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    margin: 0 0 0.5rem;
+  }
+  .pvx__lede {
+    max-width: 42rem;
+    color: var(--color-ink-600);
+    margin: 0 0 0.35rem;
+  }
+  .pvx__count {
+    font-size: 0.85rem;
+    color: var(--color-ink-500);
+    margin: 0 0 1.75rem;
+  }
+  .pvx__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 48rem;
+    border-top: 1px solid var(--color-taupe-200);
+  }
+  .pvx__item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 0.9rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--color-taupe-200);
+  }
+  .pvx__link {
+    flex: 1 1 18rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--color-ink-900);
+    text-decoration: none;
+  }
+  .pvx__link:hover,
+  .pvx__link:focus-visible {
+    color: var(--color-pink-500);
+  }
+  .tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+  }
+  .tag--draft {
+    background: var(--color-pink-500);
+    color: var(--color-paper);
+  }
+  .tag--live {
+    background: var(--color-taupe-100);
+    color: var(--color-ink-600);
+  }
+  .pvx__item time {
+    font-size: 0.82rem;
+    color: var(--color-ink-500);
+    font-variant-numeric: tabular-nums;
+  }
+</style>

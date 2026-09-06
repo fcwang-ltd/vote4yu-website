@@ -32,3 +32,18 @@ tmp/
 # public repo. Tracked locally for the coding agent, never committed/pushed.
 # ---------------------------------------------------------------------------
 docs/plans/
+
+# ---------------------------------------------------------------------------
+# Plaintext for the password-gated unlisted page.
+# Only the ENCRYPTED payload is ever built into dist/. The readable source
+# below must never be committed: this repository is PUBLIC, and anything
+# committed here stays in git history after deletion.
+# ---------------------------------------------------------------------------
+private/
+
+# ---------------------------------------------------------------------------
+# Canvassing address data. York Region civic addresses for real households —
+# fetched at runtime by the app, never committed. This repository is PUBLIC and
+# git history is permanent, so a snapshot committed once cannot be taken back.
+# ---------------------------------------------------------------------------
+public/canvass/

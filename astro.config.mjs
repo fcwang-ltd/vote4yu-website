@@ -21,6 +21,8 @@ export default defineConfig({
 
   integrations: [
     sitemap({
+      // Unlisted pages must not appear in the sitemap that search engines read.
+      filter: (page) => !/\/(private|preview)-/.test(page),
       i18n: {
         defaultLocale: 'en',
         locales: {
