@@ -16,6 +16,8 @@ interface Props {
   locale?: Locale;
   /** Root-relative path without locale prefix, e.g. "/" or "/platform". */
   path?: string;
+  /** Unlisted page: ask crawlers to skip it and drop the locale alternates. */
+  noindex?: boolean;
 }
 const localeProp = Astro.props.locale ?? 'en';
 const locale: Locale = isLocale(localeProp) ? localeProp : 'en';
@@ -24,6 +26,7 @@ const {
   title = t.meta.siteTitle,
   description = t.meta.siteDescription,
   path = '/',
+  noindex = false,
 } = Astro.props;
 
 const SITE_URL = 'https://vote4yu.ca';
@@ -57,18 +60,29 @@ const personSchema = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {!noindex && <link rel="canonical" href={canonical} />}
 
     {
-      LOCALES.map((l) => (
+      /* Alternates would publish the path under every locale, so unlisted pages skip them. */
+      !noindex &&
+        LOCALES.map((l) => (
+          <link
+            rel="alternate"
+            hreflang={LOCALE_HREFLANG[l]}
+            href={new URL(localizePath(path, l), SITE_URL).href}
+          />
+        ))
+    }
+    {
+      !noindex && (
         <link
           rel="alternate"
-          hreflang={LOCALE_HREFLANG[l]}
-          href={new URL(localizePath(path, l), SITE_URL).href}
+          hreflang="x-default"
+          href={new URL(localizePath(path, 'en'), SITE_URL).href}
         />
-      ))
+      )
     }
-    <link rel="alternate" hreflang="x-default" href={new URL(localizePath(path, 'en'), SITE_URL).href} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
