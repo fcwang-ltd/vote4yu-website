@@ -20,22 +20,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # The plaintext for the protected page is gitignored, so CI has to
-      # materialize it from a secret before the build encrypts it.
-      - name: Materialize protected page content
-        env:
-          PRIVATE_PAGE_HTML: ${{ secrets.PRIVATE_PAGE_HTML }}
-        run: |
-          if [ -n "$PRIVATE_PAGE_HTML" ]; then
-            mkdir -p private
-            printf '%s' "$PRIVATE_PAGE_HTML" > private/page.html
-            echo "protected page content: configured"
-          else
-            echo "protected page content: not configured, page will ship empty"
-          fi
-      # Bundles src/canvass into private/canvass.html, injecting the sync
-      # endpoint and token from secrets. Must run BEFORE the Astro build, which
-      # encrypts that file. Missing secrets are a warning, not a failure.
+      # Bundles src/canvass into public/private-.../index.html, injecting the
+      # sync endpoint and token from secrets. Must run BEFORE the Astro build,
+      # which copies public/ into the site. Missing secrets are a warning.
       - name: Build canvassing bundle
         env:
           CANVASS_SCRIPT_URL: ${{ secrets.CANVASS_SCRIPT_URL }}
@@ -44,8 +31,6 @@ jobs:
 
       - name: Build Astro site
         uses: withastro/action@v3
-        env:
-          PRIVATE_PAGE_PASSPHRASE: ${{ secrets.PRIVATE_PAGE_PASSPHRASE }}
         with:
           node-version: 22
           package-manager: pnpm@9.15.9

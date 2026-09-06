@@ -1,7 +1,7 @@
-# The unlisted volunteer tooling is kept out of search by the noindex meta tag
-# on those pages, and excluded from the sitemap in astro.config.mjs. This file
-# is a secondary measure only.
+# The unlisted volunteer tooling is kept out of search by its own
+# noindex,nofollow,noarchive meta tag and excluded from the sitemap in
+# astro.config.mjs. Deliberately NOT listed here: robots.txt is world-readable,
+# so a Disallow line naming the path would publish the URL it protects.
 User-agent: *
-Disallow: /private-62e6aed4888d372bb76bcb97/
 
 Sitemap: https://vote4yu.ca/sitemap-index.xml
