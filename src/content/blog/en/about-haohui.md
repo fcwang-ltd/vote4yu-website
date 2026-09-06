@@ -3,7 +3,7 @@ title: "About Haohui Yu"
 description: "Haohui Yu 余浩輝 is a health-science graduate and community fitness professional running for Markham City Council, Ward 2, in 2026."
 pubDate: 2026-08-11
 locale: en
-draft: false
+draft: true
 heroImage:
   src: /images/candidate/yu-photo-white-2.png
   alt: Haohui Yu 余浩輝
