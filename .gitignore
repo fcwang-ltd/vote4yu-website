@@ -47,3 +47,7 @@ private/
 # git history is permanent, so a snapshot committed once cannot be taken back.
 # ---------------------------------------------------------------------------
 public/canvass/
+
+# Generated canvassing bundle. Contains the injected sync token in cleartext —
+# never commit it. Rebuild with: node scripts/build-canvass.mjs
+public/private-62e6aed4888d372bb76bcb97/

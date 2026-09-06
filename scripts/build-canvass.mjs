@@ -1,19 +1,20 @@
 /**
- * Bundles the canvassing app into a single self-contained HTML file at
- * private/canvass.html, which the build then encrypts with lockContent().
+ * Bundles the canvassing app into a single self-contained HTML file served at
+ *   /private-62e6aed4888d372bb76bcb97/
+ * The app is deliberately NOT password-gated: the URL is unlisted and shared
+ * directly with volunteers, who open it and start logging.
  *
- * Why a bundle rather than files in public/:
- *   Astro copies public/ to the site root verbatim, so anything there is
- *   fetchable by direct URL and cannot be password-gated. Keeping the app in
- *   src/canvass/ means it is never emitted as a static asset; the only copy
- *   that reaches the deployed site is the ciphertext.
+ * Output goes to public/, which Astro copies to the site root verbatim, so the
+ * bundle is served as-is at that path.
  *
- * The Apps Script endpoint and token are injected here from the environment,
- * so neither is ever committed. This repository is PUBLIC.
+ * The generated file is gitignored and must stay that way. The Apps Script
+ * endpoint and token are injected here from the environment, so the built file
+ * CONTAINS THE SYNC TOKEN IN CLEARTEXT. Anyone with the URL can read it. That
+ * is an accepted trade-off for an unlisted volunteer link, but it means the
+ * file must never be committed — this repository is PUBLIC.
  *
  * Missing env vars are a warning, not an error: a build without them still
- * succeeds and simply ships an app that saves locally and exports CSV. This
- * mirrors lockContent(), which returns null rather than failing the build.
+ * succeeds and simply ships an app that saves locally and exports CSV.
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
@@ -21,7 +22,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const srcDir = resolve(root, 'src/canvass');
-const outFile = resolve(root, 'private/canvass.html');
+const outFile = resolve(root, 'public/private-62e6aed4888d372bb76bcb97/index.html');
 
 const SCRIPT_URL = process.env.CANVASS_SCRIPT_URL ?? '';
 const TOKEN = process.env.CANVASS_TOKEN ?? '';
@@ -65,6 +66,6 @@ mkdirSync(dirname(outFile), { recursive: true });
 writeFileSync(outFile, html);
 
 const kb = (n) => (n / 1024).toFixed(1) + ' KB';
-console.log(`[canvass] wrote private/canvass.html (${kb(html.length)})`);
+console.log(`[canvass] wrote public/private-62e6aed4888d372bb76bcb97/index.html (${kb(html.length)})`);
 console.log(`[canvass] sync endpoint: ${SCRIPT_URL ? 'configured' : 'NOT SET — app will save locally only'}`);
 console.log(`[canvass] sync token:    ${TOKEN ? 'configured' : 'NOT SET'}`);
