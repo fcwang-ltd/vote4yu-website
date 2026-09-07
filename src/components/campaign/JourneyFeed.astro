@@ -58,6 +58,11 @@ const feed: FeedItem[] = [
     image: post.data.heroImage,
   })),
   ...t.progress.items
+    /* `hideFromFeed` keeps a milestone off this feed while leaving it on
+       /about/journey and /platform/progress, which still list every entry.
+       Without it, unpublishing a post makes its milestone reappear here as a
+       card with no photo. */
+    .filter((item) => !('hideFromFeed' in item && item.hideFromFeed))
     .filter((item) => !('postSlug' in item && publishedSlugs.has(item.postSlug as string)))
     .map((item) => ({
       date: new Date(item.date),
@@ -232,7 +237,8 @@ const eventsHref = `${localizePath('/events', locale)}#journey`;
   .journey-card h3 {
     margin: 0;
     font-family: var(--font-display);
-    font-size: 1.15rem;
+    font-size: clamp(1.3rem, 2.2vw, 1.5rem);
+    line-height: 1.2;
     font-weight: 700;
   }
   .journey-card time {

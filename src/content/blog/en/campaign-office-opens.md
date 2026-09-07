@@ -3,7 +3,7 @@ title: "Campaign office opens"
 description: "Drop by for a lawn sign, to meet the team, or to say hello."
 pubDate: 2026-08-18
 locale: en
-draft: false
+draft: true
 categories:
   - Hospitality
 heroImage:
