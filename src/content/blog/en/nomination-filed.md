@@ -3,7 +3,7 @@ title: "Nomination filed"
 description: "Haohui Yu 余浩輝 is on the ballot for Markham Ward 2 Councillor."
 pubDate: 2026-07-15
 locale: en
-draft: false
+draft: true
 categories:
   - Advocacy
 heroImage:
