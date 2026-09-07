@@ -1,42 +1,47 @@
 ---
 import PageShell from '../../components/campaign/PageShell.astro';
 import PageHero from '../../components/campaign/PageHero.astro';
-import CtaArrow from '../../components/ui/CtaArrow.astro';
 import { getContent } from '../../utils/content';
 import { localizePath } from '../../utils/i18n';
 
 const locale = 'zh-HK' as const;
 const t = getContent(locale);
 
+/* Headings show both languages on either locale, matching the HEALTH cards and
+   the how-to-vote cards. Pulled from the two locale blocks rather than stored
+   as new bilingual strings, so the copy stays the single source it already is. */
+const zh = getContent('zh-HK').involved;
+const en = getContent('en').involved;
+
 const cards = [
   {
-    title: t.involved.donateTitle,
+    titleZh: zh.donateTitle,
+    titleEn: en.donateTitle,
     body: t.involved.donateBody,
     cta: t.involved.donateCta,
     href: '/donate',
-    critical: true,
   },
   {
-    title: t.involved.partnerTitle,
+    titleZh: zh.partnerTitle,
+    titleEn: en.partnerTitle,
     body: t.involved.partnerBody,
     cta: t.involved.partnerCta,
     href: 'mailto:amanda@vote4yu.ca',
     external: true,
-    critical: false,
   },
   {
-    title: t.involved.volTitle,
+    titleZh: zh.volTitle,
+    titleEn: en.volTitle,
     body: t.involved.volBody,
     cta: t.involved.volCta,
     href: '/get-involved/volunteer',
-    critical: false,
   },
   {
-    title: t.involved.mediaTitle,
+    titleZh: zh.mediaTitle,
+    titleEn: en.mediaTitle,
     body: t.involved.mediaBody,
     cta: t.involved.mediaCta,
     href: '/interview',
-    critical: false,
   },
 ];
 ---
@@ -53,27 +58,20 @@ const cards = [
       {
         cards.map((card) => (
           <article class="involve-card">
-            <h2>{card.title}</h2>
+            <h2 class="involve-card__title">
+              <span class="involve-card__zh">{card.titleZh}</span>
+              <span class="involve-card__en">{card.titleEn}</span>
+            </h2>
             <p>{card.body}</p>
             <a
-              class:list={['btn', card.critical ? 'btn--pink' : 'btn--outline-pink']}
+              class="btn btn--pink involve-card__cta"
               href={card.external ? card.href : localizePath(card.href, locale)}
             >
               {card.cta}
-              {card.critical && <CtaArrow />}
             </a>
           </article>
         ))
       }
-    </div>
-    <div class="container-1200" style="margin-top:2rem">
-      <img
-        src="/images/candidate/yu-photo-blue.png"
-        alt="Haohui Yu"
-        width="720"
-        height="800"
-        style="max-width:320px;width:100%;height:auto"
-      />
     </div>
   </section>
 </PageShell>
@@ -83,16 +81,33 @@ const cards = [
     display: grid;
     gap: 1.25rem;
   }
+  /* Equal-height cards so every button sits on the same baseline, however
+     long the copy above it runs. */
   .involve-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-taupe-50);
     border-top: 3px solid var(--color-pink-500);
-    padding: 1.25rem 0;
+    padding: 2rem;
   }
-  .involve-card h2 {
-    margin: 0 0 0.5rem;
+  .involve-card__title {
+    margin: 0 0 0.75rem;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+  .involve-card__zh {
+    margin-right: 0.4rem;
   }
   .involve-card p {
-    margin: 0 0 1rem;
+    margin: 0 0 1.5rem;
     color: var(--color-ink-600);
+    line-height: 1.6;
+  }
+  .involve-card__cta {
+    /* Pushed to the bottom of the card, and only as wide as its label. */
+    margin-top: auto;
+    align-self: flex-start;
   }
   @media (min-width: 800px) {
     .involve-grid {
