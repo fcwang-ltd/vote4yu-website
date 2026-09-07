@@ -3,7 +3,7 @@ title: "The day I registered as candidate for Ward 2 councillor"
 description: "After ten years helping more than 6,000 Markham residents get stronger, I am running for Ward 2 councillor. Here are the six HEALTH commitments I want to be measured against."
 pubDate: 2026-08-05
 locale: en
-draft: true
+draft: false
 categories:
   - Advocacy
 heroImage:

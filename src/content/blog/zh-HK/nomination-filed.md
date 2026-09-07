@@ -3,7 +3,7 @@ title: "我登記參選的那一天"
 description: "十年來幫助超過六千位萬錦居民變得更強壯之後，我決定參選二區市議員。以下是我提出的 HEALTH 六項承諾。"
 pubDate: 2026-08-05
 locale: zh-HK
-draft: true
+draft: false
 categories:
   - Advocacy
 heroImage:
