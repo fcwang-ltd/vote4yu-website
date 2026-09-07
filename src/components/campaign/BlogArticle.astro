@@ -75,8 +75,12 @@ const tags = post.data.categories
 </article>
 
 <style>
+  /* Narrower than the nav's 1200px band: long-form text needs a shorter
+     measure than the header does. Overrides .container-1200's max-width and
+     inherits its auto margins, so the column centres. Below 880px the
+     container's padding governs, leaving mobile unchanged. */
   .post__col {
-    max-width: 42rem;
+    max-width: 880px;
   }
   .post__back {
     display: inline-block;
@@ -136,7 +140,8 @@ const tags = post.data.categories
     background: var(--color-taupe-100);
   }
   .post__body {
-    line-height: 1.6;
+    font-size: 1.125rem;
+    line-height: 1.7;
     color: var(--color-ink-800);
   }
   .post__body :global(a) {
