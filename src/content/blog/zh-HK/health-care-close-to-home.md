@@ -3,7 +3,7 @@ title: "Ward 2 值得有家門口的高質醫療服務"
 description: "在萬錦二區，距離決定了誰能順利就醫。市議員在這件事上能做什麼？"
 pubDate: 2026-09-05
 locale: zh-HK
-draft: true
+draft: false
 categories:
   - Advocacy
   - Living Standards
