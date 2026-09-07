@@ -3,7 +3,7 @@ title: "Ward 2 deserves high-quality health care close to home"
 description: "In Markham Ward 2, distance determines who actually gets to see a doctor. Here is what a city councillor can do about it."
 pubDate: 2026-09-05
 locale: en
-draft: true
+draft: false
 categories:
   - Advocacy
   - Living Standards
