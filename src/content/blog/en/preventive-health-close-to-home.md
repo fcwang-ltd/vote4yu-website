@@ -3,7 +3,7 @@ title: "Preventive health, close to home"
 description: "The healthiest communities catch problems early. Here is why preventive health sits at the centre of my platform for Ward 2."
 pubDate: 2026-08-14
 locale: en
-draft: false
+draft: true
 categories:
   - Living Standards
 heroImage:
