@@ -1,0 +1,40 @@
+---
+/*
+ * 繁體 article pages. Mirrors /blog/[slug] but serves posts authored in
+ * zh-HK, so a translated article gets a real page instead of the index
+ * linking readers out to the English copy.
+ *
+ * Slugs are shared with the English post deliberately: the same article is
+ * /blog/<slug> and /zh-HK/blog/<slug>, which is what the language toggle in
+ * the nav relies on to stay on the same article across locales.
+ */
+import { getCollection } from 'astro:content';
+import PageShell from '../../../components/campaign/PageShell.astro';
+import BlogArticle from '../../../components/campaign/BlogArticle.astro';
+
+export async function getStaticPaths() {
+  /* Drafts are excluded here: an unpublished post has no public page at all.
+     They are readable on the unlisted preview route instead. */
+  const posts = await getCollection('blog', ({ data }) => data.locale === 'zh-HK' && !data.draft);
+  return posts.map((post) => {
+    const slug = post.id.split('/').pop()?.replace(/\.mdx?$/, '') ?? post.id;
+    return {
+      params: { slug },
+      props: { post },
+    };
+  });
+}
+
+const { post } = Astro.props;
+const locale = 'zh-HK' as const;
+---
+
+<PageShell
+  locale={locale}
+  path={`/blog/${Astro.params.slug}`}
+  active="events"
+  title={`${post.data.title}: Vote 4 Yu`}
+  description={post.data.description}
+>
+  <BlogArticle post={post} locale={locale} />
+</PageShell>
