@@ -8,7 +8,7 @@
  */
 import { render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import { HEALTH_PLANKS } from '../../utils/content';
+import { getContent, HEALTH_PLANKS } from '../../utils/content';
 import { localizePath, type Locale } from '../../utils/i18n';
 
 interface Props {
@@ -17,6 +17,7 @@ interface Props {
 }
 const { post, locale = 'en' } = Astro.props;
 const { Content } = await render(post);
+const t = getContent(locale);
 
 /* Categories are stored as HEALTH_PLANKS.labelEn strings; resolve each to its
    plank for the bilingual tag pill (matches the "為您發聲 Advocacy" pattern
@@ -28,17 +29,21 @@ const tags = post.data.categories
 
 <article class="post section-pad">
   <div class="container-1200 post__col">
-    <a class="post__back" href={localizePath('/blog', locale)}>‹ Back</a>
+    <a class="post__back" href={localizePath('/blog', locale)}>‹ {t.events.postBack}</a>
 
     <h1 class="post__title">{post.data.title}</h1>
     <p class="post__meta">
-      Posted on{' '}
+      {t.events.postPostedOn}{' '}
       <time datetime={post.data.pubDate.toISOString()}>
         {
-          post.data.pubDate.toLocaleDateString('en-CA', {
+          /* pubDate is a date, not a moment: frontmatter "2026-09-05" parses as
+             UTC midnight, so formatting it in the build machine's timezone
+             renders the previous day west of Greenwich. Format in UTC. */
+          post.data.pubDate.toLocaleDateString(locale === 'zh-HK' ? 'zh-Hant-HK' : 'en-CA', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
+            timeZone: 'UTC',
           })
         }
       </time>
@@ -122,12 +127,12 @@ const tags = post.data.categories
     font-size: 0.85rem;
     color: var(--color-blue-700);
   }
+  /* No forced aspect ratio: a hero is cropped by whoever chose it, and the
+     page should show that crop rather than cut a second one out of it. */
   .post__hero {
     display: block;
     width: 100%;
     margin: 0 0 1.75rem;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
     background: var(--color-taupe-100);
   }
   .post__body {
@@ -136,5 +141,16 @@ const tags = post.data.categories
   }
   .post__body :global(a) {
     color: var(--color-pink-500);
+  }
+  /* Photos in the body sit at the same width as the hero and each other. */
+  .post__body :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 1.75rem 0;
+    background: var(--color-taupe-100);
+  }
+  .post__body :global(p:has(> img:only-child)) {
+    margin: 0;
   }
 </style>

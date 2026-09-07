@@ -1,0 +1,74 @@
+---
+/*
+ * UNLISTED 繁體 ARTICLE PREVIEW.
+ *
+ * The zh-HK counterpart of the English preview route, so a translation can be
+ * reviewed before it is published in exactly the same way. Kept as its own
+ * route rather than folded into the English one because a translation shares
+ * its slug with the original, which would collide in getStaticPaths.
+ */
+import { getCollection } from 'astro:content';
+import PageShell from '../../../../components/campaign/PageShell.astro';
+import BlogArticle from '../../../../components/campaign/BlogArticle.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => data.locale === 'zh-HK');
+  return posts.map((post) => {
+    const slug = post.id.split('/').pop()?.replace(/\.mdx?$/, '') ?? post.id;
+    return { params: { slug }, props: { post } };
+  });
+}
+
+const { post } = Astro.props;
+const locale = 'zh-HK' as const;
+const isDraft = post.data.draft === true;
+---
+
+<PageShell
+  locale={locale}
+  path={`/preview-6cf078293d98de3f9e916aa3/zh-HK/blog/${Astro.params.slug}`}
+  active="events"
+  title={`Preview: ${post.data.title}`}
+  description={post.data.description}
+  noindex
+>
+  <div class:list={['pv', { 'pv--live': !isDraft }]} role="status">
+    <div class="container-1200 pv__inner">
+      <strong>{isDraft ? '草稿 — 尚未發布' : '已發布 — 現已在網站上線'}</strong>
+      <span>
+        {
+          isDraft
+            ? '只有持有此連結的人才能看到，網站上沒有任何連結指向這裡。'
+            : '讀者已可在正式網址閱讀這篇文章。'
+        }
+      </span>
+    </div>
+  </div>
+
+  <BlogArticle post={post} locale={locale} />
+</PageShell>
+
+<style>
+  .pv {
+    background: var(--color-pink-500);
+    color: var(--color-paper);
+    padding: 0.85rem 0;
+  }
+  .pv--live {
+    background: var(--color-blue-600);
+  }
+  .pv__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 0.9rem;
+  }
+  .pv strong {
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+  .pv span {
+    font-size: 0.9rem;
+    opacity: 0.92;
+  }
+</style>

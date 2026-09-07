@@ -10,9 +10,9 @@ import PageShell from '../../components/campaign/PageShell.astro';
 const locale = 'en' as const;
 const BASE = '/preview-6cf078293d98de3f9e916aa3';
 
-const posts = (await getCollection('blog', ({ data }) => data.locale === 'en')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+const posts = (
+  await getCollection('blog', ({ data }) => data.locale === 'en' || data.locale === 'zh-HK')
+).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 function slugOf(id: string) {
   return id.split('/').pop()?.replace(/\.mdx?$/, '') ?? id;
@@ -43,9 +43,17 @@ const drafts = posts.filter((p) => p.data.draft === true).length;
         {
           posts.map((post) => (
             <li class="pvx__item">
-              <a class="pvx__link" href={`${BASE}/blog/${slugOf(post.id)}`}>
+              <a
+                class="pvx__link"
+                href={
+                  post.data.locale === 'zh-HK'
+                    ? `${BASE}/zh-HK/blog/${slugOf(post.id)}`
+                    : `${BASE}/blog/${slugOf(post.id)}`
+                }
+              >
                 {post.data.title}
               </a>
+              <span class="pvx__locale">{post.data.locale === 'zh-HK' ? '繁體' : 'EN'}</span>
               <span class:list={['tag', post.data.draft === true ? 'tag--draft' : 'tag--live']}>
                 {post.data.draft === true ? 'Draft' : 'Published'}
               </span>
@@ -117,6 +125,14 @@ const drafts = posts.filter((p) => p.data.draft === true).length;
   .tag--live {
     background: var(--color-taupe-100);
     color: var(--color-ink-600);
+  }
+  .pvx__locale {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--color-blue-700);
+    background: var(--color-blue-100);
+    padding: 0.2rem 0.5rem;
   }
   .pvx__item time {
     font-size: 0.82rem;

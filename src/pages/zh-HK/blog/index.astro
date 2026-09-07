@@ -1,17 +1,36 @@
 ---
+/*
+ * 繁體 article index.
+ *
+ * A post is listed in 繁體 when a zh-HK translation exists, and falls back to
+ * the English entry when it does not. The fallback notice only appears while
+ * at least one row is still English, so it disappears on its own once every
+ * article has been translated.
+ */
 import { getCollection } from 'astro:content';
 import PageShell from '../../../components/campaign/PageShell.astro';
 import { localizePath } from '../../../utils/i18n';
 
 const locale = 'zh-HK' as const;
-const posts = (await getCollection('blog', ({ data }) => data.locale === 'en' && !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
 
-function hrefFor(id: string) {
-  const slug = id.split('/').pop()?.replace(/\.mdx?$/, '') ?? id;
-  return localizePath(`/blog/${slug}`, 'en');
+function slugOf(id: string) {
+  return id.split('/').pop()?.replace(/\.mdx?$/, '') ?? id;
 }
+
+const published = await getCollection('blog', ({ data }) => !data.draft);
+const zh = published.filter((post) => post.data.locale === 'zh-HK');
+const en = published.filter((post) => post.data.locale === 'en');
+
+/* A translation and its English original share a slug, so the slug is what
+   decides whether an English row still needs to be shown. */
+const translated = new Set(zh.map((post) => slugOf(post.id)));
+
+const entries = [
+  ...zh.map((post) => ({ post, translated: true })),
+  ...en.filter((post) => !translated.has(slugOf(post.id))).map((post) => ({ post, translated: false })),
+].sort((a, b) => b.post.data.pubDate.valueOf() - a.post.data.pubDate.valueOf());
+
+const hasFallback = entries.some((entry) => !entry.translated);
 ---
 
 <PageShell locale={locale} path="/blog" active="events" title="最新消息: Vote 4 Yu">
@@ -19,12 +38,15 @@ function hrefFor(id: string) {
     <div class="container-1200">
       <span class="badge">消息</span>
       <h1 style="font-family:var(--font-display);font-size:clamp(2rem,5vw,3rem)">最新消息</h1>
-      <p>繁體全文尚待審校。以下為英文更新（連結至英文頁）。</p>
+      {hasFallback && <p>部分文章的繁體全文尚待審校，該等文章暫時連結至英文頁。</p>}
       <ul style="list-style:none;padding:0;display:grid;gap:1rem">
         {
-          posts.map((post) => (
+          entries.map(({ post, translated }) => (
             <li style="border-top:3px solid var(--color-pink-500);padding-top:1rem">
-              <a href={hrefFor(post.id)} style="text-decoration:none;color:inherit">
+              <a
+                href={localizePath(`/blog/${slugOf(post.id)}`, translated ? locale : 'en')}
+                style="text-decoration:none;color:inherit"
+              >
                 <h2 style="margin:0 0 0.35rem">{post.data.title}</h2>
                 <p style="color:var(--color-ink-600)">{post.data.description}</p>
               </a>

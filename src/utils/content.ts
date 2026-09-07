@@ -265,6 +265,8 @@ const en = {
     tabEvents: 'Upcoming events',
     tabNews: 'Updates & news',
     tabJourney: "Yu's journey",
+    postBack: 'Back',
+    postPostedOn: 'Posted on',
     hostCard:
       'Interested in hosting an event at your business? Contact campaign manager Amanda at amanda@vote4yu.ca.',
     partnerCta: 'Email Amanda',
@@ -660,6 +662,8 @@ const zhHK: typeof en = {
     tabEvents: '近期活動',
     tabNews: '最新消息',
     tabJourney: '余浩輝的旅程',
+    postBack: '返回',
+    postPostedOn: '發布於',
     hostCard: '有興趣在您的商戶舉辦活動？請聯絡競選經理 Amanda：amanda@vote4yu.ca。',
     partnerCta: '電郵 Amanda',
     rsvp: '報名',
