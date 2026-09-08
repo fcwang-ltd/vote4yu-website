@@ -228,7 +228,11 @@ const donatePresets = DONATE_PRESETS.map((n) => {
 <style>
   .hero,
   .hero-join {
-    --ribbon-lift: 300px;
+    /* How far the ribbon rides up over the hero. Small on mobile, where the
+       hero is short — a large lift drags the blue band up over the watermark
+       and leaves the photo deep in the next section. Desktop value is set in
+       the 900px block. */
+    --ribbon-lift: 90px;
     --slant: calc(100vw * tan(15deg));
   }
 
@@ -518,13 +522,20 @@ const donatePresets = DONATE_PRESETS.map((n) => {
   }
 
   @media (min-width: 900px) {
+    .hero,
+    .hero-join {
+      --ribbon-lift: 190px;
+    }
     .hero {
       padding-bottom: 0.5rem;
     }
     .hero__inner {
       grid-template-columns: minmax(280px, 0.85fr) 1.3fr;
       align-items: start;
-      min-height: calc(100vh - 6.5rem);
+      /* Deliberately no viewport-height min-height. The hero used to stretch to
+         the window while the photo and the ribbon's lift stayed fixed, so on a
+         tall screen the ribbon detached and left a growing empty band. Sizing
+         to content keeps the two locked together at any window height. */
       padding-block: 1.25rem 4rem;
       gap: 1rem 1.5rem;
     }
