@@ -124,12 +124,14 @@ const zhHref = switchLocalePath(pathname, 'zh-HK');
     color: var(--color-ink-800);
     line-height: 1.15;
   }
+  /* The nav only renders at >=960px (see the media query below), so these
+     sizes are desktop-only by construction. */
   .site-nav__zh {
-    font-size: 0.8rem;
+    font-size: 0.95rem;
     font-weight: 700;
   }
   .site-nav__en {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     color: var(--color-ink-500);
   }
   .site-nav__link.is-active,
