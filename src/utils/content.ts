@@ -171,6 +171,19 @@ const en = {
       'Haohui Yu 余浩輝 has helped more than 6,000 people in Markham get healthier and stronger, drawing on a background in fitness, technology and entrepreneurship.',
     platformInvite:
       "Follow Yu's journey to serve Markham Ward 2, and tell him what you need. Track progress on each HEALTH commitment, or talk with Yu directly.",
+    wardMapZh: '第二選區在哪裡',
+    wardMapEn: 'Where is Ward 2',
+    /* Direction and destination are separate so the direction can be set in
+       bold without splitting a string in the template, which would not survive
+       translation. */
+    wardMapBounds: [
+      { dir: 'West', to: 'to Hwy 404' },
+      { dir: 'East', to: 'to Warden Ave' },
+      { dir: 'South', to: 'to Hwy 7' },
+      { dir: 'North', to: 'to 19th Ave' },
+    ],
+    wardMapAlt:
+      'Ward 2 is the northeast corner of Markham, shaded blue and outlined in pink. Highway 404 forms the western edge, Warden Avenue the eastern edge, Highway 7 the southern edge, and 19th Avenue the northern edge at the Markham city limit. Elgin Mills Road East, Major MacKenzie Drive East and 16th Avenue cross the ward from west to east, and Woodbine Avenue runs north to south through it.',
     journeyTitle: "Follow Yu's journey",
     seeAllNews: 'See all news',
     readFull: 'Read full article',
@@ -574,6 +587,16 @@ const zhHK: typeof en = {
       '余浩輝 Haohui Yu 已幫助超過6,000位萬錦居民變得更健康、更強壯，憑藉健身、科技與創業背景服務社區。',
     platformInvite:
       '關注余浩輝服務萬錦第二選區的旅程，告訴他您的需要。追蹤每項 HEALTH 承諾進度，或直接與余浩輝對話。',
+    wardMapZh: '第二選區在哪裡',
+    wardMapEn: 'Where is Ward 2',
+    wardMapBounds: [
+      { dir: '西', to: '至 404 號公路' },
+      { dir: '東', to: '至 Warden Ave' },
+      { dir: '南', to: '至 7 號公路' },
+      { dir: '北', to: '至 19 街' },
+    ],
+    wardMapAlt:
+      '第二選區位於萬錦市東北角，以藍色填色、粉紅色邊界標示。西面為404號公路，東面為 Warden Avenue，南面為7號公路，北面為市界的19街。Elgin Mills Road East、Major MacKenzie Drive East 及16街由西向東橫貫選區，Woodbine Avenue 則由北向南貫穿。',
     journeyTitle: '關注余浩輝的旅程',
     seeAllNews: '查看全部新聞',
     readFull: '閱讀全文',
