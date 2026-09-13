@@ -123,6 +123,35 @@ const donatePresets = DONATE_PRESETS.map((n) => {
   </div>
 </div>
 
+<section class="ward-map section-pad" id="ward-map">
+  <div class="container-1200 ward-map__grid">
+    <div class="ward-map__copy">
+      <h2 class="ward-map__title">
+        <span class="ward-map__title-zh">{t.home.wardMapZh}</span>
+        <span class="ward-map__title-en">{t.home.wardMapEn}</span>
+      </h2>
+      <ul class="ward-map__bounds">
+        {
+          t.home.wardMapBounds.map((bound) => (
+            <li>
+              <b>{bound.dir}</b>{bound.to}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <img
+      class="ward-map__img"
+      src="/images/ward2-map.webp"
+      width="900"
+      height="1350"
+      loading="lazy"
+      decoding="async"
+      alt={t.home.wardMapAlt}
+    />
+  </div>
+</section>
+
 <JourneyFeed locale={locale} title={t.home.journeyTitle} />
 
 <section class="band band--vote section-pad" id="how-to-vote" data-ticker-dark>
@@ -383,6 +412,74 @@ const donatePresets = DONATE_PRESETS.map((n) => {
     transform: skewY(15deg);
     padding-top: 1.75rem;
     padding-bottom: 0.75rem;
+  }
+
+  .ward-map {
+    background: var(--color-paper);
+    /* The slant stack above ends on a negative bottom margin and .hero-to-blue
+       paints at z-index 2 inside it, so a static section here gets covered by
+       the blue wedge. Same defence .journey-feed uses. */
+    position: relative;
+    z-index: 1;
+    scroll-margin-top: 5rem;
+  }
+  .ward-map__grid {
+    display: grid;
+    gap: 1.75rem;
+    align-items: center;
+  }
+  .ward-map__title {
+    margin: 0 0 1.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+  }
+  .ward-map__title-zh {
+    margin-right: 0.4rem;
+  }
+  /* Two up, so the four boundaries read as one compact block rather than a
+     tall list beside a tall map. */
+  .ward-map__bounds {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem 2rem;
+  }
+  .ward-map__bounds li {
+    padding-left: 1rem;
+    border-left: 3px solid var(--color-pink-500);
+    color: var(--color-ink-800);
+    font-size: 1.05rem;
+    line-height: 1.45;
+  }
+  /* The gap is a margin rather than a space in the template: Chinese does not
+     take a word space between the direction and what follows, but the bold
+     still needs to breathe. */
+  .ward-map__bounds b {
+    margin-right: 0.35em;
+    font-weight: 700;
+    color: var(--color-ink-900);
+  }
+  /* Portrait graphic: capped so it never dwarfs the copy beside it. */
+  .ward-map__img {
+    display: block;
+    width: 100%;
+    max-width: 340px;
+    height: auto;
+    margin-inline: auto;
+  }
+  @media (min-width: 800px) {
+    /* Centred, not top-aligned: the copy is four short lines against a tall
+       map, so anchoring it to the top leaves it stranded. */
+    .ward-map__grid {
+      grid-template-columns: minmax(0, 1fr) 22rem;
+      gap: 3.5rem;
+      align-items: center;
+    }
+    .ward-map__img {
+      max-width: none;
+    }
   }
 
   .band--vote {
